@@ -13,14 +13,24 @@ This repo is a complete AI toolkit for hvac. Every skill is a standalone prompt 
 
 | Skill | What it does | Time saved |
 |-------|-------------|------------|
-| 🔧 Service Call Diagnosis Brief | Summarize the reported issue, likely causes, and recommended parts before the tech arrives. | ~10 min/call |
-| 📋 Maintenance Agreement Writer | Draft a professional maintenance agreement customized to the customer's equipment. | ~20 min/agreement |
-| 🌡️ Load Calculation Assistant | Walk through Manual J inputs and flag common sizing mistakes before the quote. | ~30 min/calc |
-| 📝 Proposal Generator | Build a multi-option proposal with good-better-best equipment packages. | ~25 min/proposal |
-| 🔏 Warranty Claim Drafter | Compile serial numbers, install dates, and failure details into a manufacturer-ready claim. | ~15 min/claim |
-| 💡 Energy Savings Report | Generate a customer-facing report showing projected savings from a system upgrade. | ~20 min/report |
+| Field Report Dictation | Transform raw, spoken-style technician notes into structured, professional service reports. | ~15 min/report |
+| Load Calculation Assistant | Walk through Manual J residential load calculation inputs step-by-step, flag common sizing mistakes, and produce a preliminary load estimate with equipment sizing recommendations — before the formal quote. | ~30 min/calc |
+| Predictive Maintenance Summary | Analyze equipment sensor data, maintenance history, and performance trends to generate a predictive maintenance report. | ~20 min/report |
+| Service Call Diagnosis Brief | Summarize the reported issue, likely causes, and recommended parts before the tech arrives — and optionally guide live troubleshooting in the field with interactive, step-by-step diagnostic assistance. | ~10 min/call |
+| Visual Inspection Report | Transform technician field photos and accompanying notes into a structured visual inspection report. | ~20 min/report |
+| Maintenance Agreement Writer | Produce a complete, signature-ready residential or light-commercial HVAC maintenance agreement in one of three clearly-defined coverage tiers (Silver / Gold / Platinum). | ~30 min/agreement |
+| Proposal Generator | Build a professional, multi-option replacement or installation proposal with good-better-best equipment packages. | ~25 min/proposal |
+| Speed-to-Lead Qualifier | Produce a complete speed-to-lead response kit for a new inbound HVAC lead: the immediate-reply message (SMS or missed-call auto-text), a follow-up cadence over 5 days, and a qualifying question script that gathers the minimum data a dispatcher needs to book the right technician. | ~12 min/lead |
+| A2L / R-454B Refrigerant Transition Explainer | Produce clear, honest, non-alarming customer-facing explanations of the 2026 A2L refrigerant transition — most commonly R-454B replacing R-410A — tailored to a specific homeowner or light-commercial situation. | ~15 min/customer conversation |
+| After-Hours Call Handler Script | Produce a complete after-hours call-handling framework for an HVAC business: the voice-agent or live-receptionist script, emergency-triage decision tree, caller data-collection structure, and dispatcher handoff package. | ~20 min/after-hours call (plus recovered revenue) |
+| Energy Savings Report | Generate a customer-facing report showing projected energy and cost savings from upgrading their HVAC system — with real numbers, payback timelines, and available rebates. | ~20 min/report |
+| Invoice Follow-Up Drafter | Generate professional, appropriately toned payment follow-up messages for outstanding HVAC service invoices. | ~10 min/message |
+| Warranty Claim Drafter | Compile a complete, manufacturer-ready warranty claim package — serial/model lookup, proof-of-install, failure narrative, and labor reimbursement request — in the exact format each OEM portal expects. | ~25 min/claim |
+| Email Drafter | Turn rough notes into a professional email matching your company's voice and tone. | ~10 min/use |
+| Meeting Summarizer | Summarize meeting notes into action items, decisions, and follow-ups. | ~10 min/use |
+| Review Responder | Craft professional, context-aware responses to online reviews — both positive and negative — with built-in local SEO optimization. | ~10 min/use |
 
-**Total time saved per use: ~120+ minutes across all skills.**
+**Total time saved per use: ~282+ minutes across all skills.**
 
 ## Quick Start
 
