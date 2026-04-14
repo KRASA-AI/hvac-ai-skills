@@ -1,0 +1,33 @@
+skill: invoice-followup-drafter
+category: admin
+version: 1.0
+eval_date: 2026-04-13
+evaluator: automated
+previous_score: null
+previous_date: null
+note: "First evaluation — skill added 2026-04-13"
+
+scores:
+  clarity:
+    score: 9
+    rationale: "Clear 4-tier escalation ladder. Channel-specific (email/SMS/letter) guidance is explicit about tone and length at each step."
+  specificity:
+    score: 9
+    rationale: "Exact days-past-due thresholds per tier, channel length limits, subject line conventions, and payment method callouts from config."
+  industry_fit:
+    score: 9
+    rationale: "Reflects HVAC cashflow realities: residential vs commercial pacing, seasonal peak timing, maintenance agreement renewal context, and service warranty considerations."
+  output_quality:
+    score: 9
+    rationale: "Example messages read professional and compliant. SMS stays under 160 chars; final notice includes required legal elements (lien/credit reporting language)."
+  personalization:
+    score: 8
+    rationale: "Uses config company name, payment methods, phone, and voice. Adapts tone for long-time vs new customers when that context is provided."
+  efficiency:
+    score: 9
+    rationale: "One-shot when full input provided. Gracefully defaults to generic prior-contact assumption if `previous_follow_ups` omitted."
+
+weighted_score: 8.80
+passing: true
+regression: false
+delta_from_previous: null

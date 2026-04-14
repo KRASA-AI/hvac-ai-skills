@@ -1,0 +1,28 @@
+skill: proposal-generator
+category: sales
+version: 1.0
+eval_date: 2026-04-12
+evaluator: automated
+
+scores:
+  clarity:
+    score: 5
+    rationale: "Generic template. Doesn't explain how to structure good-better-best options or what differentiates each tier."
+  specificity:
+    score: 3
+    rationale: "Critically underspecified. Missing: tier structure definition, equipment comparison format, warranty differences per tier, installation scope, financing options, rebate/incentive inclusion, pricing presentation."
+  industry_fit:
+    score: 4
+    rationale: "Mentions multi-option proposal in purpose but instructions are boilerplate. No mention of SEER ratings, equipment lines, installation complexity factors, or how to present value vs. cost."
+  output_quality:
+    score: 3
+    rationale: "Would produce a generic document. No output format or example. A real HVAC proposal needs equipment specs, pricing breakdown, warranty comparison, and ROI justification."
+  personalization:
+    score: 5
+    rationale: "Generic config reference. Doesn't leverage company's preferred equipment brands, labor rates, typical job pricing, or financing options."
+  efficiency:
+    score: 5
+    rationale: "Generic process. Doesn't define the specific inputs needed to build a proper multi-option proposal."
+
+weighted_score: 4.00
+passing: false

@@ -1,0 +1,32 @@
+skill: energy-savings-report
+category: customer-service
+version: 2.0
+eval_date: 2026-04-13
+evaluator: automated
+previous_score: 8.80
+previous_date: 2026-04-12
+
+scores:
+  clarity:
+    score: 9
+    rationale: "Well-structured walkthrough from existing efficiency baseline to projected savings and payback calculation."
+  specificity:
+    score: 9
+    rationale: "Defines SEER/AFUE calculation methodology, age-based efficiency estimation, payback period formula, and rebate integration table."
+  industry_fit:
+    score: 9
+    rationale: "Real-world financial math: federal 25C tax credit, utility rebates, manufacturer co-op. Realistic efficiency degradation assumptions."
+  output_quality:
+    score: 9
+    rationale: "Produces a customer-facing report with itemized annual savings, payback years, and lifetime value — ready to hand to a homeowner."
+  personalization:
+    score: 8
+    rationale: "Uses config utility rates, climate zone, and incentive availability. Could go deeper on customer-specific load profile."
+  efficiency:
+    score: 8
+    rationale: "Complete one-shot if inputs are provided. Gracefully fills gaps with documented assumptions."
+
+weighted_score: 8.80
+passing: true
+regression: false
+delta_from_previous: 0.00

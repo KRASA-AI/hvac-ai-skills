@@ -1,0 +1,33 @@
+skill: visual-inspection-report
+category: operations
+version: 1.0
+eval_date: 2026-04-13
+evaluator: automated
+previous_score: null
+previous_date: null
+note: "First evaluation — skill added 2026-04-13"
+
+scores:
+  clarity:
+    score: 9
+    rationale: "Six-step process (catalog → identify → assess → extract → flag → recommend) is clearly structured. Condition rating scale uses unambiguous emoji markers."
+  specificity:
+    score: 9
+    rationale: "Defines exact output sections, a standardized 4-tier condition scale, nameplate data fields to extract, and photo referencing convention. Full example output included."
+  industry_fit:
+    score: 9
+    rationale: "Uses correct component terminology, references real manufacturer serial decode patterns (Carrier, Trane), and covers authentic inspection scenarios (pre-purchase, warranty, post-install QC)."
+  output_quality:
+    score: 9
+    rationale: "Example with Lennox XC21 condenser shows properly cited findings, component-level detail, and prioritized recommendations. Usable for customer delivery without editing."
+  personalization:
+    score: 7
+    rationale: "References config for voice and branding. Could incorporate company-specific inspection templates and licensing/credential footers."
+  efficiency:
+    score: 9
+    rationale: "Uses [VERIFY IN FIELD] and 'insufficient visibility' markers rather than clarifying-question loops. One-shot for the common case."
+
+weighted_score: 8.80
+passing: true
+regression: false
+delta_from_previous: null

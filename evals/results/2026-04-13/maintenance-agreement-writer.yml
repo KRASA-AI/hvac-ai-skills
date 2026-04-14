@@ -1,0 +1,33 @@
+skill: maintenance-agreement-writer
+category: sales
+version: 1.0
+eval_date: 2026-04-13
+evaluator: automated
+previous_score: 4.00
+previous_date: 2026-04-12
+
+scores:
+  clarity:
+    score: 5
+    rationale: "Generic boilerplate structure with no definition of what a maintenance agreement contains. Users reading this would need to supply most of the structure themselves."
+  specificity:
+    score: 3
+    rationale: "No coverage tier definitions, visit frequency, scope of work, parts/labor inclusion rules, exclusions, term length, renewal, cancellation terms, or pricing basis. No output format."
+  industry_fit:
+    score: 4
+    rationale: "Mentions equipment but no HVAC-specific workflow: no spring/fall visit structure, no filter change schedule, no priority-service or after-hours rate discount typically offered, no equipment-specific PM task lists."
+  output_quality:
+    score: 4
+    rationale: "Would produce a vague contract skeleton. Missing enforceable terms, equipment-specific checklists, and pricing structure customers expect."
+  personalization:
+    score: 4
+    rationale: "Config placeholders acknowledged but not meaningfully used. Pricing tier rates, service area, and equipment types in config are not tied to the agreement output."
+  efficiency:
+    score: 4
+    rationale: "Open-ended ask-clarifying-questions process guarantees multiple rounds before producing usable output."
+
+weighted_score: 4.00
+passing: false
+regression: false
+delta_from_previous: 0.00
+priority_for_improvement: 2

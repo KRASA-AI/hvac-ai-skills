@@ -1,0 +1,30 @@
+skill: maintenance-agreement-writer
+category: sales
+version: 2.0
+eval_date: 2026-04-13
+evaluator: automated
+note: "Post-improvement re-evaluation — replaced v1.0 boilerplate"
+
+scores:
+  clarity:
+    score: 9
+    rationale: "Seven-step process with a clear tier framework. Each section of the output (equipment schedule, coverage, PM checklist, exclusions, term, pricing, signature) has explicit content guidance."
+  specificity:
+    score: 9
+    rationale: "Three fully-defined tiers with visit counts, discount percentages, pricing bands, inclusions, and exclusions. Per-equipment PM checklist requirement is explicit and anti-generic."
+  industry_fit:
+    score: 9
+    rationale: "Realistic residential HVAC plan structure (Silver/Gold/Platinum). Correct per-equipment PM tasks (combustion analysis for furnace, superheat/subcooling for AC, coil flush with biocide, drain float switch inclusion on Platinum). Handles commercial vs residential scope."
+  output_quality:
+    score: 9
+    rationale: "Example agreement is signature-ready: proper letterhead, covered equipment schedule, equipment-specific PM checklists, named exclusions, clean term/renewal language, correct pricing with multi-system discount, and signature block."
+  personalization:
+    score: 9
+    rationale: "Pulls maintenance_plans pricing from config, labor_rate, after_hours_multiplier, company letterhead, logo path, license, and voice. Equipment-specific checklists reference the unit types in the covered equipment list."
+  efficiency:
+    score: 9
+    rationale: "Ten-field input list pre-empts most clarifying questions. Sensible defaults (1-year auto-renew, annual up-front payment) mean the CSR can produce a complete agreement in one turn."
+
+weighted_score: 9.00
+passing: true
+improvement_from_v1: "+5.00 (from 4.00)"

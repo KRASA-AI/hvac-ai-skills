@@ -1,0 +1,30 @@
+skill: load-calculation-assistant
+category: operations
+version: 2.0
+eval_date: 2026-04-12
+evaluator: automated
+note: "Post-improvement re-evaluation"
+
+scores:
+  clarity:
+    score: 9
+    rationale: "Six clearly numbered steps with calculation methodology at each stage. U-value defaults, ACH values, and duct loss factors are explicitly provided. No ambiguity in process."
+  specificity:
+    score: 10
+    rationale: "Extremely specific: provides U-values for every construction type, infiltration rates by tightness, duct loss percentages, internal gain values, and a 6-point sizing mistake checklist. Full output format with line-item breakdowns."
+  industry_fit:
+    score: 10
+    rationale: "Follows ACCA Manual J methodology by name. References design day temperatures, climate zones, altitude derating, SHGC, and real HVAC-Calc/Wrightsoft software. The sizing mistakes checklist addresses actual field errors."
+  output_quality:
+    score: 9
+    rationale: "Output shows complete load breakdown by component, sizing recommendation, alerts section, and assumptions. Example demonstrates practical application with oversizing diagnosis. Includes appropriate disclaimer about formal Manual J."
+  personalization:
+    score: 7
+    rationale: "References config for company details and service area climate data. Could be stronger by incorporating preferred equipment lines for sizing recommendations."
+  efficiency:
+    score: 8
+    rationale: "Structured input list with 5 categories. Handles missing inputs with estimation and flagging. Minimal back-and-forth needed when inputs are provided upfront."
+
+weighted_score: 9.10
+passing: true
+improvement_from_v1: "+5.10 (from 4.00)"

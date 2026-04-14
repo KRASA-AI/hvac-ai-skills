@@ -1,0 +1,32 @@
+skill: proposal-generator
+category: sales
+version: 2.0
+eval_date: 2026-04-13
+evaluator: automated
+previous_score: 8.90
+previous_date: 2026-04-12
+
+scores:
+  clarity:
+    score: 9
+    rationale: "Clear tier structure with explicit positioning for each option. Value justification framework and pricing guidelines unambiguous."
+  specificity:
+    score: 9
+    rationale: "Exact SEER2 ranges per tier, warranty structures, installation scope differences, comparison table, incentive integration."
+  industry_fit:
+    score: 9
+    rationale: "Uses SEER2 ratings, references real equipment categories, IAQ add-ons, 25C tax credits, and sales psychology (anchor middle option)."
+  output_quality:
+    score: 9
+    rationale: "Complete proposal with assessment, three tiers, comparison table, incentives, company differentiators, and next steps."
+  personalization:
+    score: 8
+    rationale: "Leverages config: company name, rates, warranty terms, branding, voice taglines, years in business, service area, financing."
+  efficiency:
+    score: 8
+    rationale: "Clear input list. Handles missing pricing with placeholders. One-shot ready-to-send proposal."
+
+weighted_score: 8.90
+passing: true
+regression: false
+delta_from_previous: 0.00

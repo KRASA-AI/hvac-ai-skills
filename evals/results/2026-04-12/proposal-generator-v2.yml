@@ -1,0 +1,30 @@
+skill: proposal-generator
+category: sales
+version: 2.0
+eval_date: 2026-04-12
+evaluator: automated
+note: "Post-improvement re-evaluation"
+
+scores:
+  clarity:
+    score: 9
+    rationale: "Clear tier structure with explicit positioning for each option. Value justification framework and pricing presentation guidelines are unambiguous."
+  specificity:
+    score: 9
+    rationale: "Defines exact SEER2 ranges per tier, warranty structures, installation scope differences, output format with side-by-side comparison table, and incentive integration. Good-better-best fully specified."
+  industry_fit:
+    score: 9
+    rationale: "Uses SEER2 ratings, references real equipment categories (variable-speed, cold-climate heat pump), IAQ add-ons, 25C tax credits, and common HVAC sales psychology (anchor middle option, show incremental cost)."
+  output_quality:
+    score: 9
+    rationale: "Complete proposal template with assessment, three tiers, comparison table, incentives, company differentiators, and next steps. Example uses real Carrier model numbers and demonstrates the value-bridging technique."
+  personalization:
+    score: 8
+    rationale: "Deeply leverages config: company name, rates, warranty terms, branding, voice taglines, years in business, service area, and financing availability. Cross-references with energy-savings-report and load-calculation-assistant."
+  efficiency:
+    score: 8
+    rationale: "Clear 6-item input list. Handles missing pricing gracefully with placeholder markers. Produces a complete, ready-to-send proposal in one shot."
+
+weighted_score: 8.90
+passing: true
+improvement_from_v1: "+4.90 (from 4.00)"

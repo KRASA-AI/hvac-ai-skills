@@ -1,0 +1,32 @@
+skill: load-calculation-assistant
+category: operations
+version: 2.0
+eval_date: 2026-04-13
+evaluator: automated
+previous_score: 9.10
+previous_date: 2026-04-12
+
+scores:
+  clarity:
+    score: 9
+    rationale: "Structured walkthrough of Manual J inputs with explanatory callouts. Sizing mistake checklist is unambiguous."
+  specificity:
+    score: 10
+    rationale: "Includes component U-values, infiltration rates, duct loss factors, internal gain calculations, altitude derating, and exact equipment sizing brackets."
+  industry_fit:
+    score: 9
+    rationale: "Deep industry knowledge: Manual J references, SEER2/AFUE, common oversizing pitfalls, and retrofit validation. Terminology is veteran-grade."
+  output_quality:
+    score: 9
+    rationale: "Produces a preliminary load estimate with reasoning, assumption log, and equipment size range — usable in a real quote pipeline."
+  personalization:
+    score: 8
+    rationale: "Cross-references proposal-generator and energy-savings-report. Uses config for climate zone, service area, and voice."
+  efficiency:
+    score: 9
+    rationale: "Handles missing measurements with clear assumption placeholders rather than repeated clarification loops."
+
+weighted_score: 9.10
+passing: true
+regression: false
+delta_from_previous: 0.00
