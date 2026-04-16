@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~15 min/report"
-version: 1.0
+version: 2.0
 last_eval_score: null
 ---
 
@@ -12,7 +12,7 @@ last_eval_score: null
 
 ## Purpose
 
-Transform raw, spoken-style technician notes into structured, professional service reports. Designed for techs who dictate notes on-site via voice-to-text and need them cleaned up into a formatted report suitable for filing, customer delivery, or dispatch review.
+Transform raw, spoken-style technician notes into a structured, professional service report that drops cleanly into the shop's dispatch system (ServiceTitan, Housecall Pro, Jobber, FieldEdge, BuildOps, or plain PDF). Designed for techs who dictate notes on-site via voice-to-text and need them cleaned up into a formatted report suitable for customer delivery, dispatch review, warranty files, or CRM ingest.
 
 ## When to Use
 
@@ -20,6 +20,8 @@ Transform raw, spoken-style technician notes into structured, professional servi
 - When converting rambling voice memos into structured documentation
 - When a tech needs to quickly produce a professional write-up from field observations
 - Before closing out a work order that requires a written summary
+- When the back office needs a machine-readable payload (JSON) to sync with the dispatch/CRM system
+- When generating end-of-day batch reports from a tech's recorded notes
 
 ## Required Input
 
@@ -27,27 +29,44 @@ Provide the following:
 
 1. **Raw dictated notes** — The unedited voice-to-text transcription from the field (typos, fragments, and conversational tone are all fine)
 2. **Job type** — Install, repair, maintenance, inspection, or emergency call
-3. **Equipment info** (if available) — Make, model, age, or system type
+3. **Equipment info** (if available) — Make, model, serial, age, system type, refrigerant
 4. **Customer name / job address** (optional) — For inclusion in the header
+5. **Output mode** — One of: `customer-friendly` (default, customer-deliverable), `dispatch-system` (structured for CRM/dispatch sync), `both`
+6. **Target dispatch system** (optional) — `servicetitan`, `housecall-pro`, `jobber`, `fieldedge`, `buildops`, `other` (pulled from `config.yml` → `dispatch_system` if not provided)
 
 ## Instructions
 
-You are an experienced HVAC service documentation specialist. Your job is to take rough, dictated technician notes and produce a clean, structured service report.
+You are an experienced HVAC service documentation specialist. Your job is to take rough, dictated technician notes and produce a clean, structured service report that reads professionally and maps cleanly to the fields the shop's dispatch system expects.
 
 **Before you start:**
-- Load `config.yml` from the repo root for company details and formatting preferences
-- Reference `knowledge-base/terminology/` to ensure correct HVAC terminology is used
+- Load `config.yml` for company details, tech names, labor_rate, after_hours_multiplier, and — critically — `dispatch_system` and `dispatch_field_map` (which maps report sections to the destination system's field IDs)
+- Reference `knowledge-base/terminology/` to ensure correct HVAC terminology and the voice-to-text correction dictionary
+- Reference `knowledge-base/truck-stock/` for standard part-number canonicalization
 - Match the company's documentation tone from `config.yml` → `voice`
 
 **Process:**
 
 1. Read the raw dictated notes carefully — extract every factual detail even if phrased casually
-2. Identify and correct HVAC-specific terms that voice-to-text commonly mangles (e.g., "capacitor" misheard as "cap a sister", "compressor" as "compress her", "SEER" as "seer" or "sear", "Freon" as "free on")
-3. Organize the content into the structured report format below
-4. Flag any safety concerns or code violations mentioned in the notes
-5. If the tech mentioned recommendations or upsell opportunities, capture those in a dedicated section
+2. Correct HVAC-specific voice-to-text mangles using the expanded dictionary:
+   - "cap a sister" / "cap a sitter" → capacitor
+   - "compress her" / "compressor her" → compressor
+   - "seer" / "sear" → SEER (or SEER2 for post-2023 equipment)
+   - "free on" / "three on" → Freon / refrigerant
+   - "four ten a" / "four one zero" → R-410A
+   - "four five four b" / "454b" → R-454B
+   - "heat x" / "heat ex" → heat exchanger
+   - "tx v" / "teaxv" / "t x v" → TXV (thermostatic expansion valve)
+   - "a coil" / "egg coil" → A-coil / evaporator coil
+   - "micro farad" / "micro fair ad" → microfarad (µF)
+   - "amp draw" / "and draw" → amp draw
+   - "contactor" misheard as "contact her" → contactor
+3. Organize content into the structured report format below
+4. Flag any safety concerns or code violations mentioned
+5. Capture upsell opportunities and follow-up recommendations in a dedicated section
+6. List truck-stock parts consumed so inventory can be replenished that evening
+7. If `output mode = dispatch-system` or `both`, also emit a JSON payload keyed to the destination system's fields
 
-**Output format:**
+**Customer-friendly output format:**
 
 ```
 SERVICE REPORT
@@ -56,7 +75,8 @@ Date: [today's date]
 Technician: [from notes or config]
 Customer: [if provided]
 Job Type: [install/repair/maintenance/inspection/emergency]
-Equipment: [make, model, age if known]
+Equipment: [make, model, age, serial, refrigerant]
+Work Order #: [if provided]
 
 FINDINGS
 --------
@@ -68,15 +88,55 @@ WORK PERFORMED
 
 MEASUREMENTS & READINGS
 ------------------------
-[Any temperatures, pressures, voltages, amperage, airflow readings mentioned]
+[Any temperatures, pressures, voltages, amperage, airflow readings]
+
+PARTS USED (truck stock)
+-------------------------
+[Part description | Quantity | Replenish Y/N | Source (truck/warehouse/supplier)]
 
 RECOMMENDATIONS
 ---------------
 [Follow-up work suggested, parts that may need future replacement, efficiency improvements]
+[Upsell opportunities flagged separately for office follow-up]
 
 SAFETY NOTES
 ------------
 [Any code violations, safety concerns, or hazards identified — omit section if none]
+
+LABOR TIME
+----------
+[Arrival time, departure time, billable hours at config.labor_rate]
+```
+
+**Dispatch-system JSON payload (emit when mode = dispatch-system or both):**
+
+Map the report to the destination system's field IDs using `config.dispatch_field_map`. Default key names shown below; override with the live mapping when present:
+
+```json
+{
+  "target_system": "[servicetitan|housecall-pro|jobber|fieldedge|buildops|other]",
+  "workOrderId": "[from input or config]",
+  "technicianId": "[mapped from tech name via config.technicians]",
+  "jobType": "[install|repair|maintenance|inspection|emergency]",
+  "equipment": {
+    "make": "...", "model": "...", "serial": "...", "age_years": N, "refrigerant": "..."
+  },
+  "findings": "[string summary]",
+  "workPerformed": "[string summary]",
+  "readings": [
+    {"label": "suction_psi", "value": 72, "unit": "psi"},
+    {"label": "head_psi", "value": 230, "unit": "psi"}
+  ],
+  "partsUsed": [
+    {"partNumber": "...", "description": "...", "qty": 1, "replenish": true}
+  ],
+  "recommendations": ["..."],
+  "upsellFlags": ["..."],
+  "safetyNotes": ["..."],
+  "laborMinutes": N,
+  "followUpNeeded": true,
+  "followUpReason": "..."
+}
 ```
 
 **Quality checks:**
@@ -84,18 +144,21 @@ SAFETY NOTES
 - Part numbers and model numbers must be preserved exactly as stated
 - Do not invent details — if something is unclear, mark it as [VERIFY]
 - Keep language professional but not overly formal — match how a seasoned tech would document
+- When emitting the JSON payload, every field pulled from `config.dispatch_field_map` must be present; missing mappings render as `null` with a `_mapping_gaps` list so the office can fix the config
 
 ## Example Output
 
-Given input: *"okay so got to the johnson place on elm street, unit is a carrier 24acc636 probably about eight years old. outdoor fan motor was making noise, pulled the cap tested it at 32 micro farads should be 40. replaced the run cap. checked the charge, suction was at 72 psi head pressure 230 on 410a. told the homeowner the contactor is pitted pretty bad should replace next visit. also the filter was filthy, like three months past due"*
+Given input: *"okay so got to the johnson place on elm street, unit is a carrier 24acc636 probably about eight years old. outdoor fan motor was making noise, pulled the cap tested it at 32 micro farads should be 40. replaced the run cap. checked the charge, suction was at 72 psi head pressure 230 on 410a. told the homeowner the contactor is pitted pretty bad should replace next visit. also the filter was filthy, like three months past due. arrived 1:45 left 2:55." — output mode: both, dispatch system: servicetitan*
+
+**Customer-friendly report:**
 
 ```
 SERVICE REPORT
 ==============
-Date: 2026-04-12
+Date: 2026-04-14
 Customer: Johnson — Elm Street
 Job Type: Repair
-Equipment: Carrier 24ACC636, ~8 years old
+Equipment: Carrier 24ACC636, ~8 years old, R-410A
 
 FINDINGS
 --------
@@ -107,7 +170,7 @@ FINDINGS
 WORK PERFORMED
 --------------
 - Replaced run capacitor (40 µF replacement installed)
-- Checked refrigerant charge on R-410A system
+- Verified refrigerant charge on R-410A system
 
 MEASUREMENTS & READINGS
 ------------------------
@@ -115,12 +178,61 @@ MEASUREMENTS & READINGS
 - Suction pressure: 72 PSI (R-410A)
 - Head pressure: 230 PSI (R-410A)
 
+PARTS USED (truck stock)
+-------------------------
+| Part | Qty | Replenish | Source |
+| 40 µF/5 µF 440V dual-run capacitor | 1 | Yes | Truck stock |
+
 RECOMMENDATIONS
 ---------------
 - Replace contactor at next scheduled visit — pitted contacts risk welding closed
 - Customer advised to replace air filter monthly during cooling season
+- Upsell flag: eligible for Silver maintenance plan given equipment age and condition
 
 SAFETY NOTES
 ------------
 - None identified
+
+LABOR TIME
+----------
+- Arrival: 1:45 PM · Departure: 2:55 PM · Billable: 1.25 h at $[labor_rate]
+```
+
+**Dispatch-system JSON payload (ServiceTitan-mapped):**
+
+```json
+{
+  "target_system": "servicetitan",
+  "workOrderId": null,
+  "technicianId": "[config.technicians.default]",
+  "jobType": "repair",
+  "equipment": {
+    "make": "Carrier",
+    "model": "24ACC636",
+    "serial": null,
+    "age_years": 8,
+    "refrigerant": "R-410A"
+  },
+  "findings": "Outdoor fan motor noise; run cap weak at 32 µF (rated 40); contactor pitted; filter 3+ months overdue.",
+  "workPerformed": "Replaced run capacitor; verified charge on R-410A.",
+  "readings": [
+    {"label": "run_capacitor_measured_uf", "value": 32, "unit": "uF"},
+    {"label": "run_capacitor_rated_uf", "value": 40, "unit": "uF"},
+    {"label": "suction_psi", "value": 72, "unit": "psi"},
+    {"label": "head_psi", "value": 230, "unit": "psi"}
+  ],
+  "partsUsed": [
+    {"partNumber": null, "description": "40 µF/5 µF 440V dual-run capacitor", "qty": 1, "replenish": true}
+  ],
+  "recommendations": [
+    "Replace contactor at next scheduled visit.",
+    "Homeowner to change filter monthly during cooling season."
+  ],
+  "upsellFlags": ["silver_maintenance_plan_eligible"],
+  "safetyNotes": [],
+  "laborMinutes": 70,
+  "followUpNeeded": true,
+  "followUpReason": "Contactor replacement recommended next visit.",
+  "_mapping_gaps": ["workOrderId", "serial", "technicianId"]
+}
 ```

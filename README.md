@@ -13,7 +13,7 @@ This repo is a complete AI toolkit for hvac. Every skill is a standalone prompt 
 
 | Skill | What it does | Time saved |
 |-------|-------------|------------|
-| Field Report Dictation | Transform raw, spoken-style technician notes into structured, professional service reports. | ~15 min/report |
+| Field Report Dictation | Transform raw, spoken-style technician notes into a structured, professional service report that drops cleanly into the shop's dispatch system (ServiceTitan, Housecall Pro, Jobber, FieldEdge, BuildOps, or plain PDF). | ~15 min/report |
 | Load Calculation Assistant | Walk through Manual J residential load calculation inputs step-by-step, flag common sizing mistakes, and produce a preliminary load estimate with equipment sizing recommendations — before the formal quote. | ~30 min/calc |
 | Predictive Maintenance Summary | Analyze equipment sensor data, maintenance history, and performance trends to generate a predictive maintenance report. | ~20 min/report |
 | Service Call Diagnosis Brief | Summarize the reported issue, likely causes, and recommended parts before the tech arrives — and optionally guide live troubleshooting in the field with interactive, step-by-step diagnostic assistance. | ~10 min/call |
@@ -24,13 +24,14 @@ This repo is a complete AI toolkit for hvac. Every skill is a standalone prompt 
 | A2L / R-454B Refrigerant Transition Explainer | Produce clear, honest, non-alarming customer-facing explanations of the 2026 A2L refrigerant transition — most commonly R-454B replacing R-410A — tailored to a specific homeowner or light-commercial situation. | ~15 min/customer conversation |
 | After-Hours Call Handler Script | Produce a complete after-hours call-handling framework for an HVAC business: the voice-agent or live-receptionist script, emergency-triage decision tree, caller data-collection structure, and dispatcher handoff package. | ~20 min/after-hours call (plus recovered revenue) |
 | Energy Savings Report | Generate a customer-facing report showing projected energy and cost savings from upgrading their HVAC system — with real numbers, payback timelines, and available rebates. | ~20 min/report |
+| Rebate & Tax Credit Navigator | Produce a clear, state-aware, customer-facing answer to the question "what money is still on the table for my HVAC or heat pump project?" The federal 25C Energy Efficient Home Improvement Credit for heat pumps expired for installations completed after December 31, 2025, and the landscape has shifted abruptly to a patchwork of state HEEHRA/HOMES rebates, utility programs, manufacturer promotions, and contractor-financing incentives. | ~20 min/customer conversation |
 | Invoice Follow-Up Drafter | Generate professional, appropriately toned payment follow-up messages for outstanding HVAC service invoices. | ~10 min/message |
 | Warranty Claim Drafter | Compile a complete, manufacturer-ready warranty claim package — serial/model lookup, proof-of-install, failure narrative, and labor reimbursement request — in the exact format each OEM portal expects. | ~25 min/claim |
 | Email Drafter | Turn rough notes into a professional email matching your company's voice and tone. | ~10 min/use |
 | Meeting Summarizer | Summarize meeting notes into action items, decisions, and follow-ups. | ~10 min/use |
 | Review Responder | Craft professional, context-aware responses to online reviews — both positive and negative — with built-in local SEO optimization. | ~10 min/use |
 
-**Total time saved per use: ~282+ minutes across all skills.**
+**Total time saved per use: ~302+ minutes across all skills.**
 
 ## Quick Start
 
