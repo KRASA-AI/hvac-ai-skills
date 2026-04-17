@@ -27,11 +27,12 @@ This repo is a complete AI toolkit for hvac. Every skill is a standalone prompt 
 | Rebate & Tax Credit Navigator | Produce a clear, state-aware, customer-facing answer to the question "what money is still on the table for my HVAC or heat pump project?" The federal 25C Energy Efficient Home Improvement Credit for heat pumps expired for installations completed after December 31, 2025, and the landscape has shifted abruptly to a patchwork of state HEEHRA/HOMES rebates, utility programs, manufacturer promotions, and contractor-financing incentives. | ~20 min/customer conversation |
 | Invoice Follow-Up Drafter | Generate professional, appropriately toned payment follow-up messages for outstanding HVAC service invoices. | ~10 min/message |
 | Warranty Claim Drafter | Compile a complete, manufacturer-ready warranty claim package — serial/model lookup, proof-of-install, failure narrative, and labor reimbursement request — in the exact format each OEM portal expects. | ~25 min/claim |
+| Customer Journey SMS Pack | Generate the full set of customer-facing SMS templates that an HVAC contractor needs to run a modern, automated customer journey from first inquiry through post-job follow-up and seasonal re-engagement. | ~3 hr/setup, ~12 min/customer thereafter |
 | Email Drafter | Turn rough notes into a professional email matching your company's voice and tone. | ~10 min/use |
 | Meeting Summarizer | Summarize meeting notes into action items, decisions, and follow-ups. | ~10 min/use |
 | Review Responder | Craft professional, context-aware responses to online reviews — both positive and negative — with built-in local SEO optimization. | ~10 min/use |
 
-**Total time saved per use: ~302+ minutes across all skills.**
+**Total time saved per use: ~314+ minutes across all skills.**
 
 ## Quick Start
 
