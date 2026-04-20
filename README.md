@@ -20,6 +20,7 @@ This repo is a complete AI toolkit for hvac. Every skill is a standalone prompt 
 | Visual Inspection Report | Transform technician field photos and accompanying notes into a structured visual inspection report. | ~20 min/report |
 | Maintenance Agreement Writer | Produce a complete, signature-ready residential or light-commercial HVAC maintenance agreement in one of three clearly-defined coverage tiers (Silver / Gold / Platinum). | ~30 min/agreement |
 | Proposal Generator | Build a professional, multi-option replacement or installation proposal with good-better-best equipment packages. | ~25 min/proposal |
+| Repair vs. Replace Advisor | Produce a defensible, kitchen-table-ready recommendation on whether a homeowner should repair their existing HVAC system or replace it — at 2026 tariff-adjusted prices, with financing math, available incentives, and explicit AI-validation framing so the homeowner doesn't hand the decision over to a naïve ChatGPT check after the technician leaves. | ~25 min/conversation |
 | Speed-to-Lead Qualifier | Produce a complete speed-to-lead response kit for a new inbound HVAC lead: the immediate-reply message (SMS or missed-call auto-text), a follow-up cadence over 5 days, and a qualifying question script that gathers the minimum data a dispatcher needs to book the right technician. | ~12 min/lead |
 | A2L / R-454B Refrigerant Transition Explainer | Produce clear, honest, non-alarming customer-facing explanations of the 2026 A2L refrigerant transition — most commonly R-454B replacing R-410A — tailored to a specific homeowner or light-commercial situation. | ~15 min/customer conversation |
 | After-Hours Call Handler Script | Produce a complete after-hours call-handling framework for an HVAC business: the voice-agent or live-receptionist script, emergency-triage decision tree, caller data-collection structure, and dispatcher handoff package. | ~20 min/after-hours call (plus recovered revenue) |
@@ -32,7 +33,7 @@ This repo is a complete AI toolkit for hvac. Every skill is a standalone prompt 
 | Meeting Summarizer | Summarize meeting notes into action items, decisions, and follow-ups. | ~10 min/use |
 | Review Responder | Craft professional, context-aware responses to online reviews — both positive and negative — with built-in local SEO optimization. | ~10 min/use |
 
-**Total time saved per use: ~314+ minutes across all skills.**
+**Total time saved per use: ~339+ minutes across all skills.**
 
 ## Quick Start
 
