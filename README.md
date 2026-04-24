@@ -17,6 +17,7 @@ This repo is a complete AI toolkit for hvac. Every skill is a standalone prompt 
 | Load Calculation Assistant | Walk through Manual J residential load calculation inputs step-by-step, flag common sizing mistakes, and produce a preliminary load estimate with equipment sizing recommendations — before the formal quote. | ~30 min/calc |
 | Predictive Maintenance Summary | Analyze equipment sensor data, maintenance history, and performance trends to generate a predictive maintenance report. | ~20 min/report |
 | Service Call Diagnosis Brief | Summarize the reported issue, likely causes, and recommended parts before the tech arrives — and optionally guide live troubleshooting in the field with interactive, step-by-step diagnostic assistance. | ~10 min/call |
+| Tech Onboarding Curriculum | Produce a company-specific, four-phase (Day 1 → first season) onboarding curriculum for a new HVAC technician that captures senior-tech tribal knowledge, embeds the AI-literacy track now required for DOL Registered Apprenticeships, and compresses time-to-productivity. | ~6 hr/new-hire plan |
 | Visual Inspection Report | Transform technician field photos and accompanying notes into a structured visual inspection report. | ~20 min/report |
 | Maintenance Agreement Writer | Produce a complete, signature-ready residential or light-commercial HVAC maintenance agreement in one of three clearly-defined coverage tiers (Silver / Gold / Platinum). | ~30 min/agreement |
 | Proposal Generator | Build a professional, multi-option replacement or installation proposal with good-better-best equipment packages. | ~25 min/proposal |
@@ -33,7 +34,7 @@ This repo is a complete AI toolkit for hvac. Every skill is a standalone prompt 
 | Meeting Summarizer | Summarize meeting notes into action items, decisions, and follow-ups. | ~10 min/use |
 | Review Responder | Craft professional, context-aware responses to online reviews — both positive and negative — with built-in local SEO optimization. | ~10 min/use |
 
-**Total time saved per use: ~339+ minutes across all skills.**
+**Total time saved per use: ~339+ minutes across all skills (plus ~6 hr / new-hire when onboarding a tech).**
 
 ## Quick Start
 
