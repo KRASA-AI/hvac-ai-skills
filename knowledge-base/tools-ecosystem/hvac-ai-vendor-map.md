@@ -1,6 +1,6 @@
 ---
 title: "HVAC AI Vendor & Platform Map"
-last_updated: "2026-04-15"
+last_updated: "2026-04-26"
 purpose: "Reference document for tools referenced by skills and for landscape awareness. Updated by the landscape-monitor scheduled task."
 ---
 
@@ -10,7 +10,7 @@ This is a working map of the AI-enabled tools, platforms, and integrations that 
 
 ## Field Diagnostics & Technician Assistance
 
-- **Bluon (MasterMechanic)** — AI diagnostic engine built on a 25M+ unit database, parts lookup across 200+ OEMs, and original equipment manuals. 170K+ technicians on the app. Integrated inside BuildOps FSM as of March 2026. Nationwide rollout at Helios HVACR across 40+ states.
+- **Bluon (MasterMechanic, PartsConnect)** — AI diagnostic engine built on a 30M+ model-number / 240+ OEM database (originally cited as 25M / 200+ — refreshed off the 2026-04-13 launch announcement) with original equipment manuals, wiring diagrams, and parts lists. 170K+ technicians on the app. Two AI surfaces relevant to skill authoring: (1) MasterMechanic — guided-troubleshooting trained on 135K+ verified service-call solutions, runs as a chat-style fault-tree assistant inside the Bluon app and inside BuildOps FSM (integrated March 2026). (2) PartsConnect (launched 2026-04-13, in-app + FSM plug-in) — technician scans or types a malfunctioning unit's model number, the system identifies compatible replacement parts via cross-reference, surfaces which nearby distributors have them in stock, and supports direct purchase. Early-user data cited 40% turnaround-time reduction on parts-related calls. Implication for skills: when `operations/field-report-dictation.md` or `operations/service-call-diagnosis-brief.md` recommends a part substitution, the contractor's likely workflow is to verify in PartsConnect — skill outputs should leave a placeholder for the verified part number rather than asserting one. Nationwide rollout at Helios HVACR across 40+ states (carried from prior cycle).
 - **BTrained** — AI-guided technician training and refresher content, aimed at knowledge-transfer as seasoned techs retire.
 - **Arcticom Group** — Franchise system using AI as a live field assistant for troubleshooting and error-code interpretation.
 
@@ -92,7 +92,8 @@ This is a working map of the AI-enabled tools, platforms, and integrations that 
 |------|--------------------|
 | 24/7 voice answering | Podium Larry, ServiceTitan AI Voice Agents, Dialzara, Avoca, MyAI FrontDesk, Smith.ai |
 | Speed-to-lead SMS | Hatch, Apten, Podium |
-| Live field diagnostic | Bluon (standalone or inside BuildOps) |
+| Live field diagnostic | Bluon MasterMechanic (standalone or inside BuildOps) |
+| Compatible-parts lookup + local stock | Bluon PartsConnect, Marcone MyMarcone (with MarconeAI), MeasureQuick |
 | Dispatch optimization | ServiceTitan Dispatch Pro, BuildOps, FieldCamp AI Dispatcher, Workiz |
 | Post-job reviews | Broadly, NiceJob, BirdEye |
 | Photo inspection reports | CompanyCam, InspectMind AI |
@@ -115,3 +116,4 @@ This is a working map of the AI-enabled tools, platforms, and integrations that 
 
 *Change log for this document:*
 - 2026-04-15 — Initial population from landscape-monitor backlog. Added Permitio.ai, FieldCamp AI Dispatcher, Apaya. Consolidated voice-agent list previously scattered across skill files and monitor logs.
+- 2026-04-26 — Refreshed Bluon entry with PartsConnect launch (2026-04-13): cross-referenced compatible parts + local-distributor stock layer added on top of the existing MasterMechanic diagnostic engine. Database scale refreshed (30M+ models / 240+ OEMs per the launch announcement, up from the prior 25M / 200+ figures). Added "Compatible-parts lookup + local stock" row to the Quick Lookup table covering Bluon PartsConnect, Marcone MyMarcone (with MarconeAI), and MeasureQuick. Added a skills-implication note: when `operations/field-report-dictation.md` or `operations/service-call-diagnosis-brief.md` recommends a substitution, leave a placeholder for the technician's PartsConnect-verified part number rather than asserting one in the prompt output.
