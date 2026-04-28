@@ -4,7 +4,7 @@ category: sales
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~30 min/agreement"
-version: 2.0
+version: 3.0
 last_eval_score: null
 ---
 
@@ -12,16 +12,27 @@ last_eval_score: null
 
 ## Purpose
 
-Produce a complete, signature-ready residential or light-commercial HVAC maintenance agreement in one of three clearly-defined coverage tiers (Silver / Gold / Platinum). Each agreement includes scope of work, visit schedule, parts/labor coverage, exclusions, term/renewal, pricing, and customer signature block — written to close at the point of sale or at a renewal conversation without a follow-up round.
+Produce a complete, signature-ready residential or light-commercial HVAC maintenance agreement in one of three coverage tiers (Silver / Gold / Platinum), or a multi-unit fleet PM agreement for a property manager. Each agreement includes scope of work, visit schedule, parts/labor coverage, exclusions, term/renewal, pricing, and customer signature block — written to close at the point of sale or at a renewal conversation without a follow-up round.
+
+In 2026, the agreement has a second job: surviving the customer's now-routine post-signature AI check ("paste the agreement into ChatGPT and ask if it's a fair plan"). Output must read as licensed-and-legitimate, not a templated hard-sell.
 
 ## When to Use
 
 - A homeowner accepts a maintenance plan during a service call
 - A new install is being handed off and the free first-year plan needs to be papered
 - Annual renewal for an existing plan member (pulls prior-year coverage and adjusts for equipment changes)
-- A commercial property manager requests a quote for multi-unit PM coverage
+- A commercial property manager requests a quote for multi-unit PM coverage (light-commercial fleet variant)
 - A new CSR needs a template for phone-sold plans
 - A fleet of rental properties needs a uniform plan across addresses
+- Multi-year pre-pay scenarios (1 / 2 / 3 / 5 year) where the price-lock and discount stack matters
+
+## Boundary vs. adjacent skills
+
+- **`sales/proposal-generator.md`** is upstream — when a new install proposal includes the first year of PM, the proposal generator names the plan tier and this skill writes the actual agreement.
+- **`sales/repair-vs-replace-advisor.md`** is upstream — Platinum-tier upsells are sometimes used as the lever to make a repair-track decision more attractive than a replacement.
+- **`operations/predictive-maintenance-summary.md`** is downstream for commercial fleet plans — the PM visits documented here feed the predictive-maintenance summary's failure-pattern history.
+- **`operations/field-report-dictation.md`** is downstream — every PM visit produces a field report documented via that skill.
+- **`admin/invoice-followup-drafter.md`** is downstream — the renewal billing flows there if payment is late.
 
 ## Required Input
 
@@ -43,8 +54,11 @@ Provide the following — required fields marked (*):
 You are an experienced HVAC sales office manager drafting a maintenance agreement. Your goals are: (1) produce a document a homeowner will sign without edits, (2) make the tier differences obvious and compelling, (3) protect the company with clear exclusions and terms, (4) match the equipment-specific PM work that will actually be done in the field.
 
 **Before you start:**
-- Load `config.yml` for company name, license, address, phone, email, logo path, and — critically — `maintenance_plans` (tier names, pricing, inclusions) and `labor_rate` / `after_hours_multiplier`
+- Load `config.yml` for company name, license, address, phone, email, logo path, and — critically — `maintenance_plans` (tier names, pricing, inclusions), `labor_rate`, `after_hours_multiplier`, and `multi_year_discount_table` (1yr / 2yr / 3yr / 5yr pre-pay discount %s)
+- Load `config.dispatch_field_map` so the recurring PM visits auto-populate the right ServiceTitan / Housecall Pro / Jobber / FieldEdge / BuildOps field names. Missing fields surface in `_mapping_gaps` rather than getting hallucinated.
+- Load `config.truck_stock_mapping` so the included-parts list (Platinum capacitor / contactor / float-switch coverage) reflects what's actually on the truck.
 - Reference `knowledge-base/maintenance-checklists/` for the appropriate PM checklist per equipment type
+- Reference `knowledge-base/refrigerants/a2l-handling.md` for the A2L (R-454B / R-32) refrigerant top-off rules — A2L systems require recovery-machine cylinder swaps, EPA 608 logbook entries, and nitrogen pressure tests at 250 psi (not 200 psi). Refrigerant top-off allowances on A2L systems should be priced ~30–40% higher than R-410A allowances to reflect the cylinder-handling labor. Do not promise a flat 2-lb allowance across both refrigerants without distinguishing.
 - Match the company's voice from `config.yml` → `voice` (agreements should read professionally, but not stiffer than the rest of company communications)
 
 **Coverage tier framework (use these unless config overrides):**
@@ -71,11 +85,22 @@ You are an experienced HVAC sales office manager drafting a maintenance agreemen
   - Everything in Gold, plus:
   - 20% off repair parts and labor
   - Annual $150 repair credit (non-cumulative, applies to any billable work)
-  - Capacitor, contactor, condensate float switch replacement included if failed during a PM visit
-  - Refrigerant top-off allowance: up to 2 lbs/year at no cost (repair of leak is separate)
+  - Capacitor, contactor, condensate float switch replacement included if failed during a PM visit (parts pulled from `config.truck_stock_mapping`)
+  - Refrigerant top-off allowance: R-410A systems up to 2 lbs/year at no cost; R-454B / R-32 (A2L) systems up to 1.5 lbs/year at no cost (cylinder-handling labor priced separately if exceeded). Repair of underlying leak is always separate and named so.
   - Same-day response guarantee for no-heat / no-cool calls (business hours)
   - Transferable if home is sold mid-term
-  - *Typical price: $399–549 / system / year*
+  - *Typical price: $399–549 / system / year (R-410A); $429–579 / system / year (A2L systems with cylinder-handling cost-of-service uplift)*
+
+**Multi-year pre-pay pricing matrix** (apply on top of tier price; pulls from `config.multi_year_discount_table` when set):
+
+| Term | Pre-Pay Discount | Price-Lock Through |
+|------|------------------|--------------------|
+| 1 yr | 0% (annual)      | end of term        |
+| 2 yr | 5%               | end of year 2      |
+| 3 yr | 8%               | end of year 3      |
+| 5 yr | 12%              | end of year 5      |
+
+Pre-pay is paid up-front; price-lock means tier-price increases during the term do not affect the customer. Cancel-mid-term refund is pro-rata on unused visits less the company's standard administrative fee.
 
 **Process:**
 
@@ -154,6 +179,74 @@ Printed:  ____________________________
 Questions?  [phone]  |  [email]
 ```
 
+**Light-commercial fleet variant (multi-unit property manager):**
+
+When the customer is a property manager with ≥3 covered systems (typically a strip-mall, small office, or rental fleet), use this fleet template instead of the residential format:
+
+```
+[COMPANY LETTERHEAD — license, address, phone, email]
+
+LIGHT-COMMERCIAL HVAC PM AGREEMENT — FLEET PLAN
+Agreement Date / Effective / Term / Agreement #
+
+ACCOUNT
+[Property manager / owner entity / billing address / billing contact / service contact]
+
+COVERED SITES & EQUIPMENT
+| Site | Address | Equipment | Tons | Refrigerant | Age | Tier |
+|------|---------|-----------|------|-------------|-----|------|
+| 1    | ...     | RTU 48HC  | 5T   | R-454B      | 1yr | Gold |
+| 2    | ...     | Split AC  | 3T   | R-410A      | 8yr | Silver |
+| ...                                                                  |
+
+FLEET COVERAGE
+- Bi-annual PM per Gold-tier checklist for all sites unless tier overridden per row above
+- Single quarterly invoice (rather than per-site invoicing) — net 30 terms
+- Dedicated commercial dispatcher line: [phone]
+- Master-account discount: 5% off all repair parts and labor across the fleet
+- Annual fleet condition report (one rolled-up document covering all sites) delivered each January
+- 24-hour response guarantee for any covered RTU during business hours; 4-hour response for the manager's
+  designated "tier-1" sites (named below)
+
+TIER-1 SITES (4-hour response)
+[List, with site contact phone]
+
+INCLUDED SERVICES PER VISIT
+[Per-equipment-type checklist — RTUs get separate from split-AC checklist; reference knowledge-base files]
+
+EXCLUSIONS
+- Capital repairs (compressor, heat exchanger, evaporator/condenser coil replacement) — billed separately at fleet member rate
+- Refrigerant beyond per-system allowance (1.5 lbs/yr A2L; 2 lbs/yr R-410A)
+- Tenant build-out modifications, ductwork redesign, controls upgrades
+- After-hours / weekend response unless tier-1 site
+
+PRICING (matrix; pulls from config.maintenance_plans.commercial_fleet)
+- Per-system rate by tonnage band: ≤3T $XXX/yr | 4–7.5T $XXX/yr | 8–15T $XXX/yr | 16–25T $XXX/yr
+- Multi-site bundle discount: -5% at 3 sites, -8% at 6 sites, -12% at 10+ sites
+- Fleet total: $X,XXX/yr | Quarterly invoice: $X,XXX | Net 30
+
+TERM, RENEWAL, ESCALATION
+- 12-month initial term; auto-renews 12 months unless 60-day written notice (commercial standard)
+- Annual price escalation capped at 5% or CPI-W (whichever is lower)
+
+ACCEPTANCE
+[Property-manager signature block + company representative]
+```
+
+The fleet variant ALWAYS pulls per-site equipment data from the visual-inspection-report skill if available rather than asking the property manager to re-key it.
+
+**What your AI check will see (2026-specific):**
+
+Roughly 20% of homeowners and 35% of property managers now paste the maintenance agreement into ChatGPT, Claude, or Gemini before signing, with prompts like "is this a fair maintenance plan" or "what are the red flags in this contract." The agreement must read as legitimate-and-fair when checked. Concretely:
+
+- Include the licensed company name and license number prominently in the header. AI checks cross-reference against the state board.
+- Name exclusions explicitly — buried exclusions are the #1 thing AI checks flag as predatory. Major-component exclusions, refrigerant-allowance limits, transferability rules, and cancellation refund posture must all be named clearly, not hidden.
+- Show the price math, not just the total. Tier rate × number of systems − discounts = total. AI checks flag "round number, no breakdown" as templated-blast suspicious.
+- For the renewal clause, the auto-renewal must be reasonably escapable (≥30 days written notice for residential, ≥60 days for commercial is standard). AI checks flag aggressive auto-renewal terms that require ≤14 days notice or charge significant cancellation fees as predatory.
+- Don't promise more than ops can deliver. Same-day response on Platinum is fine if dispatch can commit; if not, soften to "next-business-day priority."
+- Include the customer's actual equipment by make/model on the agreement. AI checks flag "1 unit covered" without specification as templated.
+- The signature block must include a real person's name (CSR or service manager from `config.yml`), not just "[Company Rep]." AI checks flag unsigned-rep agreements as bot-likely.
+
 **Quality checks before sending:**
 - Every covered unit has a matching PM checklist — no generic "HVAC tune-up" line items
 - Tier inclusions match what operations can actually deliver (don't promise same-day response if the dispatcher can't commit)
@@ -161,6 +254,8 @@ Questions?  [phone]  |  [email]
 - Pricing matches `config.yml`, not a made-up number. If pricing is an override, say so ("negotiated rate for multi-unit account")
 - Dates compute correctly — start date, end date, next-charge date, renewal notice deadline
 - Customer name and address match what's in the CRM record (to avoid renewal mismatch next year)
+- Recurring PM visits populate `config.dispatch_field_map`'s recurring_visit / recurring_window / recurring_account fields. Missing field-map entries surface in a `_mapping_gaps` array.
+- For A2L systems, the refrigerant allowance is correctly differentiated from R-410A allowance.
 
 ## Example Output
 

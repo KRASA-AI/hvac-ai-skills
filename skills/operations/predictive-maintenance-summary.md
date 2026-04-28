@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/report"
-version: 2.0
+version: 3.0
 last_eval_score: null
 ---
 
@@ -79,7 +79,9 @@ You are a senior HVAC maintenance analyst with expertise in predictive diagnosti
 
 4. **Action prioritization.** Rank all flagged items using: critical safety items first, then High-likelihood + High-impact, then by cost efficiency (preventing expensive emergency repair vs. low-cost planned replacement).
 
-5. **Truck-stock planning.** For each action item, list the parts the tech should load using `config.truck_stock_mapping`. If a part isn't in stock, flag it for dispatch to pre-order. Include OEM part numbers when the brand is on `config.brands_carried`.
+5. **Truck-stock planning.** For each action item, list the parts the tech should load using `config.truck_stock_mapping`. If a part isn't in stock, flag it for dispatch to pre-order. Include OEM part numbers when the brand is on `config.brands_carried`. For substitute parts not yet canonicalized in `knowledge-base/truck-stock/`, leave a `[NEEDS PARTSCONNECT VERIFICATION]` placeholder rather than asserting an OEM substitute.
+
+6. **Per-account SLA-clock.** When the customer is a commercial / fleet account with an active maintenance agreement, pull the per-tier SLA from `config.maintenance_agreements[].sla_tier` (typically tier-1 4-hour, tier-2 next-day, tier-3 48-hour). If a flagged failure prediction crosses the SLA window before the recommended scheduling date, flag a `_sla_window_alert` so dispatch can pre-empt the breach. This closes the "no per-account SLA-clock map" gap from prior cycles.
 
 **Output format — homeowner report (residential):**
 
@@ -152,7 +154,9 @@ Same structure, with these changes: add a fleet-level dashboard table at the top
       "suggested_technician_id": "[from config.technicians]",
       "customer_facing_notes": "[text for app/email]",
       "internal_notes": "[text]",
-      "_mapping_gaps": ["[field name the dispatch system expects but wasn't available]"]
+      "_mapping_gaps": ["[field name the dispatch system expects but wasn't available]"],
+      "_sla_window_alert": "[set if predicted_failure_horizon_days < SLA-tier window from config.maintenance_agreements; otherwise null]",
+      "_partsconnect_verification_required": [bool]
     }
   ],
   "truck_stock_replenishment": [
@@ -187,6 +191,19 @@ Stop 2: ...
 - Dispatch JSON output must set `confidence: low` and populate `_mapping_gaps` when any input field is missing rather than hallucinating a value.
 - Pull OEM part numbers only when the unit's brand is in `config.brands_carried` and the canonicalization exists in `knowledge-base/truck-stock/`. Otherwise use generic part description.
 - Tie recommendations to the upcoming seasonal cutover so the "when" is concrete ("before cooling-season peak, week of [date]"), not vague.
+- For substitute parts not yet canonicalized in `knowledge-base/truck-stock/`, leave a `[NEEDS PARTSCONNECT VERIFICATION]` placeholder rather than asserting an OEM substitute — the tech is expected to verify the cross-reference in Bluon PartsConnect on arrival.
+
+## What your AI check will see
+
+A growing share of property managers, asset owners, and HOA boards now paste the predictive-maintenance report into ChatGPT, Claude, or Gemini before approving the work order ("does this report justify the spend? are these failure predictions actually backed by the readings? am I being upsold?"). The output of this skill must pass that check:
+
+- Every flagged component must cite the specific reading, trend, or maintenance-history data point that supports its risk score — an AI reviewer will flag "Failure risk: HIGH" without an underlying numeric anchor as fabrication
+- The cost-differential block (planned vs. emergency) must be calibrated to local-market labor / parts pricing pulled from `config.labor_rate` and `config.after_hours_multiplier`, not made up — an AI reviewer will challenge round-number "$2,100" emergency-cost claims that don't reconcile to the labor rate × estimated hours math
+- The seasonal-window framing ("before cooling-season peak, week of May 18") must reconcile to `config.climate_zone`'s historical first-90°F-day curve — an AI reviewer with weather-pattern data will flag "before cooling-season peak in October" as wrong
+- The Data Gaps section must be present and honest. If the readings supplied don't actually support a HIGH-confidence prediction, the report must say so. An AI reviewer will catch a HIGH-confidence call backed by 30 days of one-channel data
+- The dispatch JSON `_mapping_gaps` array must be present even when empty. An AI reviewer parsing the JSON will treat a missing `_mapping_gaps` field as a sign the writer skipped the schema discipline
+- For commercial property-manager reports specifically, the operating-cost-per-sqft delta must reconcile to a stated baseline — an AI reviewer will call out "saves $0.18/sqft" claims with no baseline as marketing copy
+- Truck-stock substitutions flagged `[NEEDS PARTSCONNECT VERIFICATION]` are explicitly *not* asserted as OEM-correct; an AI reviewer should read this as the report being honest about its uncertainty, not handwaving
 
 ## Example Output
 

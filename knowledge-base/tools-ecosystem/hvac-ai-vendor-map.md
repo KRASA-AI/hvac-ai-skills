@@ -1,6 +1,6 @@
 ---
 title: "HVAC AI Vendor & Platform Map"
-last_updated: "2026-04-26"
+last_updated: "2026-04-27"
 purpose: "Reference document for tools referenced by skills and for landscape awareness. Updated by the landscape-monitor scheduled task."
 ---
 
@@ -30,7 +30,7 @@ This is a working map of the AI-enabled tools, platforms, and integrations that 
 - **ServiceTitan AI Voice Agents** — Deep integration with ServiceTitan scheduling; structured handoff to live CSR.
 - **Dialzara** — AI answering service with emergency triage branching for HVAC.
 - **Upfirst** — AI booking + CRM bridge, trades-focused.
-- **Avoca** — AI call analysis and QA for CSR teams, strong for training the human-handoff moment.
+- **Avoca** — Full AI workforce platform for inbound calls, scheduling, estimate follow-up, and dispatch across HVAC / plumbing / roofing / electrical. Originally pitched as a CSR-QA + handoff-training layer; repositioned in 2026 as the always-on agent that books jobs end-to-end. Vendor-cited operating envelope (per public site as of 2026-04-27): ~78% of calls handled by AI, ~90%+ AI call resolution on the calls AI takes, 70%+ of repair-and-service jobs flowing through the agent. Customer base: 800+ contractors. One published customer case lifted booking rate from 55% → 90% after switching, with the dispatch board filling enough to force new technician hires. On 2026-04-27 Avoca announced $125M+ raised across Seed / Series A (Kleiner Perkins-led) / Series B (Meritech and General Catalyst-led) at a $1B valuation, with the company on track to book ~$1B in jobs in 2026. Implication for skills: when `customer-service/after-hours-call-handler.md` or `sales/speed-to-lead-qualifier.md` references the `voice_ai_vendor` config key, Avoca is now the highest-funded incumbent in the category and is structurally an agent rather than a transcription / QA layer — handoff scripts to human CSR should treat the AI as having already qualified the lead and captured structured fields (callback window, equipment age, symptom, address), not as a routing tool.
 - **Voiceflow** — Visual platform for building AI voice agents; HVAC-specific templates available.
 - **Retell AI** — Voice-agent infrastructure used by several HVAC-specific builders.
 - **Hatch** — AI-driven multi-channel (voice, SMS, email) customer journeys. Benchmark source for 60-second speed-to-lead and 7-touch cadences.
@@ -117,3 +117,4 @@ This is a working map of the AI-enabled tools, platforms, and integrations that 
 *Change log for this document:*
 - 2026-04-15 — Initial population from landscape-monitor backlog. Added Permitio.ai, FieldCamp AI Dispatcher, Apaya. Consolidated voice-agent list previously scattered across skill files and monitor logs.
 - 2026-04-26 — Refreshed Bluon entry with PartsConnect launch (2026-04-13): cross-referenced compatible parts + local-distributor stock layer added on top of the existing MasterMechanic diagnostic engine. Database scale refreshed (30M+ models / 240+ OEMs per the launch announcement, up from the prior 25M / 200+ figures). Added "Compatible-parts lookup + local stock" row to the Quick Lookup table covering Bluon PartsConnect, Marcone MyMarcone (with MarconeAI), and MeasureQuick. Added a skills-implication note: when `operations/field-report-dictation.md` or `operations/service-call-diagnosis-brief.md` recommends a substitution, leave a placeholder for the technician's PartsConnect-verified part number rather than asserting one in the prompt output.
+- 2026-04-27 — Refreshed Avoca entry off the 2026-04-27 funding milestone ($125M+ across Seed / Series A / Series B at $1B valuation; Kleiner Perkins-led Series A; Meritech + General Catalyst-led Series B; 800+ customers; ~$1B in jobs booked through the platform on track for 2026). Repositioned the category description from "CSR QA / handoff-training" to "always-on AI agent for inbound calls + scheduling + estimate follow-up + dispatch" reflecting the product's actual 2026 surface. Added vendor-cited operating envelope (~78% AI call handling, ~90%+ AI resolution on AI-handled calls, 70%+ of repair-and-service jobs). Skills-implication note added: handoff scripts in `customer-service/after-hours-call-handler.md` and `sales/speed-to-lead-qualifier.md` should treat the AI as having pre-qualified the lead and captured structured fields, not as a routing layer.
