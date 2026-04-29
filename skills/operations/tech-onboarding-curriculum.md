@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: advanced
 time_saved: "~6 hr/new-hire plan (plus compressed time-to-productivity)"
-version: 1.0
+version: 2.0
 last_eval_score: null
 ---
 
@@ -46,8 +46,10 @@ Provide the following:
 5. **Tribal-knowledge input** — Either paste a senior tech's dictated knowledge dump here (see the interview prompt in the Instructions), or reference an uploaded audio transcript. Minimum 20 minutes of material for a useful seed. If none provided, the skill will include a prompted interview template the owner can run and come back with.
 6. **Apprenticeship status** — Is the hire going through a DOL-registered apprenticeship (NCCER, union JATC, ABC, state, OEM, in-house registered)? If yes, the AI-literacy track per the April 1, 2026 DOL initiative is required, not optional — flag so.
 7. **Known weak spots** — Failure modes the shop knows it struggles with (e.g., "we get burned on inherited Lennox installs," "our retention problem is weeks 6–12," "the last two hires couldn't read a duct drawing"). This lets the curriculum front-load the real risk.
-8. **Output mode** — One of: `full 90-day plan` (default, complete curriculum), `first-week kit` (just Day 1 through Day 5), `mentor handbook` (mentor-facing sign-off structure only), `tribal-knowledge capture` (interview prompts + seed KB entries only), `RA-compliant competency matrix` (DOL-aligned checklist only), `combined packet` (all of the above).
-9. **Tone** (optional) — Defaults to `config.yml` → `voice`. Onboarding curricula usually read best in `direct-plainspoken` because apprentices will actually read it.
+8. **Onboarding path** — One of: `apprentice` (zero-to-eighteen-months experience; expect heavy ride-along, EPA 608 testing, NATE Ready-to-Work pathway, full DOL AI-literacy track if RA), `experienced-hire` (3+ years at another shop; expect 2-week shadow, brand-recalibration, dispatch-system retraining, light AI-literacy refresh — NOT a full 90-day curriculum), `cross-trade-bridge` (residential-only → light-commercial, service-only → install, journeyman → lead tech; 4–6 week bridge with senior-tech ride-along on the new ticket types), `returning-tech` (rejoining the trade after ≥ 18 months out; refresh on A2L + 2026 dispatch-AI changes since they left). Default: `apprentice`. The four paths produce structurally different curricula — never collapse them into the apprentice template.
+9. **Per-state continuing-education / licensing overlay (auto-pulled when `config.licensing_state` is set)** — The skill must overlay state-specific CE-hour requirements, license-renewal cycles, and state-only certifications on the 90-day plan. Examples: California (C-20 contractor license — 20-hour journeyman entry-level + ongoing continuing-education hours toward state code refresh), Texas (TDLR Air Conditioning and Refrigeration Contractor License — 8 CE hours/year), Florida (DBPR Class A/B/CAC — 14 CE hours per renewal cycle), New York (varies by jurisdiction, NYC DOB Refrigeration — 7 CE hours/year), Washington (L&I HVAC/R Specialty — 24 hours/3-year cycle), Maryland (HVACR contractor — 16 hours/2-year cycle). When `config.licensing_state` is set, surface the state's actual CE clock + the next renewal due date for this hire (computed from `start_date` + state cycle length) so the curriculum schedules CE hours instead of leaving them to lapse. If `config.licensing_state` is not set, the skill emits a single line at the top of the plan: "[STATE LICENSING — confirm renewal cycle and CE hours; set config.licensing_state to auto-schedule]" and proceeds with the federal / DOL / EPA defaults.
+10. **Output mode** — One of: `full 90-day plan` (default, complete curriculum, apprentice path), `first-week kit` (just Day 1 through Day 5), `mentor handbook` (mentor-facing sign-off structure only), `tribal-knowledge capture` (interview prompts + seed KB entries only), `RA-compliant competency matrix` (DOL-aligned checklist only), `experienced-hire 14-day onboarding` (2-week shadow + brand-recalibration + dispatch retraining; replaces the 90-day plan when `path = experienced-hire`), `cross-trade bridge plan` (4–6 week bridge plan with senior-tech ride-along on new ticket types; replaces the 90-day plan when `path = cross-trade-bridge`), `combined packet` (all of the above).
+11. **Tone** (optional) — Defaults to `config.yml` → `voice`. Onboarding curricula usually read best in `direct-plainspoken` because apprentices will actually read it.
 
 ## Instructions
 
@@ -62,12 +64,51 @@ You are a senior service manager who has onboarded 50+ HVAC techs across a 20-ye
 - Load `knowledge-base/market-conditions/2026-tariff-price-environment.md` for the language apprentices will hear from customers and need baseline fluency in by Week 6 (customer-communication module).
 - If `dispatch_system` is provided in `config.yml`, map competency checklist items to that system's field structure (ServiceTitan calls it Call Reason, Housecall Pro calls it Job Type, etc.) so the apprentice's first 10 reports match what the office expects.
 
-**Architecture — the four-phase plan:**
+**Architecture — the apprentice path (default — four-phase 90-day plan):**
 
 1. **Week 1 (orientation + shadow):** Company safety baseline, truck-stock walkthrough, dispatch-system introduction, ride-along on 4–5 calls with zero independent responsibility, AI-tool account setup and Day-1 demo, intro to mentor cadence, EPA 608 / A2L safety refresher if applicable.
 2. **Weeks 2–4 (guided execution):** Begins performing specific task categories under mentor observation: filter changes, capacitor/contactor swaps, refrigerant gauge setup under mentor sign-off, basic diagnostics. Apprentice runs `service-call-diagnosis-brief.md` before calls and the mentor reviews. AI-literacy modules 1 (diagnostics) and 4 (AI limits and judgment) front-loaded here because every ride-along is a live test.
 3. **Weeks 5–8 (progressive independence):** Solo dispatch on defined ticket types (tune-ups, basic service calls, filter and UV maintenance), mentor on-call for 20-minute response. Progressive add of more complex call types as competency checklist rows clear. AI-literacy modules 2 (scheduling/dispatch awareness) and 3 (customer communication) come in here because the apprentice is now generating customer-facing output.
 4. **Weeks 9–12 and into the season (role independence):** Full solo dispatch within defined boundaries, participation in dispatcher morning huddle, NATE exam prep if applicable, cross-training introduction (e.g., service → install ride-along), first performance review at Day 90. Ongoing AI-tool use is now baseline, not a module.
+
+**Architecture — the experienced-hire path (14-day onboarding):**
+
+The structural mistake most shops make is dropping a 5-year journeyman into the 90-day apprentice plan. They quit by Day 30 because the plan signals "we don't trust you." The experienced-hire path explicitly tells the journeyman the company has read their resume:
+
+1. **Days 1–2 (company orientation):** Safety baseline, dispatch-system tour, truck assignment + truck-stock walkthrough, AI-tool account setup, mentor introduction (peer-level, not supervisory), and a sit-down with the service manager naming the company's specific quirks (financing partner, supplier order, after-hours rotation, ticket-cap policy). No competency tests on Day 1.
+2. **Days 3–7 (paired ride-along, 1 day per primary brand):** One day per brand in `config.brands_carried` with a senior tech who specializes in that brand. Goal is brand-recalibration (specifically: company's preferred install order, internal warranty-claim escalation path, supplier-rep relationships) — not skill validation. The journeyman runs `service-call-diagnosis-brief.md` once per day so they see the company's AI tooling in their hands by Day 4.
+3. **Days 8–10 (solo on defined ticket types, light AI-literacy refresh):** Solo dispatch on tune-ups, capacitor/contactor swaps, basic service calls. AI-literacy refresh focused on the deltas since the hire's last shop: hallucination patterns in current AI tools, the dispatch-system AI's specific behavior, and the company's `_mapping_gaps` discipline.
+4. **Days 11–14 (full dispatch within scope + first review):** Full dispatch within the agreed ticket scope. Day 14 review with service manager: confirm scope expansion, NATE-pathway alignment if applicable, mentor cadence (now monthly, not weekly), and the 90-day check-in date. The journeyman is treated as a peer from Day 15 forward.
+
+A2L safety refresher is mandatory in this path even for experienced hires — most journeymen out of school before 2024 have seen R-410A only and cannot assume the new charging procedure. Schedule it for Day 3 and check the box on the competency matrix.
+
+**Architecture — the cross-trade-bridge path (4–6 week bridge):**
+
+For a residential-only tech moving to light commercial, a service-only tech moving to install, an apprentice completing their 2-year and stepping up to lead tech, or a journeyman moving from one brand-only shop into a multi-brand shop. The bridge is structured around the *new ticket types* the hire has not run before, not around the trade fundamentals they already have:
+
+1. **Week 1 (gap-mapping):** Service manager + primary mentor sit down with the hire and map the specific ticket types they have *not* run (e.g., RTU service calls, multi-zone VRF commissioning, BMS integration, Manual N load calculations for light-commercial). The bridge plan front-loads ride-alongs on those specific tickets.
+2. **Weeks 2–4 (paired execution on new ticket types):** Mentor on every new-ticket call. AI-literacy refresh on the AI tools that change between trades (e.g., commercial diagnostic copilots are different from residential; `service-call-diagnosis-brief.md` runs in commercial mode for light-commercial bridges).
+3. **Weeks 5–6 (solo on new ticket types, mentor on call):** Hire dispatches solo on the new ticket categories with the mentor 20-minute-response. End-of-bridge review confirms the hire's ticket scope expansion.
+
+Length is 4 weeks for a one-trade-step bridge (e.g., service → install on the same brand), 6 weeks for a two-trade-step bridge (e.g., residential service → light-commercial install).
+
+**Architecture — the returning-tech path (refresh):**
+
+For a tech rejoining the trade after ≥ 18 months out (military, family leave, career detour). Treat as a hybrid of the experienced-hire 14-day plan + a mandatory technology-deltas module covering: A2L refrigerants and tooling (R-454B / R-32 charging, leak detection, A2L-rated tools), dispatch-system AI changes (AI voice agents on inbound, AI scheduling on dispatch, AI-assisted diagnostics on the tech side), 2026 OEM warranty-claim portal changes, current 2026 incentive landscape (25C expired post-12/31/2025, HEEHRA / state programs are the live anchors). Length: 21 days. Day 21 is the first review.
+
+**Per-state CE / licensing overlay (auto-applied when `config.licensing_state` is set):**
+
+The plan must schedule the state-specific continuing-education clock onto the calendar so the hire does not enter a license-renewal gap. For each state, surface:
+- The state's licensing body (TDLR, DBPR, L&I, BCDC, DLI, DOPL, etc.)
+- The hire's required CE hours and renewal cycle (1 / 2 / 3 / 4 years)
+- The hire's projected next renewal date (computed from `start_date` + cycle length, rounded to the state's renewal-anniversary convention)
+- The state-only certifications relevant to the hire's role (e.g., California: C-20 + EPA 608 + CSLB asbestos awareness for installs in pre-1980 buildings; Texas: TDLR ACR + EPA 608; Florida: DBPR + EPA 608 + locality-specific permit tests in some counties; New York: NYC DOB Refrigeration in NYC, plus statewide EPA 608)
+- The CE-hour modules the company will sponsor (typically the company books one CE-credit-eligible internal training per quarter — surface that schedule in the plan)
+- The CE-bookkeeping owner (whose responsibility it is to track CE hours across the team — usually the service manager)
+
+Example: a California C-20 hire starting 2026-05-12 with a journeyman license renewal in 2027-05-31 would have 12.5 months until renewal; the plan schedules ~6 hours of company-sponsored CE in Q3 2026 and ~6 hours in Q1 2027 (or whatever the state's annual hour split requires) so renewal is not a scramble.
+
+If `config.licensing_state` is not set, emit the top-of-plan flag "[STATE LICENSING — confirm renewal cycle and CE hours; set config.licensing_state to auto-schedule]" rather than silently skipping the overlay.
 
 **Tribal-knowledge capture sub-workflow:**
 
@@ -152,6 +193,8 @@ At minimum, the following rows must be signed off by the primary mentor with dat
 - For registered apprenticeships, the AI-literacy track is mandatory and must be called out as DOL-aligned. For non-registered programs, recommend it clearly and explain the competitive cost of skipping it.
 - Honor the mentor time commitment the owner stated. If the owner said 4 ride-along hours/week and the plan requires 10, rebalance to 4 and flag the gap — do not silently over-schedule the mentor.
 - Never recommend AI tools the contractor doesn't have. If the dispatch system doesn't include a copilot and the contractor hasn't purchased one, use `service-call-diagnosis-brief.md` from this repo and leave vendor-tool rows as optional.
+- Never collapse the four onboarding paths into the apprentice template. An experienced hire on a 90-day apprentice plan reads as an insult; an apprentice on a 14-day journeyman plan ships an unprepared tech to a customer. Honor the `path` input.
+- Always surface the per-state CE / licensing overlay when `config.licensing_state` is set. Renewal cycles surprise nobody and lapsed licenses cost the shop more than the curriculum saves.
 - Do not copy generic onboarding templates from Trainual, BambooHR, or similar. Those are hiring artifacts, not trade curricula. This skill produces a service-trade-specific, AI-aware onboarding plan.
 - If the senior-tech interview surfaced a contradiction with code or OEM spec, the plan must include a resolution step assigned to the owner — never silently follow the senior tech's off-code practice forward.
 - Link to existing skills in this repo by relative path so the apprentice's AI-literacy modules reference real prompts, not hypothetical ones.
