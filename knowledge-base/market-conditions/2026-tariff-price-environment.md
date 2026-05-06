@@ -11,6 +11,7 @@ Residential and light-commercial HVAC equipment pricing stepped up sharply betwe
 - Installed-system prices are roughly **15–30% higher than mid-2025** at the same efficiency tier, depending on brand and region.
 - A system that installed for about $7,000 in 2020 and $8,000–$9,000 in 2024 is quoting in the **$10,000–$14,000 range** in spring 2026 at the same functional spec.
 - Major OEMs (Carrier and peers) rolled out formal **list-price increases of roughly 5–10%** in Q1 2026 in addition to tariff pass-through. Monthly ACHR price-increase lists document the stacking effect.
+- A second wave of **May 2026 manufacturer price-increase letters** went out across distributor channels in late April 2026, all explicitly tied to the early-April Section 232 restructure: WaterFurnace +3.9% on residential lines / parts / accessories effective 2026-05-25 (with a 1.1% tariff surcharge held over from earlier in the year), Lennox Commercial up to **+8%** on commercial equipment / parts / accessories / VRF effective 2026-05-18, Legend Valve +5–10% effective 2026-05-18, Uniweld ≈+3% effective 2026-05-25, Systemair/Fantech +6.5% effective 2026-05-29, and Navien effective 2026-05-17. The Q1 wave was largely OEM list-price moves; the May wave is OEM moves explicitly attributing to Section 232. Treat as evidence that **2026 manufacturer pricing is staircased, not single-step** — expect another wave roughly quarterly through 2026 if Section 232 rates hold.
 
 ## Drivers of the 2026 price step
 
@@ -57,10 +58,12 @@ Commercial rooftop and chiller work has seen similar percentage moves. Emergency
 
 ## Source anchors
 
-- ACHR News monthly HVAC price-increase lists (Feb / Mar / Apr 2026 editions)
+- ACHR News monthly HVAC price-increase lists (Feb / Mar / Apr / May 2026 editions); ACHR News "Trump's Section 232 Tariff Shake-Up Raises Costs, Uncertainty" (article 166034)
 - ACCA HVAC Blog — Section 232 and IEEPA tariff updates
-- Facilities Dive and HVACR Trends — supply-chain and tariff cost reporting
+- Facilities Dive, HVACR Trends, Facilities News, SSI Services — supply-chain and tariff cost reporting
 - MarketingCode — repair-vs-replace strategy coverage
-- Imperial AC Supply, Johnstone Supply, and OEM distributor notices — manufacturer list-price increase announcements
+- Imperial AC Supply, Johnstone Supply, Geary Pacific Supply, AC Supply Texas, and OEM distributor notices — manufacturer list-price increase announcements (May 2026 wave: WaterFurnace, Lennox Commercial, Legend Valve, Uniweld, Systemair/Fantech, Navien)
 - Contractor-facing 5,000 Rule reference pages (Weathermakers, Picture Rocks, Majestic AC, etc.) — anchor for age × repair cost heuristic
 - 2025 SEER2 manufacturing standards (DOE rulemaking) — baseline efficiency spec
+
+_Last updated: 2026-05-04 — added May 2026 manufacturer price-increase wave (WaterFurnace, Lennox Commercial, Legend Valve, Uniweld, Systemair/Fantech, Navien) tied to Section 232 restructure._
