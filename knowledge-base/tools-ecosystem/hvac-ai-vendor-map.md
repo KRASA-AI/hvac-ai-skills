@@ -1,6 +1,6 @@
 ---
 title: "HVAC AI Vendor & Platform Map"
-last_updated: "2026-04-27"
+last_updated: "2026-05-05"
 purpose: "Reference document for tools referenced by skills and for landscape awareness. Updated by the landscape-monitor scheduled task."
 ---
 
@@ -101,7 +101,7 @@ This is a working map of the AI-enabled tools, platforms, and integrations that 
 | Permit filing | Permitio.ai, PermitFlow |
 | Social media content | Apaya, FlashCrafter |
 | Commercial predictive maintenance | BrainBox AI, OxMaint, BMS overlays |
-| Tiered proposal generation | ServiceTitan Pricebook Pro, Rebar (commercial supplier side) |
+| Tiered proposal generation | ServiceTitan Pricebook Pro, ServiceTrade Stella Quote (commercial deficiency quoting), Rebar (commercial supplier side) |
 
 ## Skills That Reference This Document
 
