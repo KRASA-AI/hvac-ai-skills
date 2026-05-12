@@ -4,7 +4,7 @@ category: sales
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~25 min/conversation"
-version: 1.0
+version: 1.1
 last_eval_score: null
 ---
 
@@ -58,6 +58,8 @@ You are a senior comfort advisor who has run thousands of kitchen-table repair-v
 - Load `knowledge-base/market-conditions/2026-tariff-price-environment.md` — this is the authoritative source for current price bands and tariff drivers. Do not contradict the numbers in that file without explicitly flagging a regional deviation.
 - If the repair involves R-410A refrigerant, load `knowledge-base/regulations/a2l-r454b-transition.md` for the supply-risk line.
 - If the customer is in California, load `knowledge-base/regulations/california-2026-code.md` for the prescriptive heat-pump default and commissioning requirements that affect the replace option.
+- Load `config.crm_record_id` for the customer's address if available, and pull prior repair history for this equipment from the dispatcher's CRM via `config.dispatch_field_map.prior_repair_history`. A system with 2+ documented repairs in the last 3 years is an automatic +5 modifier on the 2026 Decision Score (see modifier table below) and must be named explicitly in the "Watch-outs" block of the repair path ("This system has had [N] documented repairs in the last [X] years — continued repairs on this unit have a documented cost pattern."). If CRM data is unavailable, flag "[prior repair history not loaded — advisor should ask the customer directly]" in the Watch-outs block rather than omitting the check.
+- Determine climate zone from `config.climate_zone` (or ZIP lookup). If the property is in Climate Zone 5 or colder (roughly Minnesota, Wisconsin, Michigan, northern Illinois, upstate New York, New England, Colorado/Wyoming mountain West, Pacific Northwest highlands), add the dual-fuel option to the replace path (see Dual-fuel / cold-climate handling below).
 - Match tone from `config.yml` → `voice` unless the user overrides.
 
 **Scoring methodology — the 2026 Decision Score:**
@@ -90,6 +92,7 @@ Compute a 0–100 replace-lean score from four components, then map to a recomme
    - Repair is a **major component on a system ≥12 years old** (compressor, heat exchanger, full coil, full reversing valve): **+10 points**.
    - Repair is a **routine replaceable part** (capacitor, contactor, blower motor, ignitor, inducer, single board) and system is ≤10 years old: **−10 points** (repair is clearly correct).
    - Customer is in **California under the 2026 code** and existing system is a straight-gas furnace with no heat pump: **+5 points** (prescriptive heat-pump default at replacement time).
+   - System has **2+ documented prior repairs in the last 3 years** (from CRM pull via `config.crm_record_id`): **+5 points** (accelerating repair-cost curve). If CRM data is unavailable, flag in Watch-outs rather than applying or skipping the modifier.
    - Household has **stated budget hard-stop below replacement financing reach**: **−5 points** (replacement isn't a real option — lead with the honest repair recommendation).
 
 **Score → recommendation mapping:**
@@ -98,6 +101,16 @@ Compute a 0–100 replace-lean score from four components, then map to a recomme
 - 31–55 → **Repair with a replacement discussion on the table.** Run the repair if the customer wants it, and deliver a one-pager showing the replacement math so the second failure doesn't force a panic decision.
 - 56–75 → **Replace-lean, but present both.** Show repair as a short-runway option; recommend replacement as the defensible long-term call.
 - 76–100 → **Replace.** Repair is bridge-only at best; recommendation is replacement now. Still show the repair path and cost because suppressing it destroys trust.
+
+**Dual-fuel / cold-climate handling (auto-triggered for Climate Zone 5+):**
+
+When `config.climate_zone` indicates Climate Zone 5 or colder — or when the customer is in MN, WI, MI, northern IL, upstate NY, New England, CO/WY mountain West, or Pacific Northwest highlands — add a **dual-fuel option** alongside the Better-tier heat pump in the replace path:
+
+- **What dual-fuel means:** A heat pump handles heating above roughly 30–35°F (the balance point); a gas furnace handles the coldest days. This pairing typically delivers 15–25% better annual heating efficiency than gas-only in cold climates while preserving the security of gas backup for extreme cold snaps.
+- **Installed cost premium:** Dual-fuel (heat pump + gas furnace retained or replaced) typically runs $1,000–$2,500 more than a standalone heat pump because of the integration work (zoning wires, control board, balance-point configuration). When the customer already has a serviceable gas furnace, the premium is lower; when a full furnace replacement is also needed, price both the integrated package and the standalone-heat-pump-with-decommission-of-furnace paths.
+- **When to include dual-fuel:** (a) ZIP is in Climate Zone 5+ per `config.climate_zone`; OR (b) existing system is a gas furnace or dual-fuel system; OR (c) customer expresses concern about heat-pump performance in extreme cold.
+- **Refrigerant note:** Dual-fuel heat pump side uses R-454B (A2L) on new 2026 installs; furnace side is unchanged. Cross-reference `config.brands_carried` to confirm which dual-fuel configurations the contractor stocks.
+- **In the output:** Add a DUAL-FUEL OPTION row in the REPLACE PATH section of the kitchen-table packet, between the Better-tier heat pump and the Best tier. Label it clearly: "Better (Dual-Fuel) — Heat pump + gas backup — recommended for Zone 5+ climates." Include the installed cost, financing row, and a one-sentence cold-climate efficiency framing.
 
 **Financing math block:**
 
@@ -130,6 +143,7 @@ System: [Make / model / age / tonnage / refrigerant]
 Diagnosed repair: [What's wrong, in homeowner language]
 Repair cost: $[X,XXX] (parts $[X,XXX], labor $[X,XXX], lead time [X days])
 Expected remaining useful life after repair: [X–Y years]
+Prior repair history (from CRM): [N repairs in last 3 years — $[X,XXX] total / or "not loaded — please confirm with customer"]
 
 THE 2026 DECISION SCORE
 -----------------------
@@ -148,8 +162,9 @@ Lead time:       [X days / same-day]
 What it buys:    [X–Y more years of comfort on a [age+X]-year-old system]
 Watch-outs:      [Honest callouts — e.g., "R-410A refrigerant supply is tightening; a second refrigerant-side repair in the next 2 years will land higher than this one."]
 
-THE REPLACE PATH (Better tier — the one most homeowners pick)
--------------------------------------------------------------
+THE REPLACE PATH
+----------------
+Better tier — the one most homeowners pick:
 Equipment:       [Make / model / SEER2 / AFUE]
 Installed:       $[XX,XXX]
 After incentives: $[XX,XXX]  ([list each incentive — utility rebate, manufacturer promo, state HEEHRA if applicable])
@@ -157,6 +172,14 @@ Financing:       $[XXX] / month for [XXX] months at [X.XX]% APR
                  (break-even vs. continued repairs: month [XX])
 Warranty:        [X years parts / X years labor]
 Annual operating-cost savings vs. current: ~$[XXX]
+
+Better (Dual-Fuel) — recommended for Climate Zone 5+ (auto-included when applicable):
+Equipment:       [Heat pump make/model/SEER2] + [Gas furnace make/model/AFUE or "existing furnace retained"]
+Installed:       $[XX,XXX]  (~$[1,000–2,500] more than heat-pump-only — integration premium)
+After incentives: $[XX,XXX]
+Financing:       $[XXX] / month for [XXX] months at [X.XX]% APR
+Efficiency note: Heat pump handles ~75–80% of annual heating hours; gas kicks in below [balance point]°F. Estimated 15–25% better annual heating efficiency vs. gas-only in this climate zone.
+[Omit this row if property is in Climate Zone 4 or warmer and no cold-climate concern was expressed.]
 
 WHY NOW (OR WHY NOT)
 --------------------
@@ -215,6 +238,8 @@ The kitchen-table packet above stripped of the score breakdown and compressed to
 - When the financing monthly payment genuinely exceeds the customer's stated budget, say so and recommend repair-with-a-plan — do not massage the math to land the sale.
 - If the repair is a refrigerant-circuit repair on R-410A, link to `a2l-refrigerant-explainer.md` and include the supply-risk line in the Watch-outs block.
 - If the customer is in California, reference `california-2026-code.md` for the prescriptive heat-pump default at replacement time.
+- **Always include the dual-fuel row in the replace path when the property is in Climate Zone 5 or colder** (auto-detected from `config.climate_zone`). Omitting it for cold-climate customers produces an incomplete recommendation that the homeowner will notice when they comparison-shop.
+- **Always surface the prior-repair-history modifier.** If CRM data is available and shows 2+ repairs in 3 years, name them explicitly in the Watch-outs block — not to pressure replacement, but because the customer deserves to see the cost pattern. If CRM data is unavailable, flag it and ask.
 - Always include the **"What your AI check will see"** block in the one-pager and kitchen-table packet outputs. This is the novel 2026 piece and the reason this skill exists — removing it defeats the skill.
 
 ## Example Input → Output Sketch

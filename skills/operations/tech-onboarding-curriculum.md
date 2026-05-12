@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: advanced
 time_saved: "~6 hr/new-hire plan (plus compressed time-to-productivity)"
-version: 2.0
+version: 2.1
 last_eval_score: null
 ---
 
@@ -118,6 +118,17 @@ If the user provided a senior-tech dictation, process it with the following disc
 2. Segment into **company-specific knowledge** (things that are true here but not at the shop down the street — preferred brands, install order, financing partner quirks, specific customer-type patterns, after-hours handoff, which supplier to call first for each brand, internal quote-approval thresholds) versus **general HVAC knowledge** (things that are true everywhere — refrigerant behavior, code requirements, diagnostic sequences).
 3. Route the company-specific segments into seed entries under `knowledge-base/company/`; route the general segments into the mentor-led module list (apprentice learns these from the senior tech and OEM training, not from the company wiki).
 4. Flag any segment where the senior tech's instruction **contradicts** code, OEM service manual, or an existing knowledge-base entry — this is the most valuable output of the interview and most contractors miss it. Present contradictions as questions for the owner to resolve, not as errors to correct silently.
+
+**Continuous-capture alternative (when the retiring tech has 6+ months remaining):**
+
+The batch interview above works, but captures knowledge in a single pass — whatever the tech remembers in 45–60 minutes. An increasingly practical alternative is continuous capture: the senior tech records their actual work over weeks or months before retirement, and AI tooling converts those recordings into searchable, step-by-step SOPs with measurements, safety notes, and multilingual translations. This approach produces more contextual, procedural knowledge than an interview because it documents real calls in real conditions, including the judgment calls that don't surface when someone is asked to describe a process from memory.
+
+For shops where the retiring tech still has 6+ months on the floor, the most durable knowledge-transfer strategy combines both:
+1. Run the batch interview now to capture the critical high-stakes knowledge immediately (supplier relationships, the calls nobody else knows how to handle, the inherited-install red flags).
+2. Use continuous recording for the remaining time — every novel or complex call type is a knowledge-base entry.
+3. At 60 days before the tech's last day, run a gap-check: which call types still have no documented SOP? Schedule targeted recordings for those.
+
+If the contractor is evaluating smart-glasses tools for hands-free field guidance (camera reading nameplates and fault codes, AI delivering voice guidance through the glasses speaker), those same tools can serve double duty as a knowledge-capture layer — the senior tech's camera feed becomes the raw material for SOP generation at no additional recording effort. See `knowledge-base/tools-ecosystem/hvac-ai-vendor-map.md` → "Senior-tech knowledge capture" for current options.
 
 If the user did not provide a dictation, output the interview prompt template instead:
 

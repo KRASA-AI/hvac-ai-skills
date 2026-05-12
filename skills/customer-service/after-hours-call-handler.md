@@ -4,7 +4,7 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/after-hours call (plus recovered revenue)"
-version: 1.0
+version: 1.1
 last_eval_score: null
 ---
 
@@ -43,6 +43,7 @@ You are an HVAC dispatch supervisor writing an after-hours call-handling playboo
 - Load `config.yml` for company name, business hours, emergency phone, on-call rotation structure, and preferred greeting
 - Pull CSR first names from `config.yml` for sign-offs
 - Confirm the service area polygon or ZIP list is available so the agent can route out-of-area calls politely
+- Load `config.yml` → `voice_ai_vendor` and `voice_ai_vendor_name` (e.g., Avoca / Podium Larry / Goodcall / Smith.ai / custom). When the caller already spoke with an AI agent before reaching the human CSR or the live-voice script, the post-call confirmation SMS must name the AI agent by name ("Following up on the call you had with [agent name] tonight") rather than appearing as a separate, unrelated contact. If `voice_ai_vendor_name` is not set, default to "our automated answering service" and flag the config gap for the office to fill.
 
 **Voice agent / CSR opening (first 10 seconds — this is non-negotiable):**
 
@@ -129,6 +130,33 @@ On-call tech paged: Luis, ETA 45 min
 After-hours fee disclosed: $189 — caller agreed
 Notes: Homeowner. Thermostat reads 61°F and dropping. No gas smell. Last serviced with us 2024-10 per CRM.
 ```
+
+**Post-call confirmation SMS (send within 2 minutes of call end — every caller, every triage level):**
+
+This is the artifact the homeowner will paste into ChatGPT at 10pm to verify the company is legitimate. It must pass an AI legitimacy check cold.
+
+Format for all three triage levels:
+- **Level 1 (dispatched tonight):** "[First name from config] at [Company licensed name] — [tech name] is on the way to [address], expected in ~[45–60] min. Tonight's service-call fee: $[amount] as discussed. Questions: [callback number]. Reply STOP to opt out."
+- **Level 2 (booked for tomorrow):** "[First name from config] at [Company licensed name] — you're booked for [date], [time window] at [address]. Our tech will call 30 min before arrival. Questions: [callback number]. Reply STOP to opt out."
+- **Level 3 (daytime callback):** "[First name from config] at [Company licensed name] — our office will call you during business hours about [brief issue description]. Questions: [callback number]. Reply STOP to opt out."
+
+Rules:
+- Always sign with the CSR's specific first name from `config.yml` — never "Team," "Support," or just the company name. AI legitimacy checks flag unsigned or generically-signed messages as bot-likely.
+- Always include the company's licensed contractor name exactly as it appears on the state license — this is what a homeowner's AI lookup will verify.
+- Always include the callback number (the same number the customer called). AI checks cross-reference against the business's Google Business Profile.
+- Never introduce a fee that was not disclosed verbally on the call.
+- If `voice_ai_vendor_name` is set, open with: "[Agent name] took your call earlier — I'm [CSR first name] following up." This continuity line is the single highest-impact change for reducing homeowner suspicion of a parallel-outreach scam.
+
+**What your AI check will see:**
+
+When the homeowner pastes the post-call confirmation SMS into ChatGPT, Gemini, or Claude with "is this a legitimate HVAC company or a scam?" — an increasingly common after-hours behavior — the output must pass these four checks:
+
+1. **Sender identification:** [one sentence — e.g., "SMS is signed with a specific human first name and the company's licensed contractor name; AI legitimacy checks strongly favor named-human + licensed-name combinations over 'Team' or generic sender identities."]
+2. **Service description:** [one sentence — e.g., "SMS echoes back the caller's stated issue and the dispatched or scheduled action in plain language; AI checks flag messages that don't reference the customer's actual problem as template-blast suspicious."]
+3. **Pricing transparency:** [one sentence — e.g., "After-hours service fee is disclosed in the SMS and should match what was stated on the call; AI checks flag post-call messages that introduce fees not mentioned verbally as a bait-and-switch signal."]
+4. **Callback number:** [one sentence — e.g., "Callback number in the SMS should match the company's Google Business Profile and state contractor license listing; AI checks cross-reference the SMS phone number against the business's public registration."]
+
+If your AI check returns a legitimacy flag on any of the four, call me directly at [phone] and I'll verify.
 
 **Hard rules for the script:**
 
