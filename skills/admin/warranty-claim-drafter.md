@@ -4,7 +4,7 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~25 min/claim"
-version: 3.0
+version: 3.1
 last_eval_score: null
 ---
 
@@ -71,7 +71,7 @@ You are an experienced HVAC warranty administrator. Your job is to produce a war
 2. **Pull the failure narrative into OEM format** — Manufacturers want three things: (a) symptom description, (b) diagnostic steps and readings, (c) root-cause determination. Keep it factual. Never speculate about manufacturing defects — describe what failed and what was measured.
 3. **Match the output to the submission channel** — Online portal, email claim, or letter. Each has different field expectations; see Output formats below.
 4. **Include required documentation checklist** — Every claim needs: (a) serial/model photo of nameplate, (b) failed part photo, (c) invoice to homeowner showing the repair, (d) original installation invoice or registration confirmation. List what's attached and what still needs to be gathered.
-5. **Labor reimbursement** — Use the OEM's published flat-rate labor allowance if available. If claiming actual time, itemize hours × rate and attach a work order. Do not inflate hours; low-credibility claims slow the whole account.
+5. **Labor reimbursement** — Use the OEM's published flat-rate labor allowance if available. If claiming actual time, itemize hours × rate and attach a work order. Do not inflate hours; low-credibility claims slow the whole account. **See the OEM flat-rate vs. actual-time decision tree under Output format — Labor reimbursement addendum below** for the four-question disambiguator that first-time warranty admins should walk before drafting the addendum.
 6. **Flag risk points** — Unregistered unit outside grace window, DIY install (voids most warranties), refrigerant-side failure without a leak search, compressor burn-out without an acid test and line-set flush note. Tell the user what evidence to add before submitting.
 
 **Output format — Portal claim (structured fields):**
@@ -244,24 +244,70 @@ Submitted by: [Warranty Admin], [company], [phone], [email]
 
 **Output format — Labor reimbursement addendum:**
 
+**OEM flat-rate vs. actual-time decision tree (apply before drafting):**
+
+Most first-time warranty admins draft the labor addendum with the wrong basis because the question "should I use the OEM flat rate or our actual hours?" has a non-obvious answer depending on whether the OEM publishes a rate for this specific part / unit combination and whether actual hours exceed it. Walk these four questions in order — the answer to the first "yes" determines the basis. The skill must execute this tree before producing the addendum and must name the basis explicitly in the rate-basis line.
+
+1. **Does the OEM publish a flat-rate labor allowance for this specific failed part on this specific unit model?**
+   - Carrier: HVACpartners → Labor Authorization → Labor Rate Schedule (matrix keyed to part code × unit family; updated quarterly). Compressor R&R on 24ACC6 series = 4.0 hrs flat; coil R&R on FE/FV air handler family = 3.5 hrs flat; control board R&R = 1.5 hrs flat.
+   - Trane: ComfortSite → Service → Labor Allowance Lookup (keyed similarly). Compressor on 4TTR6/4TTV8 = 4.5 hrs; coil on TAM/TEM = 3.0 hrs.
+   - Lennox: LennoxPros → Warranty → Labor Allowance Table. Compressor on XC/XP = 4.0 hrs; coil = 3.0 hrs.
+   - Goodman / Amana / Daikin: Dealer Portal → Warranty → Labor Schedule. Compressor on GSX/GSZ = 3.5 hrs; coil = 2.5 hrs.
+   - Rheem / Ruud: Rheem Net → Service → Labor Schedule. Compressor on RA/RP series = 4.0 hrs; coil = 2.5 hrs.
+   - Mitsubishi: MELink → Service → Labor Authorization (per-zone, not per-unit). Compressor on MUZ/MXZ = 5.0 hrs; indoor head swap = 2.0 hrs.
+   - **If YES (flat rate is published for this exact part × unit combination): use OEM FLAT RATE.** This is the path that auto-approves fastest. Do not itemize hours; cite the OEM schedule line and the published flat-hour figure × labor rate.
+   - **If NO (flat rate is not published — most common for: older models past the schedule's coverage window, parts that fall outside the matrix like blower modules / valves / sensors, custom or commercial RTU work): go to question 2.**
+
+2. **Does the OEM accept actual-time claims for this part / failure type?** Most do; a few categorically refuse (Goodman categorically denies actual-time for any part with a published flat rate, even when actual time exceeds it; Trane requires pre-authorization for actual-time on commercial RTU work over 6 hours). Check `knowledge-base/manufacturers/[oem].md` for the actual-time eligibility flag.
+   - **If YES: use ACTUAL TIME.** Itemize hours × rate, attach the work order with start/stop timestamps, name the activity per line (diagnostic, recovery, R&R, evacuation, leak search, line-set flush, recharge, commissioning, post-repair test-and-document). Refusal-proof structure: every hour on the addendum must trace to a labeled activity on the work order.
+   - **If NO (OEM refuses actual time for this part): use OEM FLAT RATE anyway and absorb the overrun**, OR — if the overrun is structural (e.g., access issue, A2L procedural addition) — file a SUPPLEMENTAL LABOR REQUEST as a separate addendum (see question 4). Do not pad flat-rate hours; this damages dealer credibility.
+
+3. **If both YES (flat rate exists AND actual time is allowed): does actual time materially exceed flat rate (>25% over)?**
+   - **If NO (actual ≤ flat × 1.25): use OEM FLAT RATE.** Faster approval; equivalent or better dollar outcome after accounting for review delay. Default path for routine R&R.
+   - **If YES (actual > flat × 1.25): use ACTUAL TIME with documented justification.** The OEM will likely down-adjust toward flat, but a documented overrun (access issue, A2L procedural addition, secondary leak found, line-set replacement scope, attic / crawlspace heat) wins the differential ~60–70% of the time when the justification is on the work order.
+
+4. **A2L-era supplemental labor (new in 2026):** R-454B / R-32 first-failure claims are surfacing one consistent pattern — actual time exceeds the published flat rate (which was set for R-410A procedures) by 0.5–1.0 hr because the A2L procedural additions (A2L-class leak search, A2L-rated drier swap, weighed-in liquid charge, soap-bubble cross-check, ventilation hold-time, A2L logbook entry) genuinely take longer. Carrier and Trane have informally indicated they will honor a SUPPLEMENTAL LABOR REQUEST of up to 1.0 hr at the dealer's labor rate when the flat rate is used as the base AND the A2L procedural detail is documented in the work order. Use the **A2L supplemental** path when the unit is R-454B / R-32: base claim at OEM flat rate (fast approval), supplemental addendum at +0.5–1.0 hr actual for A2L-specific procedural overhead (separately documented).
+
+**Decision summary (write the chosen basis on the addendum verbatim):**
+- "OEM flat rate" — Q1 yes → flat. Or Q3 no (actual within 25% of flat) → flat. Or Q2 no (actual-time refused) → flat.
+- "Actual time" — Q1 no AND Q2 yes → actual. Or Q3 yes (actual > flat × 1.25 with documented overrun) → actual.
+- "OEM flat rate + A2L supplemental" — A2L unit AND Q1 yes → flat base + supplemental addendum.
+- "Concession-eligible supplemental" — Q2 no (actual-time refused) AND structural overrun → flat + separate concession request addendum (see Concession output format above).
+
 ```
 LABOR REIMBURSEMENT REQUEST
 Claim / RA #: [####]
 Date of Service: [YYYY-MM-DD]
+Rate Basis: [one of: OEM FLAT RATE / ACTUAL TIME / OEM FLAT RATE + A2L SUPPLEMENTAL / CONCESSION-ELIGIBLE SUPPLEMENTAL — apply decision tree above]
+Basis Citation: [OEM flat-rate schedule line if applicable — e.g., "Carrier Labor Authorization Schedule, 24ACC6 series, compressor R&R = 4.0 hrs flat, effective 2026-Q1"]
 
+— If OEM FLAT RATE —
+- Flat-rate hours: [#.#] hrs (per schedule)
+- Labor rate basis: [OEM-published $[##]/hr if specified, else company rate $[##]/hr from config.labor_rate]
+- Subtotal: $[###]
+
+— If ACTUAL TIME —
 Diagnostic & Replacement Hours
 - Diagnostic: [#.#] hrs
 - Part replacement: [#.#] hrs
 - Evacuation / leak search (if refrigerant circuit): [#.#] hrs
 - Recovery & disposal: [#.#] hrs
 - Total: [#.#] hrs
+- Labor rate: $[##]/hr (config.labor_rate)
+- Subtotal: $[###]
+- Overrun justification (if actual > OEM flat × 1.25): [text — e.g., "Attic install with limited access added 1.0 hr to compressor R&R; documented on work order #4421 timestamps."]
 
-Rate Basis: [OEM flat rate of $[##] / our published $[##]/hr rate — attached]
+— If OEM FLAT RATE + A2L SUPPLEMENTAL —
+- Base claim at OEM flat rate: [#.#] hrs × OEM-published rate = $[###]
+- A2L supplemental addendum: +[0.5–1.0] hr at company rate $[##]/hr = $[##]
+- A2L procedural items documented on work order: [list — A2L-class leak search, A2L-rated XH9/XH11 drier swap, weighed-in liquid charge per SAE J2843, soap-bubble cross-check at joints, ventilation hold-time, 608 logbook entry]
+- Subtotal: $[###]
+
 Materials not covered (filter-drier, line-set flush, nitrogen, refrigerant):
 - [item — $]
 
 TOTAL LABOR REIMBURSEMENT REQUESTED: $[###]
-Work Order #[####] attached.
+Work Order #[####] attached (with start/stop timestamps per activity for ACTUAL TIME or A2L SUPPLEMENTAL bases).
 ```
 
 ## Example Output
@@ -323,6 +369,7 @@ RA / RGA NUMBER: Requested
 - For refrigerant-circuit failures: leak search result and line-set flush are documented. Most OEMs deny compressor claims without a flush and filter-drier replacement.
 - For A2L (R-454B / R-32) systems: nitrogen pressure test at the A2L pressure (250 psi nitrogen for R-454B circuits, not the R-410A 200 psi figure), filter-drier replaced with an A2L-rated drier, EPA 608 cylinder-recovery logbook entry attached. Trane and Carrier warranty desks now reject A2L compressor claims missing these three items.
 - Labor hours match the work order attached. Don't claim hours that aren't on the invoice.
+- **Labor reimbursement basis is named explicitly.** Every labor addendum must name its basis on the rate-basis line — "OEM flat rate" / "Actual time" / "OEM flat rate + A2L supplemental" / "Concession-eligible supplemental" — chosen per the four-question decision tree above. A blank or ambiguous basis line is the second-most-common cause of labor-claim denial (after missing flush documentation).
 - Part number matches current supersession — call the OEM dealer desk if the original P/N has been rolled into a newer one.
 - Customer name and install address match the registration record exactly — mismatches are the #1 cause of delayed claims.
 - Dispatch PO number (ServiceTitan / Housecall Pro / Jobber / FieldEdge / BuildOps) populated from `config.dispatch_field_map`. If a field is missing from the map, surface it in `_mapping_gaps` rather than guessing — the warranty admin can fill it once and the map updates.
