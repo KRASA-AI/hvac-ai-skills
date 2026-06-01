@@ -8,6 +8,7 @@ Quick-reference facts for any HVAC AI skill that touches on refrigerant transiti
 - As of January 1, 2025, manufacture and import of new residential/light-commercial split-system equipment charged with R-410A is prohibited. Equipment already manufactured before the cutoff could be sold into 2025 under the sell-through allowance.
 - 2026 new-equipment market is essentially A2L only for residential splits, heat pumps, and VRF/ductless.
 - R-410A itself is not banned for service use. It remains legal to produce, sell, and charge into existing systems. Supply is declining, which affects price.
+- **EPA Technology Transitions reconsideration final rule (published Federal Register 2026-05-26; effective 2026-07-27).** EPA finalized targeted relief from the 2023 Technology Transitions Rule. The provision contractors must know: the installation deadline has been **removed** for residential and light-commercial AC/HP systems where every specified component was domestically manufactured or imported before January 1, 2025. Stranded pre-2025 R-410A inventory can be installed indefinitely under this allowance. The rule also extends compliance dates and adjusts thresholds in retail food refrigeration, cold storage warehouses (GWP cap raised toward 700 effective 2026-01-01 in the proposal), and certain refrigerated lab equipment. EPA's stated rationale: avoid stranded inventory and ease the R-454B supply crunch that drove price spikes in early 2025. What this does NOT change: new equipment manufactured after January 1, 2025 must still be A2L; the AIM Act HFC phasedown schedule itself is unchanged; A2L safety training, equipment, and service-procedure requirements still apply.
 
 ## Common A2L refrigerants in 2026 equipment
 
@@ -52,12 +53,14 @@ Both are classified ASHRAE A2L — lower toxicity, mildly flammable.
 - "You'll have to replace your system." (Only if replacement is actually warranted.)
 - "A2L is dangerous." (It is mildly flammable under specific conditions; properly installed, it is safe.)
 - "This is a government cash grab." (Inaccurate and unprofessional.)
+- "New A2L installs must be in by [old install-deadline date]." (The residential AC/HP install deadline for pre-2025-manufactured equipment was removed by the EPA Technology Transitions reconsideration final rule published 2026-05-26, effective 2026-07-27.)
 
 ## Source anchors
 
 - EPA AIM Act rulemaking and sector transition deadlines
+- EPA Technology Transitions reconsideration final rule, Federal Register 2026-05-26 (effective 2026-07-27)
 - UL 60335-2-40 and ASHRAE 15 safety standards for A2L systems
 - ACCA A2L Refrigerant Safety Training program
 - Manufacturer transition guides (Carrier, Trane, Lennox, Goodman, Rheem, Daikin, Mitsubishi)
 
-_Last reviewed: 2026-04-14_
+_Last reviewed: 2026-06-01_
