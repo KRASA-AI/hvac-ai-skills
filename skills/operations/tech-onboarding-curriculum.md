@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: advanced
 time_saved: "~6 hr/new-hire plan (plus compressed time-to-productivity)"
-version: 2.1
+version: 2.2
 last_eval_score: null
 ---
 
@@ -17,6 +17,8 @@ Produce a structured, company-specific onboarding curriculum for a new HVAC tech
 The skill takes the contractor's actual brand mix, service mix, equipment carried, dispatch system, and mentor roster — plus one or more senior techs' dictated tribal-knowledge dumps — and returns a four-phase onboarding plan with per-week objectives, ride-along rotation, competency checklists (traditional + AI), AI-copilot integration points, mentor sign-off forms, and a seed set of knowledge-base entries captured from the senior-tech interview.
 
 This skill exists because in April 2026 the labor equation changed twice in quick succession: the DOL mandated AI-skills integration into every Registered Apprenticeship (2026-04-01), and OxMaint / Trainual / ServiceTitan case data confirmed that contractors who pair tribal-knowledge capture with AI diagnostic copilots cut diagnostic time ~65% and onboarding from 6 months to 6 weeks. Meanwhile, ~225,000 HVAC vacancies are projected within five years, 25,000+ techs leave the industry annually, and 40%+ of the field is over age 50. The senior tech retiring this fall is an existential knowledge problem; this skill is how the contractor turns that retirement into a transferable asset instead of a hole.
+
+Mid-2026 adoption data sharpens why the AI-literacy track in this curriculum is front-loaded rather than bolted on at the end. A 2026 survey of 600+ commercial contractors (BuildOps, via ACHR News, "Addressing the AI Training Gap in HVAC") found ~78% already use AI — concentrated in estimating (~47%), jobsite search/chat (~43%), and compliance tracking (~40%) — yet identified **training, not security or cost, as the single biggest barrier to wider adoption.** Critically, apprentices are ~23% more likely than senior techs to reach for AI on procedures like estimating. The practical reading for onboarding: new hires arrive already AI-inclined, so the company's job is not to *introduce* AI but to install **judgment and guardrails** before bad habits set — exactly what AI-literacy module 4 (AI limits, hallucination, and professional judgment) does. A shop that skips structured AI training is not keeping AI out of the field; it is shipping an apprentice who already trusts AI output uncritically. See `knowledge-base/industry-overview.md` → "AI Adoption Snapshot (mid-2026)" for the underlying figures.
 
 ## When to Use
 
