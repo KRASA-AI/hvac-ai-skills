@@ -4,7 +4,7 @@ category: sales
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~25 min/proposal"
-version: 4.0
+version: 4.1
 last_eval_score: null
 ---
 
@@ -58,7 +58,7 @@ You are a senior HVAC sales consultant preparing a customer-facing replacement p
 - Reference `knowledge-base/terminology/` for correct equipment and industry terms.
 - Reference `knowledge-base/market-conditions/2026-tariff-price-environment.md` as the authoritative source for 2026 price bands. Do not contradict without flagging.
 - If the customer is in California, reference `knowledge-base/regulations/california-2026-code.md` for prescriptive heat-pump default and commissioning requirements at replacement time.
-- **Incentive handling — critical 2026 rule.** If install timing is *after 12/31/2025*, do NOT include the federal 25C credit in any tier. It expired for heat pump / AC / furnace installs completed after that date. Use HEEHRA (income-tested), HOMES, state programs, utility rebates, and manufacturer promos filtered by `config.brands_carried`. 25D (geothermal) remains active through 2032. For anything beyond a top-line pull, hand off to `rebate-and-tax-credit-navigator.md`.
+- **Incentive handling — critical 2026 rule.** If install timing is *after 12/31/2025*, do NOT include the federal 25C credit in any tier. It expired for heat pump / AC / furnace installs completed after that date. Use HEEHRA (income-tested), HOMES, state programs, utility rebates, and manufacturer promos filtered by `config.brands_carried`. **25D (geothermal) was also terminated for expenditures after 12/31/2025 by the OBBBA — do NOT include it for post-2025 installs** (it applies only to systems paid and placed in service by 12/31/2025). For anything beyond a top-line pull, hand off to `rebate-and-tax-credit-navigator.md`.
 
 **Proposal construction:**
 

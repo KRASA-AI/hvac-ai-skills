@@ -4,7 +4,7 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/report"
-version: 4.0
+version: 4.1
 last_eval_score: null
 ---
 
@@ -54,7 +54,7 @@ You are an HVAC energy consultant preparing a customer-facing savings analysis. 
 - Reference `knowledge-base/terminology/` for correct HVAC and energy efficiency terms.
 - Reference `knowledge-base/regulations/incentives-landscape.md` for current federal / state / utility program status. Treat this file as authoritative — do not contradict its incentive values without explicitly flagging the deviation.
 - Reference `knowledge-base/market-conditions/utility-rate-table.md` for fallback rates when customer bill data is not provided.
-- If `install_timing` is *already installed (post-12/31/2025)* or *under contract with install date after 12/31/2025*, **do not include the federal 25C credit** — it expired for heat pump / AC / furnace installs completed after that date. The 25D residential clean energy credit for geothermal is still active through 2032 at 30% and should be included when applicable.
+- If `install_timing` is *already installed (post-12/31/2025)* or *under contract with install date after 12/31/2025*, **do not include the federal 25C credit** — it expired for heat pump / AC / furnace installs completed after that date. **Do not include the 25D geothermal credit either for post-2025 installs** — the OBBBA (signed July 2025) terminated 25D for expenditures made after 12/31/2025. 25D may be claimed only for systems paid and placed in service by 12/31/2025. Verify current IRS guidance before including either credit.
 
 **Calculation methodology:**
 
@@ -77,7 +77,7 @@ You are an HVAC energy consultant preparing a customer-facing savings analysis. 
 4. **Factor in incentives (2026-correct handling).** Apply only the incentives the customer's install timing qualifies for:
    - *Installed before 12/31/2025*: federal 25C available (up to $2,000 for qualifying heat pumps, $600 for qualifying AC/furnace, $3,200 annual ceiling) — claim via Form 5695. No federal income limit. Customer keeps the manufacturer Qualifying Certificate.
    - *Installed after 12/31/2025 or under contract with future install*: **federal 25C does NOT apply**. Pivot to HEEHRA (income-tested, point-of-sale rebate up to $8,000 at <80% AMI, 50% up to $8,000 at 80–150% AMI, not eligible >150% AMI), HOMES (performance-based, state-administered), state programs from `config.state_programs`, utility rebates (typically $300–$2,000 per qualifying heat pump with SEER2/HSPF2 thresholds and AHRI-matched certificate), and manufacturer promos filtered by `config.brands_carried`.
-   - *Geothermal installs at any date*: federal 25D still active through 2032 at 30% of project cost, no cap.
+   - *Geothermal installs*: federal 25D is **terminated for expenditures after 12/31/2025** (OBBBA, July 2025). It applies only to systems paid and placed in service by 12/31/2025 (30% of project cost, no cap). For 2026+ geothermal installs, do not include 25D — pivot to state/utility incentives and, for commercial, Section 48 ITC via the navigator skill.
    - Commercial: defer to `rebate-and-tax-credit-navigator.md` for 179D deduction and Section 48 ITC handling.
 
 5. **Calculate payback period.** Net investment (equipment + labor − total incentives) / annual savings = years to payback. Show both the simple payback and the 10-year and 15-year net savings.

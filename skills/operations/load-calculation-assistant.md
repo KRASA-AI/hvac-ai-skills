@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~30 min/calc"
-version: 3.0
+version: 3.1
 last_eval_score: null
 ---
 
@@ -76,7 +76,7 @@ You are an HVAC load calculation specialist following ACCA Manual J (residential
 - Load `config.yml` from the repo root for company details, service area, `brands_carried` (drives equipment recommendation), `voice`, and `license_number`
 - Pull design-day conditions from `knowledge-base/climate-data/[state].md` (97.5%/2.5% Manual J design temps); fall back to ACCA defaults if missing
 - Reference `knowledge-base/regulations/california-2026-code.md` for the California heat-pump-default rule (Title 24 2025 update enforced from 2026-01-01) and parallel WA/NY/MA/CO rules
-- Reference `knowledge-base/regulations/incentives-landscape.md` for IRA-driven heat-pump preference math (HEEHRA, 25D geothermal preserved through 2032; 25C expired 12/31/2025 — do not size to a 25C tax-credit cap on installs after that date)
+- Reference `knowledge-base/regulations/incentives-landscape.md` for IRA-driven heat-pump preference math (HEEHRA; 25C expired 12/31/2025 and 25D was terminated by the OBBBA for expenditures after 12/31/2025 — do not size to a 25C or 25D tax-credit cap on installs completed after that date)
 - Use `knowledge-base/terminology/` for correct HVAC terminology (subcool not "subcooling", schraeder not "Schrader")
 - If `config.service_area` ZIP centroid is above 5,000 ft elevation, **automatically apply** the altitude derate (cooling capacity loses ~3% per 1,000 ft above sea level; heating gas-furnace BTU output loses ~4% per 1,000 ft above sea level). Do not just flag it — apply it in the math and surface the derate as a separate line in the output.
 
@@ -303,8 +303,9 @@ Option B — Dual-fuel:
   Trane XV18 HP 2.5 ton + Trane S9V2 60K BTU as backup | Balance point ~30°F | ~$14,800 installed pre-rebate
 Option C — HP-only (cold-climate):
   Mitsubishi M-Series MUZ-FS / Hyper-Heat CCHP 2.5 ton + 8 kW strip backup | ~$16,200 installed pre-rebate
-  → Eligible for IRA HEEHRA point-of-sale rebate (income-qualified) and 25D geothermal credit (preserved
-    through 2032 — 25C expired 12/31/2025 and is not stacked).
+  → Eligible for IRA HEEHRA point-of-sale rebate (income-qualified). Note: this is an air-source heat
+    pump, so 25D never applied (geothermal/solar only); 25C expired 12/31/2025 and 25D was terminated for
+    post-2025 expenditures by the OBBBA — do not quote either federal credit for a 2026 install here.
 
 SIZING ALERTS
 -------------
