@@ -4,7 +4,7 @@ category: sales
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~25 min/conversation"
-version: 1.1
+version: 1.2
 last_eval_score: null
 ---
 
@@ -16,7 +16,7 @@ Produce a defensible, kitchen-table-ready recommendation on whether a homeowner 
 
 Output can be delivered as a verbal tech script, a printable one-pager the customer keeps, a short email follow-up, a text-message pre-read the dispatcher sends ahead of the visit, or a combined kitchen-table packet.
 
-This skill exists because the 2026 price environment has broken the old rules of thumb. A replacement that was $8,000 in 2024 is now quoting at $12,000–$15,000 thanks to Section 232 tariff restructuring, 5–10% OEM list-price increases, the A2L equipment premium, and the expiration of the federal 25C heat-pump tax credit on 12/31/2025. The classic $5,000 Rule still works as a starting anchor, but the economic cutover shifts — a $1,200 repair on a 12-year-old system is often the honest call in 2026 even when the rule points to replacement. At the same time, 22% of homeowners now paste their quote into ChatGPT before signing, and without local labor, permit, and load context the AI frequently says "that seems high" — killing the deal before the contractor gets a rebuttal. This skill fixes both problems: it grounds the recommendation in current market reality, and it produces AI-legible reasoning the contractor can walk the homeowner through on the spot.
+This skill exists because the 2026 price environment has broken the old rules of thumb. A replacement that was around $8,000 in 2024 is now commonly quoting in the low-to-mid five figures (directional — confirm against current wholesale and `knowledge-base/market-conditions/2026-tariff-price-environment.md`) thanks to Section 232 tariff restructuring, OEM list-price increases, the A2L equipment premium, and the expiration of the federal 25C heat-pump tax credit on 12/31/2025 (confirm current IRS guidance before quoting any federal credit). The classic $5,000 Rule still works as a starting anchor, but the economic cutover shifts — a $1,200 repair on a 12-year-old system is often the honest call in 2026 even when the rule points to replacement. At the same time, 22% of homeowners now paste their quote into ChatGPT before signing, and without local labor, permit, and load context the AI frequently says "that seems high" — killing the deal before the contractor gets a rebuttal. This skill fixes both problems: it grounds the recommendation in current market reality, and it produces AI-legible reasoning the contractor can walk the homeowner through on the spot.
 
 ## When to Use
 
@@ -94,6 +94,8 @@ Compute a 0–100 replace-lean score from four components, then map to a recomme
    - Customer is in **California under the 2026 code** and existing system is a straight-gas furnace with no heat pump: **+5 points** (prescriptive heat-pump default at replacement time).
    - System has **2+ documented prior repairs in the last 3 years** (from CRM pull via `config.crm_record_id`): **+5 points** (accelerating repair-cost curve). If CRM data is unavailable, flag in Watch-outs rather than applying or skipping the modifier.
    - Household has **stated budget hard-stop below replacement financing reach**: **−5 points** (replacement isn't a real option — lead with the honest repair recommendation).
+
+   **Modifier accounting rules:** Sum only *distinct* triggers. **Do not double-count a single physical repair across two market-risk modifiers** — an R-410A evaporator-coil or compressor replacement satisfies both the "refrigerant circuit repair on R-410A" trigger and the "major component on a system ≥12 years old" trigger, but it is one repair, so apply **+10 once, not +20.** Triggers that describe genuinely separate facts (e.g., R-410A circuit repair **and** 2+ prior CRM repairs) do stack. The California modifier and the budget-hard-stop modifier are the only ones that can be negative or zero; **a customer who is simply not in California contributes 0 from the California modifier — there is no "−5 for not being in California."**
 
 **Score → recommendation mapping:**
 
@@ -242,8 +244,116 @@ The kitchen-table packet above stripped of the score breakdown and compressed to
 - **Always surface the prior-repair-history modifier.** If CRM data is available and shows 2+ repairs in 3 years, name them explicitly in the Watch-outs block — not to pressure replacement, but because the customer deserves to see the cost pattern. If CRM data is unavailable, flag it and ask.
 - Always include the **"What your AI check will see"** block in the one-pager and kitchen-table packet outputs. This is the novel 2026 piece and the reason this skill exists — removing it defeats the skill.
 
-## Example Input → Output Sketch
+## Example Input → Rendered Output
 
-**Input:** Mr. and Mrs. Patel, 2,400 sq ft home in Phoenix, 13-year-old Goodman 3-ton R-410A split (GSX130361). Tech diagnosed a leaking evaporator coil, repair quote $2,600 (coil $1,100 + labor $900 + refrigerant recover/recharge $600). System was installed new at 13 SEER. Replacement Better-tier quote: Carrier Performance 24SPA636 17 SEER2 at $13,800 installed. Financing available at 120 months / 8.99%. Output mode: kitchen-table packet. Tone: warm-conversational.
+**Input:** Mr. and Mrs. Patel, 2,400 sq ft home in Phoenix, 13-year-old Goodman 3-ton R-410A split (GSX130361). Tech diagnosed a leaking evaporator coil, repair quote $2,600 (coil $1,100 + labor $900 + refrigerant recover/recharge $600). System was installed new at 13 SEER. Replacement Better-tier quote: Carrier Performance 24SPA636 17 SEER2 at $13,800 installed. Financing available at 120 months / 8.99%. Phoenix utility rebate ~$1,000 + Carrier promo ~$500 (no federal 25C — expired 12/31/2025). Output mode: kitchen-table packet. Tone: warm-conversational. (Not in California; no prior CRM repair history loaded.)
 
-**Expected output behavior:** Decision Score computes to roughly 65 (35 on $5,000 Rule + 15 on age + 10 on efficiency + 10 on R-410A refrigerant-circuit market risk − 5 no Calif). Score maps to **LEAN REPLACE**. Packet presents repair as bridge-only ("$2,600 gets you 2–4 more years on a 13-year system; the next refrigerant-side repair will land higher than this one because R-410A supply is drawing down"), replacement as recommended long-term call with specific Carrier Performance spec, financing row computes to about $174/month, break-even vs. continued repairs at month 15, and AI-validation block honestly scores the $13,800 installed price as "mid-range for 17 SEER2 Carrier in Phoenix in spring 2026, within ~10% of competitive quotes; includes permit, haul-away, and new line set which not all quotes include."
+**Decision Score (every number shown, computed from the methodology):**
+
+| Component | Calculation | Points |
+|-----------|-------------|--------|
+| $5,000 Rule | 13 yrs × $2,600 = **$33,800** → > $15,000 band | **40 / 40** |
+| System age | 13 years → 12–14 band | **15 / 25** |
+| Efficiency gap | 13 SEER → 17 SEER2 (≈17.9 SEER-equiv); ~38% gain → 25–40% band | **10 / 15** |
+| Market-risk | R-410A refrigerant-circuit repair (+10). The coil is also a "major component on a ≥12-yr system," but that is the *same* physical repair, so it counts **+10 once, not +20**. Not in California → 0. No CRM history → flag, not score. | **+10** |
+| **TOTAL** | 40 + 15 + 10 + 10 | **75 / 100 → LEAN REPLACE** (56–75 band) |
+
+**Rendered packet:**
+
+```
+KRASA HEATING & COOLING — REPAIR OR REPLACE RECOMMENDATION
+Prepared for: Mr. and Mrs. Patel
+Property: [Phoenix, AZ 850XX]
+Date: 2026-06-22
+Prepared by: [Advisor name from config]
+
+THE SHORT ANSWER
+----------------
+At 13 years old with a $2,600 R-410A coil-leak repair, the honest call is to lean
+toward replacement — and we'll show you the math so you can check it yourself. The
+repair is a real option; it's just a 2–4 year bridge, not a fix.
+
+WHAT WE FOUND
+-------------
+System: Goodman GSX130361, 3-ton R-410A split, 13 SEER, 13 years old
+Diagnosed repair: Leaking evaporator coil (refrigerant slowly escaping; the coil
+                  has to be replaced and the system recharged)
+Repair cost: $2,600 (coil $1,100, labor $900, refrigerant recover/recharge $600,
+             lead time 2 days)
+Expected remaining useful life after repair: 2–4 years
+Prior repair history (from CRM): not loaded — please confirm with customer
+
+THE 2026 DECISION SCORE
+-----------------------
+$5,000 Rule (13 yrs × $2,600 = $33,800):     40 / 40
+System age (13 years):                       15 / 25
+Efficiency gap to Better tier (~38%):        10 / 15
+2026 market-risk adjustments (R-410A circuit): +10
+────────────────────────────────────────────
+TOTAL:                                       75 / 100
+Recommendation: LEAN REPLACE
+
+THE REPAIR PATH
+---------------
+Cost today:      $2,600
+Lead time:       2 days
+What it buys:    2–4 more years on a 13-year-old system
+Watch-outs:      This is a refrigerant-circuit repair on R-410A. R-410A supply is
+                 drawing down under the A2L transition, so a second refrigerant-side
+                 repair in the next 2 years will land higher than this one. (See
+                 a2l-refrigerant-explainer for the why.) Prior-repair history was not
+                 pulled — if this system has had work before, the cost pattern matters.
+
+THE REPLACE PATH
+----------------
+Better tier — the one most homeowners pick:
+Equipment:       Carrier Performance 24SPA636, 17 SEER2, 3-ton (R-454B)
+Installed:       $13,800
+After incentives: $12,300  (Phoenix utility rebate −$1,000; Carrier promo −$500;
+                  no federal 25C — it expired 12/31/2025, confirm current IRS guidance)
+Financing:       ~$175 / month for 120 months at 8.99% APR (on $13,800)
+                 (break-even vs. continued repairs: ~month 15)
+Warranty:        [10 years parts / 10 years labor from config]
+Annual operating-cost savings vs. current 13 SEER: ~$300–$400
+
+[Dual-fuel row omitted — Phoenix is Climate Zone 2B; no cold-climate trigger.]
+
+WHY NOW (OR WHY NOT)
+--------------------
+- The $2,600 coil repair on a 13-year unit is the textbook "$5,000 Rule" replace signal
+  (13 × $2,600 = $33,800, far past the $5,000 line).
+- R-410A is on its way out; the next refrigerant-side failure on this system will cost
+  more than this one, not less.
+- A 17 SEER2 replacement pays part of itself back in lower operating cost, and you reset
+  the clock on a system that is already near the end of its useful life.
+- If cash flow is the concern, the financed payment (~$175/mo) is the real number to weigh
+  — not the sticker price.
+
+WHAT YOUR AI CHECK WILL SEE
+---------------------------
+Paste this into ChatGPT or Claude if you want a second opinion — here's what it should
+see and honestly say.
+
+1. Comparable local pricing: $13,800 installed is mid-range for a 17 SEER2 Carrier
+   Performance in Phoenix in 2026, within ~10% of competitive quotes.
+2. Efficiency tier: 17 SEER2 is the honest mid-tier pick post-SEER2 rule and matches most
+   homeowner installs for this square footage — not over-specced.
+3. Warranty: 10-year parts + 10-year labor is at or above the market standard; an AI that
+   scores warranties will flag this as a plus.
+4. Scope: Price includes permit, haul-away, and new line set — not all quotes do, so a
+   price-only comparison understates the value here.
+
+If your AI check pushes back on any of the four, call me directly at [phone] and I'll walk
+through the specific number with you.
+
+NEXT STEPS
+----------
+1. Tell us which path you want — we're not pushy.
+2. If repair, we can get the coil moving today for a 2-day turnaround.
+3. If replace, we'll have your Good / Better / Best proposal in your hands within [X] hours.
+4. Want to sit with it overnight? That's fine — text us at [phone] anytime.
+
+Krasa Heating & Cooling • [address] • [phone] • [website] • license #[X]
+```
+
+**Why this example matters:** every number in the score reconciles to the methodology above it (40 + 15 + 10 + 10 = 75), the same physical coil repair is scored once rather than double-counted, and "not in California" correctly contributes 0 rather than a phantom −5. A homeowner who re-runs the arithmetic — or pastes it into their own AI — gets the same 75 and the same LEAN REPLACE call, which is the entire point of the skill.

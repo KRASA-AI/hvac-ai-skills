@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~30 min/calc"
-version: 3.1
+version: 3.2
 last_eval_score: null
 ---
 
@@ -78,7 +78,7 @@ You are an HVAC load calculation specialist following ACCA Manual J (residential
 - Reference `knowledge-base/regulations/california-2026-code.md` for the California heat-pump-default rule (Title 24 2025 update enforced from 2026-01-01) and parallel WA/NY/MA/CO rules
 - Reference `knowledge-base/regulations/incentives-landscape.md` for IRA-driven heat-pump preference math (HEEHRA; 25C expired 12/31/2025 and 25D was terminated by the OBBBA for expenditures after 12/31/2025 — do not size to a 25C or 25D tax-credit cap on installs completed after that date)
 - Use `knowledge-base/terminology/` for correct HVAC terminology (subcool not "subcooling", schraeder not "Schrader")
-- If `config.service_area` ZIP centroid is above 5,000 ft elevation, **automatically apply** the altitude derate (cooling capacity loses ~3% per 1,000 ft above sea level; heating gas-furnace BTU output loses ~4% per 1,000 ft above sea level). Do not just flag it — apply it in the math and surface the derate as a separate line in the output.
+- If `config.service_area` ZIP centroid is above 5,000 ft elevation, **automatically apply** the altitude derate. **The derate adjusts equipment *capacity*, not building *load* — keep them separate.** Altitude does not change how much heat the building gains or loses (the load), but it does reduce what a given piece of equipment can deliver: cooling capacity drops ~3% per 1,000 ft above sea level, and gas-furnace output drops ~4% per 1,000 ft. So the building load lines are computed normally and the TOTAL LOAD is reported **un-derated**; the derate is then applied as a **gross-up on the required equipment capacity** in the EQUIPMENT SIZING section — i.e., divide the un-derated load by (1 − derate fraction) to get the required nameplate capacity. Never subtract the derate from the load subtotal. Surface the gross-up as its own line in the equipment-sizing output (not in the load breakdown).
 
 **Process:**
 
@@ -129,7 +129,9 @@ For each component, calculate heat gain (cooling) and heat loss (heating):
 ### Step 5: Sum & Size
 - **Total cooling load** = Envelope gains + Solar gains + Internal gains + Infiltration gains + Duct losses
 - **Total heating load** = Envelope losses + Infiltration losses + Duct losses
-- Convert to tons: Cooling BTU/hr ÷ 12,000 = tons
+- Report both TOTAL LOADs **un-derated** — altitude does not change the building's load.
+- **Altitude gross-up (only above 5,000 ft):** the *equipment capacity target* = TOTAL LOAD ÷ (1 − derate fraction) (cooling derate ≈ 3%/1,000 ft; gas-heating derate ≈ 4%/1,000 ft). This grosses the required nameplate **up** so the de-rated equipment still meets the un-derated load. Never subtract the derate from the load.
+- Convert to tons: equipment-capacity-target BTU/hr ÷ 12,000 = tons
 - **Round to nearest half-ton** for equipment selection
 
 ### Step 6: Flag Common Sizing Mistakes
@@ -139,7 +141,7 @@ Check for and alert on:
 - **Ignoring duct losses** — If ducts are in unconditioned space and no loss factor was applied
 - **Missing latent load** — In humid climates (zones 1A–3A), undersizing causes humidity problems
 - **Design day vs. average** — Calculations must use design conditions, not average temperatures
-- **Altitude adjustment** — Above 5,000 ft, derate is applied automatically and surfaced as a separate output line. Confirm the derate read.
+- **Altitude adjustment** — Above 5,000 ft, the derate grosses **up** the equipment-capacity target (it is not subtracted from the building load). Confirm the gross-up appears in the EQUIPMENT SIZING section, not in the load breakdown.
 - **Heat-pump-default jurisdictions** — In California (Title 24 2025 update enforced from 2026-01-01), Washington, parts of NY/MA/CO, the like-for-like gas-furnace replacement is no longer the default. Flag it and present the dual-fuel and HP-only options with balance-point and aux-heat sizing.
 
 ### Step 7: Equipment-Type Recommendation (2026)
@@ -271,11 +273,16 @@ Internal gains (3 occ × 230 + 1,200 kit
    + 1,800 × 1 W × 3.41):                 8,028 BTU/hr
 Subtotal:                                22,590 BTU/hr
 Duct loss adder (10%):                    2,259 BTU/hr
-Altitude derate on subtotal (−15.8%):    -3,925 BTU/hr (capacity, not load — see below)
 ─────────────────────────────────────────
 TOTAL COOLING LOAD:                      24,849 BTU/hr (~2.07 tons sensible+latent)
-EQUIPMENT-CAPACITY TARGET (post-derate): 28,800 BTU/hr nameplate (2.4 ton)
-                                         → ROUND TO: 2.5 ton system
+   (load is reported un-derated — altitude does not change the building's heat gain)
+
+EQUIPMENT-CAPACITY TARGET (altitude gross-up):
+   Required nameplate = load ÷ (1 − 0.158 cooling derate at 5,280 ft)
+                      = 24,849 ÷ 0.842 = 29,512 BTU/hr
+                      → ROUND TO: 2.5 ton system (30,000 BTU/hr nominal)
+   Rationale: equipment loses ~15.8% capacity at Denver elevation, so the system must be
+   sized UP to still deliver the 24,849 BTU/hr the building actually needs.
 
 HEATING LOAD BREAKDOWN
 ----------------------
@@ -289,9 +296,12 @@ Subtotal:                               31,330 BTU/hr
 Duct loss adder (10%):                   3,133 BTU/hr
 ─────────────────────────────────────────
 TOTAL HEATING LOAD:                     34,463 BTU/hr
-EQUIPMENT-OUTPUT TARGET (gas, post-altitude derate −21.1%):
-                                         43,700 BTU/hr output → 60K BTU/hr input
-                                         at 80% AFUE (or 50K at 90%+).
+   (load reported un-derated, same as cooling)
+
+EQUIPMENT-OUTPUT TARGET (gas, altitude gross-up):
+   Required output = load ÷ (1 − 0.211 gas derate at 5,280 ft)
+                   = 34,463 ÷ 0.789 = 43,680 BTU/hr output
+                   → ~60K BTU/hr input at 80% AFUE (or ~50K input at 90%+).
 EQUIPMENT-OUTPUT TARGET (CCHP at 5°F):  35,000 BTU/hr at 5°F outdoor
                                          + 8 kW aux electric strip backup.
 
