@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/report"
-version: 3.0
+version: 3.1
 last_eval_score: null
 ---
 
@@ -62,7 +62,7 @@ You are a senior HVAC inspection specialist producing a visual condition assessm
 
 - **Carrier / Bryant / Payne / ICP**: First 2 digits = week, next 2 = year (e.g., `2419E12345` → week 24 of 2019). Post-2005 format.
 - **Trane / American Standard**: Year is position 2 or 3 (letter- or digit-coded). Older pre-2010 uses Julian-style.
-- **Lennox**: Last 4 digits of serial = week+year (e.g., `...2419` → week 24 of 2019)
+- **Lennox**: Format varies by era. Newer residential serials encode the build date in the **first 4 digits** = `WWYY` (e.g., `3819F12345` → week 38 of 2019). Always sanity-check that the first two digits are a valid week (01–53); if not, the unit uses an older/plant-coded format — fall back to the Lennox decoder and flag the age as low-confidence.
 - **Rheem / Ruud / Weather King**: Positions 1–4 = `WWYY` (e.g., `2419xxxx` → week 24 of 2019)
 - **Goodman / Amana / Daikin NA**: First 4 = `YYMM` (e.g., `1906xxxxxx` → June 2019)
 - **York / Coleman / Luxaire / Johnson Controls**: 10-char serial; year letter in position 4 or use manufacturer lookup
@@ -213,7 +213,7 @@ EQUIPMENT IDENTIFIED
 --------------------
 | Unit | Type | Make/Model | Serial # | Decoded Mfg Date (method, confidence) | Age | Refrigerant |
 |------|------|------------|----------|---------------------------------------|-----|-------------|
-| Outdoor | Split-system condenser | Lennox XC21 | 3819F12345 | Week 38, 2019 (Lennox last-4 = WWYY, high) | ~6.5 yrs | R-410A (era default) |
+| Outdoor | Split-system condenser | Lennox XC21 | 3819F12345 | Week 38, 2019 (Lennox first-4 `3819` = WWYY; wk 38 valid → medium-high, verify w/ decoder) | ~6.5 yrs | R-410A (era default) |
 | Indoor | Air handler | [Not visible — VERIFY] | — | — | — | — |
 
 PHOTO-BY-PHOTO FINDINGS
@@ -252,7 +252,7 @@ EQUIPMENT DATA EXTRACTED
 
 APPENDIX — Pre-Purchase Scope & Limitations
 --------------------------------------------
-This visual inspection is limited to the equipment and areas photographed or accessible at the time of the walk-through. It does not constitute a mechanical test of refrigerant charge, airflow, or electrical load, which require onsite diagnostic equipment. The age estimate for the outdoor unit is based on a high-confidence decode of the Lennox serial number format (positions 5–8 = week + year). A complete pre-close test is recommended for any system over 5 years old.
+This visual inspection is limited to the equipment and areas photographed or accessible at the time of the walk-through. It does not constitute a mechanical test of refrigerant charge, airflow, or electrical load, which require onsite diagnostic equipment. The age estimate for the outdoor unit is based on a decode of the Lennox serial number format (first 4 digits `3819` = week 38 + year 2019); Lennox formats vary by era, so this date should be confirmed against the manufacturer decoder before any warranty or replacement decision. A complete pre-close test is recommended for any system over 5 years old.
 
 Inspector: [Name], [License #], [Date]
 [Company] · [Phone] · [Email]

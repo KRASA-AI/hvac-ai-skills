@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~30 min/calc"
-version: 3.2
+version: 3.3
 last_eval_score: null
 ---
 
@@ -263,26 +263,26 @@ Walls (1,272 net sq ft × 0.07 × 18°F):    1,602 BTU/hr
 Ceiling/Roof (1,800 × 0.03 × 18°F):         972 BTU/hr  (R-30)
 Windows conduction (250 × 0.50 × 18°F):   2,250 BTU/hr
 Windows solar (60S × 35 + 65E × 28 +
-   65W × 28 + 60N × 14):                  6,440 BTU/hr
+   65W × 28 + 60N × 14):                  6,580 BTU/hr
 Floors (over basement, 1,800 × 0.05 × 8): 720 BTU/hr
 Infiltration sensible (14,400 ft³ × 0.50
    ACH × 1.08 × 18 / 60):                 2,333 BTU/hr
-Infiltration latent (14,400 × 0.50 × 0.68
-   × 0.003 ΔW lb/lb / 60):                  245 BTU/hr  (Denver is dry)
+Infiltration latent (120 CFM × 0.68
+   × 3.0 gr/lb ΔW):                         245 BTU/hr  (Denver is dry; CFM = 14,400 × 0.50 ÷ 60)
 Internal gains (3 occ × 230 + 1,200 kit
    + 1,800 × 1 W × 3.41):                 8,028 BTU/hr
-Subtotal:                                22,590 BTU/hr
-Duct loss adder (10%):                    2,259 BTU/hr
+Subtotal:                                22,730 BTU/hr
+Duct loss adder (10%):                    2,273 BTU/hr
 ─────────────────────────────────────────
-TOTAL COOLING LOAD:                      24,849 BTU/hr (~2.07 tons sensible+latent)
+TOTAL COOLING LOAD:                      25,003 BTU/hr (~2.08 tons sensible+latent)
    (load is reported un-derated — altitude does not change the building's heat gain)
 
 EQUIPMENT-CAPACITY TARGET (altitude gross-up):
    Required nameplate = load ÷ (1 − 0.158 cooling derate at 5,280 ft)
-                      = 24,849 ÷ 0.842 = 29,512 BTU/hr
+                      = 25,003 ÷ 0.842 = 29,695 BTU/hr
                       → ROUND TO: 2.5 ton system (30,000 BTU/hr nominal)
    Rationale: equipment loses ~15.8% capacity at Denver elevation, so the system must be
-   sized UP to still deliver the 24,849 BTU/hr the building actually needs.
+   sized UP to still deliver the 25,003 BTU/hr the building actually needs.
 
 HEATING LOAD BREAKDOWN
 ----------------------
@@ -319,7 +319,7 @@ Option C — HP-only (cold-climate):
 
 SIZING ALERTS
 -------------
-⚠ Existing 4-ton AC is OVERSIZED by ~1.5 tons (load is 2.07 tons). This is the likely root cause
+⚠ Existing 4-ton AC is OVERSIZED by ~1.5 tons vs the 2.5-ton recommendation (raw load is 2.08 tons). This is the likely root cause
   of the homeowner's short-cycling complaint and any humidity / temperature-swing issues.
 ⚠ Existing 80,000 BTU input gas furnace is correctly sized (load is 34,463 BTU/hr; 80K input × 80%
   AFUE × −21.1% altitude = ~50,500 BTU/hr output, defensible at design day).

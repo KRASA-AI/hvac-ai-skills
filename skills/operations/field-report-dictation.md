@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~15 min/report"
-version: 3.0
+version: 3.1
 last_eval_score: null
 ---
 
@@ -147,7 +147,7 @@ SAFETY NOTES
 
 LABOR TIME
 ----------
-[Arrival time, departure time, billable hours at config.labor_rate]
+[Arrival time, departure time, on-site minutes, billable hours at config.labor_rate. Billable hours = on-site minutes ÷ 60, then rounded UP to config.billing_increment if set (common values: 0.25 h / 15 min, 0.5 h / 30 min); if no increment is configured, report exact decimal hours. Always show the on-site minutes alongside billable hours so the figure is auditable.]
 ```
 
 **Dispatch-system JSON payload (emit when mode = dispatch-system or both):**
@@ -256,7 +256,7 @@ SAFETY NOTES
 
 LABOR TIME
 ----------
-- Arrival: 1:45 PM · Departure: 2:55 PM · Billable: 1.25 h at $[labor_rate]
+- Arrival: 1:45 PM · Departure: 2:55 PM · On-site: 70 min · Billable: 1.25 h at $[labor_rate] (70 min = 1.17 h, rounded up to the shop's 0.25 h billing increment)
 ```
 
 **Dispatch-system JSON payload (ServiceTitan-mapped):**
