@@ -4,7 +4,7 @@ category: sales
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~25 min/conversation"
-version: 1.2
+version: 1.3
 last_eval_score: null
 ---
 
@@ -88,7 +88,7 @@ Compute a 0–100 replace-lean score from four components, then map to a recomme
    - 25–40% gain → 10 points
    - > 40% gain → 15 points
 4. **2026 market-risk modifier (−10 to +20 points).** This is the piece that makes this skill honest about 2026.
-   - Repair is a **refrigerant circuit repair on R-410A** (compressor, evap coil, leak-seal + recharge): **+10 points** (supply risk). Cite `a2l-r454b-transition.md`.
+   - Repair is a **refrigerant circuit repair on R-410A** (compressor, evap coil, leak-seal + recharge): **+10 points** (supply risk). Cite `a2l-r454b-transition.md`. **The supply-risk claim is now quantifiable:** EPA's own analysis projects a **12–24% rise in US refrigerant prices by 2029** (roughly 4–8% annual refrigerant inflation), with further phasedown step-downs in 2029, 2034, and 2036 — and HVACR trade groups (ACCA, HARDI, PHCC) are litigating the EPA reconsideration rule precisely because they expect it to tighten supply further. Use the projection to make the second-repair risk concrete rather than vague ("the next refrigerant-side repair will cost more, and here is the published reason why"), and attribute it — it is an EPA projection cited by trade associations, not a Krasa forecast.
    - Repair is a **major component on a system ≥12 years old** (compressor, heat exchanger, full coil, full reversing valve): **+10 points**.
    - Repair is a **routine replaceable part** (capacitor, contactor, blower motor, ignitor, inducer, single board) and system is ≤10 years old: **−10 points** (repair is clearly correct).
    - Customer is in **California under the 2026 code** and existing system is a straight-gas furnace with no heat pump: **+5 points** (prescriptive heat-pump default at replacement time).
@@ -239,6 +239,8 @@ The kitchen-table packet above stripped of the score breakdown and compressed to
 - Never use scarcity pressure. "Prices will never be this low again" is not defensible language.
 - When the financing monthly payment genuinely exceeds the customer's stated budget, say so and recommend repair-with-a-plan — do not massage the math to land the sale.
 - If the repair is a refrigerant-circuit repair on R-410A, link to `a2l-refrigerant-explainer.md` and include the supply-risk line in the Watch-outs block.
+- **Never present "just top it off" as a neutral, no-consequence option on a known-leaking system.** With refrigerant inflation projected at roughly 4–8%/yr, a recharge on a system that is actively leaking is a recurring and worsening cost, and high leak rates degrade the shared refrigerant supply everyone draws from. This is not a scarcity-pressure tactic — it is the honest cost picture, and it must be presented as such: name the leak, name the likely recurrence, and let the customer choose. If the customer's budget genuinely forces a recharge-and-monitor path, say so and set an explicit re-inspection date rather than pretending the leak is solved.
+- **Correct the two misconceptions when they surface**, in plain language: (1) no regulation requires anyone to replace a working system early — the rules govern what gets manufactured and installed, not what must be torn out; (2) leak-repair obligations have *expanded* under EPA's Emissions Reduction and Reclamation rule, so a chronic leaker is increasingly a compliance issue and not just an annoyance. Both correct against the customer's likely fear ("the government is forcing me to buy a new system") and both are verifiable if they check.
 - If the customer is in California, reference `california-2026-code.md` for the prescriptive heat-pump default at replacement time.
 - **Always include the dual-fuel row in the replace path when the property is in Climate Zone 5 or colder** (auto-detected from `config.climate_zone`). Omitting it for cold-climate customers produces an incomplete recommendation that the homeowner will notice when they comparison-shop.
 - **Always surface the prior-repair-history modifier.** If CRM data is available and shows 2+ repairs in 3 years, name them explicitly in the Watch-outs block — not to pressure replacement, but because the customer deserves to see the cost pattern. If CRM data is unavailable, flag it and ask.

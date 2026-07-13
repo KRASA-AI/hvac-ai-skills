@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/report"
-version: 3.1
+version: 3.2
 last_eval_score: null
 ---
 
@@ -36,6 +36,8 @@ Provide as much of the following as available:
 
 1. **Equipment list** — Unit make, model, age, serial number (for OEM decode), tonnage/BTU, refrigerant type, and location for each system being monitored.
 2. **Recent sensor data or BMS readings** — Temperature differentials (supply/return), head and suction pressures, amperage draws per component, vibration levels, run-time hours, static pressure, or any IoT dashboard exports (CSV / JSON).
+   - **Analytics-agent output is a first-class input mode.** Telemetry platforms increasingly ship their own conversational agents that already emit a *ranked* anomaly list, a chart summary, or an exportable action plan (e.g., Axiom Cloud's AI Insights Agent for refrigeration / cold storage / multi-site cooling; AFDD overlays like Clockworks; BMS layers like OpenBlue or BrainBox). If the contractor pastes one of those outputs, **do not re-derive the diagnosis from scratch and do not silently defer to it either.** Treat it as a strong prior: carry its ranking forward, state that the ranking came from the platform, sanity-check it against the wear-curve and maintenance-history logic below, and say so explicitly if your read differs and why. The platform sees more telemetry than you do; you see the customer, the cost, and the consequence. Where the agent output and the maintenance history disagree, surface the disagreement rather than resolving it silently.
+   - The value this skill adds on top of a platform agent is **translation, not detection** — turning "anomaly #3, high business impact" into an owner-facing recommendation with cost, downtime risk, and a decision the customer can actually make. When the input is already a ranked anomaly list, lean harder into that translation layer and spend fewer words restating the technical findings.
 3. **Maintenance history** — Last service dates, parts replaced, known recurring issues, and last µF capacitor readings. Use `knowledge-base/failure-modes/` for brand-specific wear-curve adjustments when the customer's system is on `config.brands_carried`.
 4. **Fault codes or alerts** — Any active or recent AFDD (Automated Fault Detection & Diagnostics) alerts, rooftop-unit controller faults (Trane Tracer, Carrier iVu, Daikin DIII-NET), or thermostat error history.
 5. **Operating context** — Climate zone (`config.climate_zone`), building type, occupancy patterns, seasonal load expectations, and the upcoming seasonal cutover (spring cool-down / fall heat-up).

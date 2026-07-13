@@ -39,18 +39,52 @@ confirm current program terms."
 > training cutoffs). If a skill's model "remembers" 25D running through 2032, that memory is stale —
 > this file overrides it. Still, instruct the output to "verify current IRS guidance before quoting."
 
-### HEEHRA / HEAR — High-Efficiency Electric Home Rebate (point-of-sale)
+### HEEHRA / HEEHR / HEAR — High-Efficiency Electric Home Rebate (point-of-sale)
 - IRA-funded, **state-administered** (rollout varies by state; some live, some still standing up).
 - Income-tested, point-of-sale rebate:
   - **< 80% AMI:** up to **$8,000** for a qualifying heat pump (covers up to 100% of project cost).
   - **80–150% AMI:** up to **$8,000** but capped at **50%** of project cost.
   - **> 150% AMI:** not eligible.
-- Per-household lifetime caps and other electrification line items (panel, wiring, heat-pump water
-  heater) apply. Confirm the customer's state program is **live** before promising point-of-sale.
+- Household cap across all electrification measures is **$14,000**. Other line items (panel, wiring,
+  heat-pump water heater) apply against it. Confirm the customer's state program is **live** before
+  promising point-of-sale.
+
+> 🚨 **2026 DOE guidance rewrite — fuel switching is out of HEEHR.** DOE resumed the paused $8.8B
+> Home Energy Rebates program under revised guidance (Program Notices issued mid-2026; reported by
+> ACHR NEWS 2026-06-25). The change contractors must internalize: **HEEHR rebates no longer cover
+> fuel-switching.** The program now funds *electric-to-more-efficient-electric* HVAC upgrades. What
+> remains allowable: electric HVAC in **new construction**, and heat-pump installs at homes that have
+> a fossil-fuel system **provided the fossil system is retained** (i.e., the heat pump does not have
+> to become the primary heating source). What is no longer covered: ripping out gas/propane/oil
+> equipment and replacing it with a heat pump under HEEHR.
+>
+> Practical consequences for skills:
+> - **Do not tell a gas-furnace homeowner that HEEHR will pay to replace it with a heat pump.** That
+>   is now the single highest-risk incentive statement a skill can make.
+> - **Dual-fuel / hybrid gets more attractive**, not less — the retained fossil system is compatible
+>   with the new rules and is often the most cost-effective design anyway. `sales/proposal-generator.md`
+>   and `customer-service/rebate-and-tax-credit-navigator.md` should treat dual-fuel as a first-class
+>   option for fossil-heated homes, not a fallback.
+> - **ENERGY STAR requirements are now optional** rather than prescribed at the federal level; states
+>   may still impose them.
+> - **Rebate spending power broadened:** incremental claims (insulation, air sealing, ventilation,
+>   electrical wiring done over time) are more flexible, and grantees may let rebate funds cover state/
+>   local tax, warranties, and necessary accessories — *if their state adopts the flexibility*.
+> - **Post-install inspection / commissioning verification requirements were loosened.** ACCA objects,
+>   citing that up to 90% of residential HVAC installs carry significant faults costing 30–50% of rated
+>   efficiency. Quality-install language remains a legitimate differentiator in proposals.
+> - **States must revise their programs under the new guidance (roughly a three-month window from the
+>   guidance release), and implementation varies by state.** Any HEEHR dollar figure a skill produces
+>   must carry a "confirm with your state energy office — program is being revised" caveat.
 
 ### HOMES — Home Efficiency Rebates (performance-based)
 - IRA-funded, state-administered, **modeled or measured energy-savings** based (not income-gated the
-  same way). Stackability with HEEHRA is restricted — generally cannot double-dip on the same measure.
+  same way). Up to **$8,000** based on modeled savings, with a **20% minimum modeled savings** floor.
+  Stackability with HEEHRA is restricted — generally cannot double-dip on the same measure.
+- 2026 guidance removed the **40% reserved allocation for disadvantaged communities** and the
+  associated mapping/outreach mandates; a **$200-per-dwelling-unit** payment to the contractor or
+  aggregator for completed installs in a disadvantaged community remains, with the grantee defining
+  the boundary.
 
 ---
 
@@ -95,9 +129,12 @@ incentive story for most 2026 residential jobs:
    utility/state/manufacturer stack.
 3. **Income-test HEEHRA** before quoting a dollar figure; if AMI tier is unknown, give the range and
    flag it.
-4. **Utility rebates usually need pre-approval** — say so.
-5. **Commercial → defer to the navigator** for 179D/Section 48/§6417; do not compute those inline.
-6. **Always label dollar figures "estimate — confirm current program terms."**
+4. **Fuel-test HEEHR before quoting it at all.** If the home currently heats with gas, propane, or oil
+   and the customer intends to *remove* that system, HEEHR does not fund the swap under 2026 guidance.
+   Route to dual-fuel (retain the fossil system) or to the state/utility stack instead.
+5. **Utility rebates usually need pre-approval** — say so.
+6. **Commercial → defer to the navigator** for 179D/Section 48/§6417; do not compute those inline.
+7. **Always label dollar figures "estimate — confirm current program terms."**
 
 ---
 
