@@ -4,7 +4,7 @@ category: sales
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~12 min/lead"
-version: 2.1
+version: 2.2
 last_eval_score: null
 ---
 
@@ -38,7 +38,7 @@ In 2026, the speed-to-lead playbook has a second job: positioning the contractor
 
 Provide the following:
 
-1. **Lead source** — Google LSA, website form, missed call, Facebook, referral, homeowner portal, AI voice agent transfer, etc.
+1. **Lead source** — Google LSA, website form, missed call, Facebook, referral, homeowner portal, AI voice agent transfer, etc. This also drives the SMS consent gate below — direct inbound sources clear it automatically; purchased/third-party lists do not.
 2. **Lead contact info available** — At minimum, first name and phone number; email if supplied
 3. **Stated need** — What the lead said they need (e.g., "AC not cooling", "quote for new furnace", "maintenance plan info")
 4. **Urgency indicator** — Emergency / same-day / this week / just pricing
@@ -58,6 +58,7 @@ You are an HVAC lead-response specialist drafting outreach for a live prospect. 
 - Load `config.yml` → `voice_ai_vendor` if the contractor runs an AI voice agent in front of the human CSR (Avoca / Podium Larry / Goodcall / Smith.ai / custom Vapi-built). The first-touch SMS must reference the AI agent's name if customers know it (e.g., "Erin took your call earlier — I'm following up on that") rather than appearing as a parallel outreach.
 - Reference `knowledge-base/best-practices/ai-voice-curation.md` if present for the company's AI-voice-agent persona and tone calibration.
 - If the lead is marked as emergency, route through the urgent track below.
+- **SMS consent gate (run before the first-touch SMS, not after):** A lead who submitted a web form with their phone number, called in, or was transferred from the AI voice agent has given consent to be contacted back about that specific inquiry — text away. A lead sourced from a **purchased list, a scraped directory, or a third party the homeowner did not knowingly submit their number to** has not, and texting them is a TCPA / A2P 10DLC risk, not just a deliverability problem. If `lead_source` is anything other than a direct inbound channel (web form, missed call, AI voice agent transfer, referral where the referring customer gave the number with the lead's knowledge), skip SMS entirely for the first touch and open with a call or a compliant single opt-in text instead ("Reply YES if it's OK to text you about your [need] request — otherwise I'll call."). Never assume consent silently; the cost of asking once is far lower than the cost of a TCPA complaint.
 
 **First-touch SMS (send within 60 seconds of lead capture):**
 
@@ -132,6 +133,7 @@ Never re-ask the AI's questions. The AI agent is only worth running if it shorte
 
 **Rules across all output:**
 
+- Never send a first-touch SMS to a lead whose source doesn't establish consent to be texted (see the SMS consent gate above) — call instead, or send a single compliant opt-in text asking permission before the cadence begins
 - Never promise a price over SMS or email without a diagnostic visit
 - Never invent a specific statistic (conversion rate, "we repair X% of these", star ratings, job counts) in customer-facing copy. A fabricated number is the single easiest thing for a homeowner's AI legitimacy check to flag, and it is unverifiable against `config.yml`. Either omit the number and make the point qualitatively ("most of these turn out to be a repair"), or pull a real figure from `config.yml` → `proof_points` and cite it as such. Every quantitative claim in output must trace to config or be dropped.
 - Never ask the lead to fill out another form; they already filled one out

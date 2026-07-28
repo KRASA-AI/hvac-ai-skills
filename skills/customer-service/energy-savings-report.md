@@ -4,7 +4,7 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/report"
-version: 4.3
+version: 4.4
 last_eval_score: null
 ---
 
@@ -31,15 +31,19 @@ Generate a customer-facing report showing projected energy and cost savings from
 
 ## Required Input
 
-Provide as much of the following as available:
+**Minimum viable input (fastest path — everything else below is estimate-and-flag):** ZIP code +
+current system age/type + install timing. That's enough to generate a directionally useful
+`homeowner report` with every unmeasured number marked `[ESTIMATE — VERIFY WITH UTILITY BILLS]`.
+Don't hold up the report chasing all ten fields below — gather what's on hand, run it, and let the
+Assumptions section carry the gaps. Provide as much of the following as available:
 
-1. **Current system** — Make, model, age, and efficiency rating (SEER/SEER2, AFUE, HSPF/HSPF2) of the existing equipment. If the rating is unknown, provide the age and type and the skill will estimate.
-2. **Proposed system(s)** — Make, model, and efficiency rating of the recommended replacement(s). If comparing tiers (Good/Better/Best), list each.
-3. **Home/building details** — Approximate square footage, ZIP (for climate zone, utility lookup, and AMI checks), construction era, and any known insulation or envelope issues.
-4. **Utility costs** — Customer's average monthly electric and/or gas bill, or local utility rate per kWh / therm. If not provided, the skill will use the rate stored in `config.utility_rates` keyed by ZIP or fall back to the regional average in `knowledge-base/market-conditions/utility-rate-table.md` and flag as "directional — confirm with customer's bill."
-5. **Install timing** — One of: *already installed (pre-12/31/2025)*, *already installed (post-12/31/2025)*, *under contract*, *shopping*. This gates the incentive handling (25C availability).
-6. **Incentive posture** — Whether the customer is in an active HEEHRA / HOMES state, or whether the skill should pull the top-line number only and link to `rebate-and-tax-credit-navigator.md` for the full breakdown.
-7. **Output mode** — One of: `homeowner report` (default printed or emailed PDF), `proposal-inline block` (table-only for embedding in `proposal-generator.md` output), `light-commercial report` (single-property property-manager framing with operating-cost-per-sqft), `commercial-portfolio` (multi-building energy roll-up for a property-management entity — adds per-property energy table, portfolio-wide OpEx-per-sqft, 10-year operating savings projection by property, and a CapEx-by-quarter rollout sequence), `verbal summary` (60-90 second kitchen-table talk track). Default: `homeowner report`.
+1. **Current system (required — or estimate from age)** — Make, model, age, and efficiency rating (SEER/SEER2, AFUE, HSPF/HSPF2) of the existing equipment. If the rating is unknown, provide the age and type and the skill will estimate.
+2. **Proposed system(s) (required)** — Make, model, and efficiency rating of the recommended replacement(s). If comparing tiers (Good/Better/Best), list each.
+3. **Home/building details (recommended — estimate from ZIP + regional averages if omitted)** — Approximate square footage, ZIP (for climate zone, utility lookup, and AMI checks), construction era, and any known insulation or envelope issues.
+4. **Utility costs (optional — falls back to config/regional table)** — Customer's average monthly electric and/or gas bill, or local utility rate per kWh / therm. If not provided, the skill will use the rate stored in `config.utility_rates` keyed by ZIP or fall back to the regional average in `knowledge-base/market-conditions/utility-rate-table.md` and flag as "directional — confirm with customer's bill."
+5. **Install timing (required)** — One of: *already installed (pre-12/31/2025)*, *already installed (post-12/31/2025)*, *under contract*, *shopping*. This gates the incentive handling (25C availability).
+6. **Incentive posture (optional)** — Whether the customer is in an active HEEHRA / HOMES state, or whether the skill should pull the top-line number only and link to `rebate-and-tax-credit-navigator.md` for the full breakdown.
+7. **Output mode (optional — defaults to `homeowner report`)** — One of: `homeowner report` (default printed or emailed PDF), `proposal-inline block` (table-only for embedding in `proposal-generator.md` output), `light-commercial report` (single-property property-manager framing with operating-cost-per-sqft), `commercial-portfolio` (multi-building energy roll-up for a property-management entity — adds per-property energy table, portfolio-wide OpEx-per-sqft, 10-year operating savings projection by property, and a CapEx-by-quarter rollout sequence), `verbal summary` (60-90 second kitchen-table talk track). Default: `homeowner report`.
 8. **Tone** (optional) — Defaults to `config.yml` → `voice`. Options: warm-conversational, brisk-professional, direct-plainspoken.
 9. **Commercial-portfolio inputs (only when `output_mode = commercial-portfolio`)** — Building roster (`property_id`, address, sqft, year built, current equipment, current annual energy spend or utility-account ID), filing-entity tax structure (LLC / S-corp / C-corp / non-profit / municipal — drives 179D / Section 48 / §6417 elective-pay handling on the proposal hand-off), `config.crm_record_id` for prior-bid linkback, `config.energy_modeling_partner` if a third-party modeler will validate the projection. If a property's current annual energy spend is unknown, the skill will model it from sqft + climate zone and flag the row `[MODELED — VERIFY WITH UTILITY ACCOUNT]`.
 10. **TOU / time-of-use overlay (optional but recommended)** — Whether the customer's utility tariff is time-of-use, tiered, or flat. If TOU, provide on-peak / mid-peak / off-peak rates and hours from `config.utility_rates[zip].tou` if present; otherwise the skill will pull the regional default from `knowledge-base/market-conditions/utility-rate-table.md` and flag as "directional — confirm with customer's bill." Heat-pump pre-cool / pre-heat scheduling savings is a separate line in the savings table when this overlay is on.

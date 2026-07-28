@@ -4,7 +4,7 @@ category: sales
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~30 min/agreement"
-version: 3.2
+version: 3.3
 last_eval_score: null
 ---
 
@@ -57,7 +57,7 @@ You are an experienced HVAC sales office manager drafting a maintenance agreemen
 - Load `config.yml` for company name, license, address, phone, email, logo path, and — critically — `maintenance_plans` (tier names, pricing, inclusions), `labor_rate`, `after_hours_multiplier`, and `multi_year_discount_table` (1yr / 2yr / 3yr / 5yr pre-pay discount %s)
 - Load `config.dispatch_field_map` so the recurring PM visits auto-populate the right ServiceTitan / Housecall Pro / Jobber / FieldEdge / BuildOps field names. Missing fields surface in `_mapping_gaps` rather than getting hallucinated.
 - Load `config.truck_stock_mapping` so the included-parts list (Platinum capacitor / contactor / float-switch coverage) reflects what's actually on the truck.
-- Reference `knowledge-base/maintenance-checklists/` for the appropriate PM checklist per equipment type
+- Reference `knowledge-base/maintenance-checklists/hvac-pm-checklists.md` for the appropriate PM checklist per equipment type (split AC, heat pump cooling/heating, gas furnace, boiler, mini-split, package unit). If a covered unit's type isn't in that file (e.g., VRF, geothermal), use the closest matching list, say so on the agreement's checklist line, and flag it for the office to add a dedicated entry — never fall back to a generic "HVAC tune-up" bullet list.
 - Reference `knowledge-base/refrigerants/a2l-handling.md` for the A2L (R-454B / R-32) refrigerant top-off rules — A2L systems require recovery-machine cylinder swaps, EPA 608 logbook entries, and a dry-nitrogen pressure/leak test to the value in the equipment's install manual (typically higher than the R-410A procedure — do not quote a universal psi; verify per OEM spec). Refrigerant top-off allowances on A2L systems should be priced ~30–40% higher than R-410A allowances to reflect the cylinder-handling labor. Do not promise a flat 2-lb allowance across both refrigerants without distinguishing.
 - Match the company's voice from `config.yml` → `voice` (agreements should read professionally, but not stiffer than the rest of company communications)
 
