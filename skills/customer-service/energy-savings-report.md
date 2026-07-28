@@ -4,7 +4,7 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/report"
-version: 4.2
+version: 4.3
 last_eval_score: null
 ---
 
@@ -88,7 +88,13 @@ Only `commercial-portfolio` uses the per-property roster (#9), the 179D/Section 
 
 4. **Factor in incentives (2026-correct handling).** Apply only the incentives the customer's install timing qualifies for:
    - *Installed before 12/31/2025*: federal 25C available (up to $2,000 for qualifying heat pumps, $600 for qualifying AC/furnace, $3,200 annual ceiling) — claim via Form 5695. No federal income limit. Customer keeps the manufacturer Qualifying Certificate.
-   - *Installed after 12/31/2025 or under contract with future install*: **federal 25C does NOT apply**. Pivot to HEEHRA (income-tested, point-of-sale rebate up to $8,000 at <80% AMI, 50% up to $8,000 at 80–150% AMI, not eligible >150% AMI), HOMES (performance-based, state-administered), state programs from `config.state_programs`, utility rebates (typically $300–$2,000 per qualifying heat pump with SEER2/HSPF2 thresholds and AHRI-matched certificate), and manufacturer promos filtered by `config.brands_carried`.
+   - *Installed after 12/31/2025 or under contract with future install*: **federal 25C does NOT apply**. Pivot to HEEHRA (income-tested, point-of-sale rebate up to $8,000 at <80% AMI, 50% up to $8,000 at 80–150% AMI, not eligible >150% AMI — **but see the fuel-switching gate immediately below, which disqualifies a large share of the replacement jobs this skill models**), HOMES (performance-based, state-administered), state programs from `config.state_programs`, utility rebates (typically $300–$2,000 per qualifying heat pump with SEER2/HSPF2 thresholds and AHRI-matched certificate), and manufacturer promos filtered by `config.brands_carried`.
+   - 🚨 **HEEHR fuel-switching gate — run this BEFORE putting a HEEHRA dollar figure on any option.** Under 2026 DOE guidance, HEEHR **no longer funds fuel switching** (see `knowledge-base/regulations/incentives-landscape.md`). Apply this test to *each modeled option independently*, because a single report routinely contains options that land on both sides of the line:
+     - **AC-for-AC replacement** (no heat pump anywhere in the option) → **HEEHRA does not apply at all.** HEEHR funds heat pumps and other electric appliances; it has never funded a straight AC changeout. Do not put a HEEHRA line on an AC option.
+     - **Heat pump replacing an existing fossil furnace / boiler, fossil equipment removed** (full electrification) → **HEEHRA does NOT apply.** This is the fuel switch DOE pulled out of the program. Say so plainly on the option; do not hedge it as "may qualify."
+     - **Dual-fuel / hybrid — heat pump added, existing fossil furnace retained as backup** → **HEEHRA may apply.** The fossil system stays, so this is not a fuel switch. This is now frequently the *only* HEEHR-eligible option in a gas-heated home, and the report should say that out loud rather than letting the customer infer it.
+     - **Electric-to-electric** (heat pump or high-efficiency electric replacing existing electric resistance / an old heat pump) → **HEEHRA may apply.** Not a fuel switch.
+     - In all "may apply" cases the figure still carries the AMI test and the "as of [date] — your state is revising its program" caveat. Route the dollar figure to `rebate-and-tax-credit-navigator.md`; this skill states eligibility posture, not the final number.
    - *Geothermal installs*: federal 25D is **terminated for expenditures after 12/31/2025** (OBBBA, July 2025). It applies only to systems paid and placed in service by 12/31/2025 (30% of project cost, no cap). For 2026+ geothermal installs, do not include 25D — pivot to state/utility incentives and, for commercial, Section 48 ITC via the navigator skill.
    - Commercial: defer to `rebate-and-tax-credit-navigator.md` for 179D deduction and Section 48 ITC handling.
 
@@ -206,7 +212,12 @@ Per-property savings projection:
 PORTFOLIO ROLL-UP
 -----------------
 Total project cost (all 3 years): $[X,XXX,XXX]
-Total stacked incentives (utility + manufacturer + 179D + Section 48): −$[XXX,XXX]   (see Rebate & Tax Credit Navigator commercial-portfolio output)
+Cash incentives (utility + manufacturer rebates):                     −$[XX,XXX]
+179D deduction: $[X.XX]/sqft (PW/A-enhanced band) × [sqft] = $[XXX,XXX] deduction,
+  CAPPED at project cost, × [entity marginal rate ~21%]           ≈ −$[XXX,XXX] cash-equivalent
+Section 48 ITC:  $0 — [state why: air-source RTUs are not §48 energy property]
+                       [only populate this line for geothermal / ground-source / CHP scope]
+Total cash-equivalent incentives:                                    −$[XXX,XXX]   (see Rebate & Tax Credit Navigator commercial-portfolio output)
 Net portfolio investment: $[X,XXX,XXX]
 Annual energy savings at full deployment: $[XX,XXX]/yr
 Portfolio OpEx per sqft after deployment: $[X.XX]/sqft/yr  (down from $[X.XX])
@@ -232,7 +243,7 @@ WHAT YOUR CFO / ACCOUNTANT WILL SEE
 We encourage you to share this report with your finance team and run the numbers. Here's what an honest review will see and say:
 1. Portfolio OpEx-per-sqft baseline ($[X.XX]/sqft/yr): [one sentence — e.g., "In line with BOMA 2025 benchmark for [building class] in [climate zone]."]
 2. Per-property savings methodology: [one sentence — "Uses (1 − old/new) efficiency ratio plus IEER-vs-SEER2 conversion for RTU; consistent with ASHRAE 90.1-2019 baseline assumptions used by the 179D modeler."]
-3. Incentive posture: [one sentence — "179D ($[X.XX]/sqft sliding-scale with PW/A 5× multiplier) and Section 48 ITC (base 6% / enhanced 30% with energy-community + domestic-content adders) handed off to the navigator skill for accountant-facing detail and CPA confirmation."]
+3. Incentive posture: [one sentence — "179D taken at the PW/A-**enhanced** $2.50–$5.00/sqft band (that band is already the ~5×-multiplied figure — no further multiplier is applied on top of it), capped at project cost and reported at its ~21% cash-equivalent value because it is a deduction and not a credit; Section 48 ITC is $0 on air-source RTU scope and is only populated for geothermal / CHP property; all handed to the navigator for accountant-facing detail and CPA confirmation."]
 4. Payback horizon: [one sentence — "[X.X]-year simple payback at portfolio level on a 15+ year useful-life standardization is in the defensible range for a [filing entity] under 2026 equipment pricing."]
 
 If your CFO or accountant pushes back on any of the four, call me at [phone] and I'll bring the per-property model and the navigator output to the next finance review.
@@ -271,7 +282,9 @@ When the customer's tariff is time-of-use, add a separate "TOU pre-cool / pre-he
 - Never guarantee exact savings — use "estimated" and "projected" language.
 - Include the Assumptions section so the report has credibility.
 - If data is insufficient for a reliable estimate, flag with `[ESTIMATE — VERIFY WITH UTILITY BILLS]`.
-- **Never claim the federal 25C credit for installs completed after 12/31/2025.** It expired. Use HEEHRA / HOMES / utility / manufacturer stacks instead.
+- **Never claim the federal 25C credit for installs completed after 12/31/2025.** It expired. Use HEEHRA / HOMES / utility / manufacturer stacks instead — subject to the HEEHR gate below.
+- **Never put a HEEHRA figure on an AC-only option, or on a heat-pump option that removes a fossil furnace.** HEEHR does not fund AC-for-AC changeouts, and 2026 DOE guidance removed fuel switching from the program. In a gas-heated home the dual-fuel option (furnace retained) is typically the only HEEHR-eligible one in the set — say that explicitly instead of leaving the customer to assume the $8,000 applies to whichever option they like best. A savings report that books $8,000 against a furnace-removal option is the fastest way to get a signed proposal unwound at rebate-denial time.
+- **Never show a heat pump saving money on *heating* against an existing gas furnace without checking the local fuel-cost spread.** In most 2026 gas markets, delivered heat from a ~2.5-COP heat pump costs *more* per MMBtu than from an 80% AFUE furnace. Heat-pump savings in those markets come from the cooling side and from dual-fuel switchover logic. Model it; don't assume it.
 - Always include the "What your AI check will see" block in the homeowner report and the "What your CFO / accountant will see" block in the commercial-portfolio report. This is the 2026-specific piece that makes the report survive the customer's own LLM (or accountant's) check.
 - For any incentive dollar figure, always note "estimate — confirm with current program terms" unless sourced from a point-of-sale program the contractor controls.
 - When the proposed option is a heat pump in California, reference `knowledge-base/regulations/california-2026-code.md` for the prescriptive default and commissioning requirements.
@@ -285,10 +298,11 @@ Given input: *"Mrs. Garcia, 1,800 sqft home in Denver (ZIP 80202). Current: 15-y
 
 The report would show:
 - Current annual cost: ~$2,400 (modeled from sqft + Denver CDD/HDD; flagged as verify-against-bill)
-- Option A (17 SEER2 AC): ~$325/year savings, ~9-year payback (no federal 25C available post-12/31/2025; utility rebate + manufacturer promo applied)
-- Option B (17 SEER2 heat pump): ~$650/year savings, ~6-year payback after Xcel $1,250 rebate + HEEHRA at 50%-up-to-$8,000 tier (80-150% AMI for Ramsey County)
-- Option C (24 SEER2 heat pump with gas backup): ~$875/year savings, ~5-year payback after full incentive stack
-- AI-validation block correctly notes 25C is *not* included (install is post-12/31/2025), explains HEEHRA AMI tier reasoning, and defends the payback math with the (1 − old/new) efficiency methodology
+- Option A (17 SEER2 AC, gas furnace retained): ~$325/year savings, ~9-year payback (no federal 25C post-12/31/2025; **no HEEHRA line — HEEHR does not fund an AC-for-AC changeout at all**; utility rebate + manufacturer promo applied)
+- Option B (17 SEER2 heat pump, gas furnace removed — full electrification): ~$300–$400/year savings, payback deliberately shown as a range because the *heating* side of this swap is not automatically a saving in Denver (see the fuel-cost reality check below). **No HEEHRA line: removing the furnace is a fuel switch, which 2026 DOE guidance excludes from HEEHR.** The report says that in one plain sentence rather than omitting it silently, because the customer will otherwise assume the $8,000 is on the table.
+- Option C (24 SEER2 heat pump with the existing gas furnace retained as backup — dual-fuel): ~$450–$600/year savings, ~7-year payback after the full stack — and this is **the only option in the set that HEEHRA can pay for** (fossil system retained ⇒ not a fuel switch), at the 50%-up-to-$8,000 / 80–150% AMI tier for **Denver County** (family of 3 at ~$95K). Lead with this. The incentive rule and the engineering both point the same direction here, which is the report's headline finding.
+- **Fuel-cost reality check the report must show, not bury** (this is the number that makes or breaks trust on a heat-pump recommendation in a gas market): at Xcel's Denver 2026 residential rates, gas at ~$0.85/therm and 80% AFUE delivers useful heat at roughly **$10–$11 per MMBtu**, while electricity at ~$0.14/kWh through a heat pump at a seasonal COP of ~2.5 delivers it at roughly **$16–$17 per MMBtu**. **Heating on the heat pump costs more per delivered BTU than the existing gas furnace at these rates.** So the savings on Options B and C come from the *cooling* side (and, on C, from running the heat pump only above its balance point and letting gas carry the cold hours) — not from a heating win. Any report that shows a heat pump beating a gas furnace on *heating* cost in this rate environment is wrong, and an AI second-pass will say so.
+- AI-validation block correctly notes 25C is *not* included (install is post-12/31/2025), states the HEEHRA fuel-switching gate and why Option C is the eligible one, and defends the payback math with the (1 − old/new) efficiency methodology — including the SEER→SEER2 conversion (the existing unit's 10 SEER is converted at ≈×0.95 before it is compared against a 17 SEER2 rating, so the ratio is computed on like units)
 - Assumptions section cites Xcel's 2026 residential rate, Denver climate zone, and links to the `rebate-and-tax-credit-navigator.md` output for the full stacked-incentive breakdown
 
 ### Commercial-portfolio worked example
@@ -299,9 +313,14 @@ The report would produce:
 - Portfolio baseline: $487K total, $1.56/sqft/yr OpEx (with BOMA Phoenix 2025 benchmark referenced as $1.49–$1.72/sqft/yr for garden-style multi-family at this vintage so the figure is calibrated)
 - Per-property baseline table with all 6 properties, sqft, equipment age range, current SEER2-equivalent IEER, annual $ (utility-account verified, no `[MODELED]` flags), $/sqft per property, surfacing that two properties run at $1.81–$1.93/sqft/yr (the worst — and the prioritized Y1 targets)
 - Per-property savings projection with each of the 18 RTUs scheduled into Y1/Y2/Y3, annual savings per RTU calculated from (1 − old IEER / new 14.8 IEER) × current cooling kWh × $/kWh, plus the TOU demand-charge-reduction line for variable-capacity equipment
-- Portfolio roll-up: total project ~$1.62M, stacked incentives (179D at $2.50–$3.50/sqft sliding scale × 312K sqft with PW/A 5× multiplier, Section 48 ITC base 6% / enhanced 30% with energy-community adder if any property qualifies, APS commercial RTU rebate, Carrier commercial promo) handed to the navigator for the CPA-facing detail; net portfolio investment ~$950K–$1.10M; annual energy savings at full deployment ~$73K/yr; portfolio OpEx down to $1.32/sqft/yr; simple payback ~13 years pre-incentive, ~6.5 years post-incentive
-- CapEx-by-quarter table sequencing the 8 / 6 / 4 RTU replacements across 12 quarters with cumulative CapEx and cumulative annual savings columns
-- CapEx-vs-OpEx summary showing the cash position turns positive between Y6 and Y7
-- "What your CFO will see" block calibrated to the BOMA benchmark, ASHRAE 90.1-2019 baseline for the 179D modeler hand-off, and the explicit CPA-confirm caveat on the Section 48 base-vs-enhanced-rate breakdown
+- Portfolio roll-up (every figure below reconciles — the arithmetic is shown because a property manager *will* check it): total project **~$645K** (12 RTUs at the Better tier ≈ $390K, 6 at the Best tier with VFD + BMS integration ≈ $255K — i.e. roughly $32K–$43K per installed RTU including curb adapter, crane, controls and commissioning, which is the band a 3–7.5-ton commercial changeout actually lands in); annual energy savings at full deployment **~$71K/yr** (HVAC is ~45% of the $487K spend; going from a blended ~10.8 IEER to 14.8 IEER is a ~27% cut on that portion ≈ $59K, plus ~$12K of TOU demand-charge reduction from the variable-capacity units); portfolio OpEx **$1.56 → $1.33/sqft/yr**; **simple payback ~9.1 years pre-incentive, ~6.7 years post-incentive**
+- Incentive stack, stated in **cash-equivalent** terms and handed to the navigator for CPA-facing detail — the three rules this block exists to enforce:
+  - **179D is a deduction, not a credit.** The PW/A-**enhanced** rate is the $2.50–$5.00/sqft band (that band is *already* the multiplied figure — do **not** apply a further 5× to it; base is the ~$0.50–$1.00/sqft band). And **179D is capped at the cost of the qualifying property**, so on a $645K project the deduction caps at $645K, not at $2.50 × 312K sqft = $780K. Cash value ≈ $645K × the entity's ~21% marginal rate ≈ **$135K**.
+  - **Section 48 ITC does not apply here at all.** These are packaged air-source rooftop units; §48 energy property means geothermal/ground-source, CHP and similar. A 6%/30% ITC line on an air-source RTU portfolio is a hard error a CPA will strike. Removed from this example on purpose.
+  - Cash incentives that *do* apply: APS commercial RTU rebate ≈ $27K (18 units) + Carrier commercial promo ≈ $7K. **Total cash-equivalent stack ≈ $170K; net portfolio investment ≈ $475K.**
+- ⚠️ **179D timing flag on a 3-year rollout:** OBBBA terminates 179D for property whose construction begins after the 2026 cutoff. A Y1 start may qualify while the **Y2 and Y3 tranches may not** — the report must flag this rather than modeling the deduction flat across all three years, because it is the single largest line in the stack and the one most likely to evaporate.
+- CapEx-by-quarter table sequencing the 8 / 6 / 4 RTU replacements across 12 quarters with cumulative CapEx and cumulative annual savings columns, respecting the stated CapEx ceiling
+- CapEx-vs-OpEx summary showing the cumulative cash position turning positive in **Y7** on the post-incentive basis (~$475K net ÷ ~$71K/yr ≈ 6.7 years) — and stating the pre-incentive figure (~9.1 years) alongside it, so the manager sees what the incentives are actually buying
+- "What your CFO will see" block calibrated to the BOMA benchmark, the ASHRAE 90.1-2019 baseline for the 179D modeler hand-off, and the explicit CPA-confirm caveat on the 179D cap, rate band, and begin-construction cutoff
 - Mapping gaps: lease pass-through structure (does the property absorb savings or pass to tenants?), prior capital-plan amounts pulled from `config.crm_record_id`, Sustainability Solutions Group sign-off on the ASHRAE 90.1-2019 baseline model, energy-community designation per property
 - Refrigerant-transition note triggered (all 18 RTUs are R-410A) with cross-link to `a2l-refrigerant-explainer.md` for the property-manager-facing tenant-communications sequence

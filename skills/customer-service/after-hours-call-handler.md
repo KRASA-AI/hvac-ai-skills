@@ -4,7 +4,7 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/after-hours call (plus recovered revenue)"
-version: 1.1
+version: 1.2
 last_eval_score: null
 ---
 
@@ -136,7 +136,7 @@ Notes: Homeowner. Thermostat reads 61°F and dropping. No gas smell. Last servic
 This is the artifact the homeowner will paste into ChatGPT at 10pm to verify the company is legitimate. It must pass an AI legitimacy check cold.
 
 Format for all three triage levels:
-- **Level 1 (dispatched tonight):** "[First name from config] at [Company licensed name] — [tech name] is on the way to [address], expected in ~[45–60] min. Tonight's service-call fee: $[amount] as discussed. Questions: [callback number]. Reply STOP to opt out."
+- **Level 1 (dispatched tonight):** "[First name from config] at [Company licensed name] — our on-call tech is on the way to [address], expected within about the next hour (we'll call if it runs long). Tonight's service-call fee: $[amount] as discussed. Questions: [callback number]. Reply STOP to opt out." *(Name the tech only if dispatch has confirmed who is rolling — "our on-call tech" is the safe default; never name a tech who isn't actually assigned yet, and keep the arrival window ≥30 min wide.)*
 - **Level 2 (booked for tomorrow):** "[First name from config] at [Company licensed name] — you're booked for [date], [time window] at [address]. Our tech will call 30 min before arrival. Questions: [callback number]. Reply STOP to opt out."
 - **Level 3 (daytime callback):** "[First name from config] at [Company licensed name] — our office will call you during business hours about [brief issue description]. Questions: [callback number]. Reply STOP to opt out."
 
@@ -161,7 +161,7 @@ If your AI check returns a legitimacy flag on any of the four, call me directly 
 **Hard rules for the script:**
 
 - Never hang up before repeating the callback number back to the caller
-- Never promise a specific technician or arrival time window tighter than 30 minutes
+- Never promise a specific technician *before dispatch has confirmed who is rolling* — during triage/booking, say "our on-call tech." Once a tech is actually paged and en route, naming them in the confirmation is fine and reassuring. Never give an arrival window tighter than 30 minutes wide (e.g., "within the next hour," not "45–60 min")
 - Never agree to a billing adjustment or fee waiver without supervisor approval — log the request instead
 - Never diagnose the problem over the phone. Active listening only.
 - If caller asks, "Am I talking to a robot?", answer honestly. Then continue helping.

@@ -4,7 +4,7 @@ category: sales
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~30 min/agreement"
-version: 3.0
+version: 3.2
 last_eval_score: null
 ---
 
@@ -58,7 +58,7 @@ You are an experienced HVAC sales office manager drafting a maintenance agreemen
 - Load `config.dispatch_field_map` so the recurring PM visits auto-populate the right ServiceTitan / Housecall Pro / Jobber / FieldEdge / BuildOps field names. Missing fields surface in `_mapping_gaps` rather than getting hallucinated.
 - Load `config.truck_stock_mapping` so the included-parts list (Platinum capacitor / contactor / float-switch coverage) reflects what's actually on the truck.
 - Reference `knowledge-base/maintenance-checklists/` for the appropriate PM checklist per equipment type
-- Reference `knowledge-base/refrigerants/a2l-handling.md` for the A2L (R-454B / R-32) refrigerant top-off rules — A2L systems require recovery-machine cylinder swaps, EPA 608 logbook entries, and nitrogen pressure tests at 250 psi (not 200 psi). Refrigerant top-off allowances on A2L systems should be priced ~30–40% higher than R-410A allowances to reflect the cylinder-handling labor. Do not promise a flat 2-lb allowance across both refrigerants without distinguishing.
+- Reference `knowledge-base/refrigerants/a2l-handling.md` for the A2L (R-454B / R-32) refrigerant top-off rules — A2L systems require recovery-machine cylinder swaps, EPA 608 logbook entries, and a dry-nitrogen pressure/leak test to the value in the equipment's install manual (typically higher than the R-410A procedure — do not quote a universal psi; verify per OEM spec). Refrigerant top-off allowances on A2L systems should be priced ~30–40% higher than R-410A allowances to reflect the cylinder-handling labor. Do not promise a flat 2-lb allowance across both refrigerants without distinguishing.
 - Match the company's voice from `config.yml` → `voice` (agreements should read professionally, but not stiffer than the rest of company communications)
 
 **Coverage tier framework (use these unless config overrides):**
@@ -256,10 +256,11 @@ Roughly 20% of homeowners and 35% of property managers now paste the maintenance
 - Customer name and address match what's in the CRM record (to avoid renewal mismatch next year)
 - Recurring PM visits populate `config.dispatch_field_map`'s recurring_visit / recurring_window / recurring_account fields. Missing field-map entries surface in a `_mapping_gaps` array.
 - For A2L systems, the refrigerant allowance is correctly differentiated from R-410A allowance.
+- Equipment specs on the covered-equipment schedule match the actual model. Cross-check AFUE against the PM checklist: any furnace whose checklist includes a **condensate trap/drain** is a condensing furnace (≥90% AFUE, and in practice 95–98% for modern two-stage/variable models — e.g., Trane S9V2 is 96% AFUE, not 90%). Do not carry a sub-condensing AFUE on a model whose checklist drains condensate.
 
 ## Example Output
 
-Given input: *"Customer: Mark & Liz Alvarez, 2812 Cedar Lane. One 16 SEER Trane XR16 (4 ton, 2019 install), one Trane S9V2 90% gas furnace (2019). They want Gold tier, 1 year, starting 5/1/2026, annual up-front payment. First-time plan members."*
+Given input: *"Customer: Mark & Liz Alvarez, 2812 Cedar Lane. One 16 SEER Trane XR16 (4 ton, 2019 install), one Trane S9V2 96% AFUE two-stage gas furnace (2019). They want Gold tier, 1 year, starting 5/1/2026, annual up-front payment. First-time plan members."*
 
 ```
 KRASA HEATING & COOLING
@@ -281,7 +282,7 @@ COVERED EQUIPMENT
 | # | System       | Make & Model   | Serial         | Age | Refrigerant |
 |---|--------------|----------------|----------------|-----|-------------|
 | 1 | Split AC     | Trane XR16 4T  | 19351ABC12345  | 7yr | R-410A      |
-| 2 | Gas Furnace  | Trane S9V2 80K | 19347DEF56789  | 7yr | —           |
+| 2 | Gas Furnace  | Trane S9V2, 80 kBTU input, 96% AFUE (two-stage, condensing) | 19347DEF56789  | 7yr | —           |
 
 COVERAGE — GOLD PLAN
 

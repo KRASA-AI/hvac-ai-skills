@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~30 min/calc"
-version: 3.3
+version: 3.4
 last_eval_score: null
 ---
 
@@ -311,18 +311,28 @@ Option A — Gas furnace + AC (like-for-like):
   Trane XR16 2.5 ton + Trane S9V2 60K BTU 96% AFUE | Aligned to Manual J | ~$11,400 installed pre-rebate
 Option B — Dual-fuel:
   Trane XV18 HP 2.5 ton + Trane S9V2 60K BTU as backup | Balance point ~30°F | ~$14,800 installed pre-rebate
-Option C — HP-only (cold-climate):
+Option C — HP-only (cold-climate), existing gas furnace REMOVED:
   Mitsubishi M-Series MUZ-FS / Hyper-Heat CCHP 2.5 ton + 8 kW strip backup | ~$16,200 installed pre-rebate
-  → Eligible for IRA HEEHRA point-of-sale rebate (income-qualified). Note: this is an air-source heat
-    pump, so 25D never applied (geothermal/solar only); 25C expired 12/31/2025 and 25D was terminated for
-    post-2025 expenditures by the OBBBA — do not quote either federal credit for a 2026 install here.
+  → ⚠️ NOT eligible for HEEHRA. Removing the gas furnace and replacing it with a heat pump is a
+    FUEL SWITCH, which 2026 DOE guidance removed from the HEEHR program (see
+    knowledge-base/regulations/incentives-landscape.md). Option B (dual-fuel — the gas furnace is
+    RETAINED as backup) is the HEEHR-eligible path in this home; Option C is not. Do not let the
+    homeowner assume the $8,000 follows whichever option they prefer.
+  → Also: this is an air-source heat pump, so 25D never applied (geothermal/solar only); 25C expired
+    12/31/2025 and 25D was terminated for post-2025 expenditures by the OBBBA — do not quote either
+    federal credit for a 2026 install here.
 
 SIZING ALERTS
 -------------
 ⚠ Existing 4-ton AC is OVERSIZED by ~1.5 tons vs the 2.5-ton recommendation (raw load is 2.08 tons). This is the likely root cause
   of the homeowner's short-cycling complaint and any humidity / temperature-swing issues.
-⚠ Existing 80,000 BTU input gas furnace is correctly sized (load is 34,463 BTU/hr; 80K input × 80%
-  AFUE × −21.1% altitude = ~50,500 BTU/hr output, defensible at design day).
+⚠ Existing 80,000 BTU input gas furnace is OVERSIZED. Load is 34,463 BTU/hr; the furnace delivers
+  80K input × 80% AFUE × −21.1% altitude = ~50,500 BTU/hr output — roughly 47% more than design day
+  requires. It is not dangerous and it is not urgent (an oversized furnace short-cycles and swings
+  temperature rather than failing to heat), but it should not be described as "correctly sized," and
+  the replacement recommendation above is a ~60K input unit precisely because that is what the load
+  calls for. Sizing the new furnace to match the old one is how oversizing gets inherited across
+  equipment generations.
 ⚠ Altitude derate auto-applied (−15.8% cooling, −21.1% heating-gas) for 5,280 ft Denver elevation.
 ⚠ Heat-pump-default code does NOT apply in CO statewide (Denver-specific permits — check before final
   proposal). For reference, similar IRA-eligible HP-only path is increasingly customer-preferred.

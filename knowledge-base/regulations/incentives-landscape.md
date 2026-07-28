@@ -96,9 +96,32 @@ confirm current program terms."
   effect (90.1-2019 for current projects). Note: OBBBA set a **termination of 179D for property whose
   construction begins after a 2026 cutoff** — confirm the current begin-construction date rule before
   promising it on a future project.
-- **Section 48 / 48E — Investment Tax Credit (ITC).** Applies to geothermal and certain other
-  property: **base 6% / enhanced 30%** (PW/A), plus **energy-community** and **domestic-content**
-  adders. Technology-neutral 48E governs property placed in service after 2024.
+
+  > ⚠️ **Which band is which — the repo's most-repeated commercial error.** The **base** deduction is
+  > the *low* band (order of **$0.50–$1.00/sqft**, sliding with modeled savings from 25% up). The
+  > **$2.50–$5.00/sqft** band is the **PW/A-ENHANCED** rate — it is *already* the multiplied number.
+  > Do **not** describe $2.50/sqft as "base" and then apply a 5× (or any) multiplier on top of it:
+  > that double-counts by roughly 5×, and $2.50 → $5.00 is 2×, not 5×, which makes the error
+  > self-evident to any CPA reading the worksheet. The ~5× relationship is base → enhanced
+  > (≈$0.50 → ≈$2.50), not enhanced → enhanced.
+  >
+  > Two further guardrails skills must carry:
+  > - **179D is a deduction, not a credit.** Its cash value is the deduction × the entity's marginal
+  >   tax rate (≈21% for a C-corp). Never subtract the face deduction from CapEx as if it were cash.
+  > - **179D is capped at the cost of the qualifying property installed.** A deduction larger than the
+  >   project itself is not possible; cap it at project cost before computing cash value.
+
+- **Section 48 / 48E — Investment Tax Credit (ITC).** Applies to geothermal (ground-source) heat
+  pumps, CHP, fuel cells and other listed energy property: **base 6% / enhanced 30%** (PW/A), plus
+  **energy-community** and **domestic-content** adders. Technology-neutral 48E governs property
+  placed in service after 2024.
+
+  > ⚠️ **Section 48 does NOT cover packaged rooftop AC units or ordinary air-source heat pumps.** A
+  > Carrier/Trane/Lennox RTU changeout — however high its IEER — is not §48 energy property. Claiming
+  > a 6%/30% ITC on an air-source RTU portfolio is a hard error that a CPA will strike, and it is the
+  > single fastest way to lose credibility on a commercial worksheet. §48 enters an HVAC job only when
+  > the equipment is **ground-source/geothermal** (or CHP). For air-source commercial work the federal
+  > lever is **179D**, plus utility/manufacturer cash.
 - **§6417 — Elective pay ("direct pay").** Lets tax-exempt entities (municipal, non-profit, school
   districts, some co-ops) monetize Section 48/48E as a cash payment. Drives the filing-entity question
   on commercial-portfolio jobs.

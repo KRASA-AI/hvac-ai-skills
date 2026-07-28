@@ -4,7 +4,7 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~10 min/message"
-version: 3.0
+version: 3.1
 last_eval_score: null
 ---
 
@@ -97,7 +97,7 @@ You are a professional HVAC office administrator drafting payment follow-up comm
 4. **Final Notice (60+ days or approaching `collections_referral_threshold_days`)**
    - Formal, firm, factual
    - States this is a final notice before further action
-   - Specific deadline (7–10 business days, or what the state requires — whichever is longer)
+   - Specific deadline (7–10 business days from the **send date**, or what the state requires — whichever is longer). Compute the calendar date from today, not from the invoice date or the days-past-due count — a 70-days-past-due invoice still gets a fresh 7–10 business-day window, never a 1–2 day ultimatum. Skipping weekends, a notice sent today lands its deadline ~1.5 calendar weeks out; sanity-check that the printed date is at least 7 business days ahead before sending.
    - One last offer for a payment plan
    - State-compliant language about potential referral to a third-party collections agency or small-claims action (per `knowledge-base/collections/state-rules.md`)
    - No personal blame language; no comparisons to other customers; no implied legal threats beyond what the state permits
@@ -204,19 +204,19 @@ Given input: *"Customer: R&B Properties. Invoice #5104, $2,140 for commercial RT
 **Output (Tier 4 — Final Notice):**
 
 ```
-Subject: Final notice — Invoice #5104 ($2,140.00) — action required by April 24
+Subject: Final notice — Invoice #5104 ($2,140.00) — action required by May 6
 
 R&B Properties — Accounts Payable,
 
 This is a final notice on invoice #5104 for $2,140.00, covering RTU preventive maintenance completed on February 12, 2026 at your managed properties. The invoice is now 70 days past due. We sent reminders on [dates from previous follow-ups].
 
-To resolve this matter, please take one of the following actions by April 24, 2026:
+To resolve this matter, please take one of the following actions by May 6, 2026:
 
 1. Pay the balance in full via [payment portal link] or ACH to the account on the attached remittance
 2. Contact [Name] at [phone] to set up a 3-month payment plan on the $2,140 balance
 3. Respond in writing if any portion of the invoice is disputed, with the specific line item and reason
 
-If we have not heard from you by April 24, we will refer this balance to a third-party collections partner and suspend scheduling on the 12 units under management until the balance is resolved, per our standard service-pause policy. This is the final notice we will send before that step.
+If we have not heard from you by May 6, we will refer this balance to a third-party collections partner and suspend scheduling on the 12 units under management until the balance is resolved, per our standard service-pause policy. This is the final notice we will send before that step.
 
 We value the relationship and would strongly prefer to keep your properties on our PM schedule. Please call or reply so we can resolve this together.
 
@@ -263,19 +263,19 @@ Given input: *"Customer: Pinnacle Property Management. Invoice #5104, $2,140 for
 **Output (Tier 4 — Commercial Final Notice variant):**
 
 ```
-Subject: Final notice — Invoice #5104, PO #PG-2026-0244 ($2,140.00) — action required by April 24
+Subject: Final notice — Invoice #5104, PO #PG-2026-0244 ($2,140.00) — action required by May 6
 
 Dana —
 
 This is a final notice on invoice #5104 for $2,140.00, covering RTU preventive maintenance completed on February 12, 2026 across the 12 properties under Pinnacle's management (PO #PG-2026-0244). The invoice is 70 days past due. We sent reminders on March 1, March 16, and April 10.
 
-To resolve the balance, please take one of the following steps by April 24, 2026:
+To resolve the balance, please take one of the following steps by May 6, 2026:
 
 1. Pay in full via [payment portal link] or ACH to the account on the attached remittance (routing / account / reference field "INV-5104 PO-PG-2026-0244")
 2. Contact me at [phone] to arrange a 3- or 6-month payment plan on the $2,140 balance
 3. Respond in writing if any line item is disputed, with the specific item and reason — we will pause the clock for two business days while we sort it out
 
-If we have not heard from you by April 24, 2026, we will (a) refer the balance to a third-party collections partner, and (b) suspend scheduling on all 12 units under Pinnacle's management until the balance is resolved, per our standard service-pause policy. Colorado permits a commercial mechanic's lien filing on the affected properties under C.R.S. § 38-22-101 et seq.; we have not initiated a lien filing and would prefer not to.
+If we have not heard from you by May 6, 2026, we will (a) refer the balance to a third-party collections partner, and (b) suspend scheduling on all 12 units under Pinnacle's management until the balance is resolved, per our standard service-pause policy. Colorado permits a commercial mechanic's lien filing on the affected properties under C.R.S. § 38-22-101 et seq.; we have not initiated a lien filing and would prefer not to.
 
 We value the relationship with Pinnacle and would much rather keep your portfolio on our PM schedule. Please reply or call so we can resolve this together.
 

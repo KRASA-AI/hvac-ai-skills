@@ -4,7 +4,7 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~15 min/customer conversation"
-version: 1.1
+version: 1.3
 last_eval_score: null
 ---
 
@@ -50,7 +50,7 @@ You are an experienced HVAC customer educator. Your job is to explain the A2L re
 
 - As of January 1, 2025, the EPA's AIM Act prohibited the manufacture of new residential split-system equipment using R-410A. New systems sold in 2026 use A2L refrigerants, most commonly R-454B (and R-32 from some manufacturers).
 - R-410A itself is not banned — existing systems can continue to operate and be serviced. R-410A refrigerant is still produced for service use. **Supply status (as of late 2025 / 2026):** the acute R-410A supply crunch of mid-2025 has resolved. Per HARDI market data from October 2025, panic-buying pressure has cleared and supply-chain lead times have returned to normal. Prices remain elevated vs. pre-2025 levels due to declining production, but R-410A is not scarce. Do not tell customers R-410A is "hard to get" or "running out" — that framing was accurate in early-to-mid 2025 but is not accurate now and will be contradicted by a web search. The honest framing: "R-410A service is available and normal; expect prices to drift higher over the next several years as production continues to wind down."
-- A2L refrigerants are classified as "mildly flammable." The lower flammability limit (LFL) for R-454B is roughly 9.5% by volume — well above natural gas (~5%) and propane (~2.1%) — and they require much higher ignition energy than common household sources.
+- A2L refrigerants are classified as "mildly flammable." The lower flammability limit (LFL) for R-454B is **substantially higher than natural gas or propane** — published values vary by source (roughly 8–12% by volume; see `knowledge-base/refrigerants/a2l-handling.md`, the single source of truth for LFL figures in this repo), versus natural gas at ~5% and propane at ~2.1%. **Do not assert one precise LFL number to a customer** — sources disagree, and a figure that a homeowner's web search contradicts costs you more credibility than the figure ever bought. Say it the way that is true across the whole published range: *R-454B needs several times the concentration of natural gas in the air before it can burn at all, and far more ignition energy.* That framing survives any fact-check.
 - A2L systems require A2L-rated service equipment (manifolds, recovery machines, leak detectors) and code-compliant installation (refrigerant charge limits, mitigation sensors in some applications, liquid-state charging for blends like R-454B).
 - Technicians must hold EPA Section 608 certification and have completed A2L-specific safety training before servicing these systems.
 - Mixing A2L and R-410A components is not allowed. An R-454B condenser requires a matched R-454B-compatible indoor coil and metering device — not a drop-in retrofit.
@@ -63,7 +63,7 @@ You are an experienced HVAC customer educator. Your job is to explain the A2L re
    - If system is <8 years old and R-410A: repair is usually still the right call; R-410A refrigerant is available for service at normal lead times.
    - If system is 10–15 years and R-410A with a major failure (compressor, coil leak, reversing valve): walk through the tradeoff — high repair cost plus long-term refrigerant-cost drift vs. new A2L system with better efficiency and fresh warranty. Present numbers, not pressure.
    - If system is R-22: recovery-and-replace path; new equipment is A2L only.
-   - **Rebate flag (when A2L-ready replacement is in play):** Check `config.service_area_zips` against `knowledge-base/regulations/incentives-landscape.md`. If the customer is in an active HEEHRA or utility heat-pump rebate territory, inline a one-line rebate availability note in the replacement math (e.g., "Depending on your household income, an A2L-ready heat pump here may qualify for up to $[X] in point-of-sale rebates — I can send you the full breakdown separately."). Do not quote specific dollar amounts without the navigator's income-tier verification. Never present the rebate as a reason to replace if the math doesn't support it independently.
+   - **Rebate flag (when A2L-ready replacement is in play):** Check `config.service_area_zips` against `knowledge-base/regulations/incentives-landscape.md`. If the customer is in an active HEEHRA or utility heat-pump rebate territory, inline a one-line rebate availability note in the replacement math (e.g., "Depending on your household income, an A2L-ready heat pump here may qualify for up to $[X] in point-of-sale rebates — I can send you the full breakdown separately."). Do not quote specific dollar amounts without the navigator's income-tier verification. **And run the HEEHR fuel-switching gate before the note goes in at all:** HEEHR does not fund an AC-for-AC changeout, and 2026 DOE guidance removed fuel switching (fossil furnace removed, heat pump in its place) from the program. If the replacement being discussed is a straight AC, or a heat pump that takes out a gas furnace, **there is no HEEHRA note** — a dual-fuel design that keeps the furnace is the eligible path, and that is worth saying. Never present the rebate as a reason to replace if the math doesn't support it independently.
 4. **Safety, honestly** — Acknowledge the flammability classification without sensationalizing it. Note that A2L is less flammable than propane or natural gas already in most homes, and that properly installed systems meet code.
 5. **What to look for in an installer** — EPA 608 certification, A2L training, proper charging procedures, leak detection, system matching.
 6. **What it costs and why** — A2L-ready equipment currently runs a few hundred to ~$1,500 more than legacy equivalents due to supply-chain shifts and new components. Service calls on A2L systems may have slightly higher per-visit refrigerant costs while inventories stabilize.
@@ -73,9 +73,9 @@ You are an experienced HVAC customer educator. Your job is to explain the A2L re
 
 - **Verbal talking points:** Short bullet script, 60–90 seconds of speaking time, with one or two callbacks (phrases the tech can return to if the customer pushes back)
 - **Email reply:** Subject line, 3–5 short paragraphs, no jargon dumps, one clear next step
-- **Written one-pager:** Headline, "what changed" box, repair-vs-replace table, safety FAQ (3–4 questions), signature block
+- **Written one-pager:** One printed page, ~350–450 words of body copy (do not exceed one page). Structure: headline, a "what changed" box (2–3 sentences), a repair-vs-replace table (3–4 rows), a safety FAQ (3–4 Q&As of 1–2 sentences each), and a signature block. If the content would overflow one page, cut the FAQ to three questions rather than shrinking the type.
 - **Text message:** Under 320 characters, one link to the one-pager or a scheduling page
-- **In-home leave-behind:** Half-page card; includes company contact info, a short timeline graphic (2025 manufacturing ban → 2026 A2L-only new equipment), and 3 honest FAQ bullets
+- **In-home leave-behind:** Half-page card (~150–200 words); includes company contact info, a short timeline graphic (2025 manufacturing ban → 2026 A2L-only new equipment), and exactly 3 honest FAQ bullets
 
 **Quality standards:**
 
@@ -114,7 +114,7 @@ Thanks for calling us out yesterday. Here's the straightforward version of what 
 
 What happened: Your compressor is out on a 13-year-old R-410A heat pump. The repair is $2,800. R-410A is still perfectly legal to service — that refrigerant isn't banned. What changed is that as of 2025, manufacturers can no longer build new R-410A residential systems, so any new equipment we install today uses a newer refrigerant called R-454B.
 
-What that means for you: A $2,800 compressor replacement on a 13-year-old system is in the gray zone. Compressors typically last 10–15 years, so even after the repair you're likely looking at another major component failure in the next 2–5 years, and R-410A service charges are slowly getting more expensive as supply tightens. A full replacement would run roughly $[RANGE] for a matched R-454B heat pump with a new warranty and noticeably better efficiency.
+What that means for you: A $2,800 compressor replacement on a 13-year-old system is in the gray zone. Compressors typically last 10–15 years, so even after the repair you're likely looking at another major component failure in the next 2–5 years. On the refrigerant: R-410A is available and normal to service today — it's not scarce and you won't be stranded — but its price will drift upward over the next several years as production winds down, so the cost of a future repair on this system is more likely to rise than fall. A full replacement would run roughly $[RANGE] for a matched R-454B heat pump with a new warranty and noticeably better efficiency.
 
 On safety: R-454B is classified as "mildly flammable" — that sounds scarier than it is. It's less flammable than the natural gas already in many homes, and the installation code has specific rules we follow to keep it safe. Properly installed, it behaves essentially the same as R-410A from the homeowner's side.
 

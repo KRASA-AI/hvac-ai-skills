@@ -4,7 +4,7 @@ category: sales
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~25 min/proposal"
-version: 4.1
+version: 4.3
 last_eval_score: null
 ---
 
@@ -52,6 +52,21 @@ Provide the following:
 
 You are a senior HVAC sales consultant preparing a customer-facing replacement proposal. Your job is to present options clearly, highlight value differences between tiers, make the investment feel justified, and produce a document that holds up when the homeowner pastes it into an AI for a second opinion.
 
+**Step 0 — pick the mode first, then read only that path.** This skill exposes five output modes (#9), five multi-zone flags (#10), and three incentive-auto-stacking settings (#12). Do not carry all of that machinery into a simple job. Route from the one-line job description before reading further:
+
+| If the job is… | `output_mode` (#9) | `multi_zone_flag` (#10) | Incentive stacking (#12) | Sections you can IGNORE |
+|----------------|--------------------|--------------------------|--------------------------|--------------------------|
+| One home, standard swap (DEFAULT) | `homeowner proposal` | `single system` | `pull from navigator` if a navigator output exists, else `top-line only` | commercial-portfolio template, CapEx tables, CFO block, multi-zone breakdown |
+| Home + heat pump & gas backup | `homeowner proposal` | `dual-fuel` | as above | commercial-portfolio template, CFO block |
+| Ductless / mini-split, 2–8 heads | `homeowner proposal` | `multi-zone ductless` | as above | commercial-portfolio template, CFO block |
+| Fossil-to-electric with panel work | `homeowner proposal` | `whole-home electrification` | as above | commercial-portfolio template, CFO block |
+| Just a quick side-by-side for email | `comparison-only block` | inherit | inherit | tier prose, Why-Choose, Next-Steps, CFO block |
+| Lead with the monthly payment | `financing-focused proposal` | inherit | inherit | commercial-portfolio template, CFO block |
+| One commercial building, one owner | `light-commercial proposal` | as applicable | `pull from navigator` | commercial-portfolio roster/roll-up, CFO block uses 179D/§48 framing |
+| **Multiple properties, one entity** | `commercial-portfolio` | per-property | `pull from navigator` (portfolio variant) | nothing — this is the full path; use the portfolio template + CapEx tables + CFO block |
+
+Any non-`single system` multi-zone flag and every commercial mode earns exactly ONE clarification block (see Multi-zone handling and the CLARIFICATIONS blocks) — never silently average across systems or invent portfolio inputs. The default when a single residence is described without qualifiers is `homeowner proposal` + `single system`.
+
 **Before you start:**
 
 - Load `config.yml` for company name, license number, service area, labor rate, warranty terms (`config.warranty_terms`), financing partner (`config.financing_partner` — monthly-payment APR default), brands carried (`config.brands_carried` — priority order), and communication tone.
@@ -59,6 +74,12 @@ You are a senior HVAC sales consultant preparing a customer-facing replacement p
 - Reference `knowledge-base/market-conditions/2026-tariff-price-environment.md` as the authoritative source for 2026 price bands. Do not contradict without flagging.
 - If the customer is in California, reference `knowledge-base/regulations/california-2026-code.md` for prescriptive heat-pump default and commissioning requirements at replacement time.
 - **Incentive handling — critical 2026 rule.** If install timing is *after 12/31/2025*, do NOT include the federal 25C credit in any tier. It expired for heat pump / AC / furnace installs completed after that date. Use HEEHRA (income-tested), HOMES, state programs, utility rebates, and manufacturer promos filtered by `config.brands_carried`. **25D (geothermal) was also terminated for expenditures after 12/31/2025 by the OBBBA — do NOT include it for post-2025 installs** (it applies only to systems paid and placed in service by 12/31/2025). For anything beyond a top-line pull, hand off to `rebate-and-tax-credit-navigator.md`.
+
+- 🚨 **HEEHRA eligibility gate — run this per tier, before any HEEHRA line goes in the Available Incentives block.** A proposal is the document a customer takes to the bank; a rebate line that later gets denied is the worst failure mode this skill has. HEEHRA is *not* a general "new HVAC" rebate. Two independent tests, both of which must pass:
+  1. **Is there a heat pump (or other qualifying electric appliance) in this tier at all?** HEEHR funds heat pumps and electric equipment. **A straight AC replacement — however high its SEER2 — gets no HEEHRA line, ever.** In a Good/Better/Best set where all three tiers are air conditioners, the correct number of HEEHRA lines in the whole proposal is **zero**. This is the single most common way this skill has produced a wrong incentive block.
+  2. **Does the job avoid a fuel switch?** Under 2026 DOE guidance HEEHR no longer funds fuel switching (`knowledge-base/regulations/incentives-landscape.md`). A heat pump that **replaces and removes** a gas / propane / oil furnace is not HEEHR-fundable. A heat pump added where the **fossil system is retained** (`dual-fuel`) *is*, as is electric-to-electric and new construction.
+  - Consequence for the `whole-home electrification` flag: that mode is defined as *replacing fossil heating* + adding a heat pump — i.e. it is **precisely the fuel-switching case HEEHR excludes**. When that flag is set, the Available Incentives block must carry **no HEEHRA line**, and the proposal should name the trade-off honestly: full electrification is a legitimate choice the customer may want for their own reasons, but HEEHR will not pay for it, whereas a `dual-fuel` design that keeps the furnace as backup both qualifies and is frequently the better economics anyway. Presenting that comparison *is* the sales move — it is more persuasive than a rebate figure that evaporates.
+  - When a tier fails either test, do not silently drop the line. Write one sentence saying why (e.g. "HEEHRA does not apply to an air-conditioner replacement"), because the customer has almost certainly read about the $8,000 and will otherwise assume you forgot it.
 
 **Proposal construction:**
 
@@ -218,6 +239,9 @@ AVAILABLE INCENTIVES
 [PER YOUR INSTALL TIMING — INCENTIVES AUTO-FILTERED FOR 2026 ELIGIBILITY]
 
 - HEEHRA (state-administered point-of-sale rebate): up to $[X,XXX]  ([tier based on AMI])
+  [ONLY IF the tier contains a heat pump AND the job is not a fossil-removal fuel switch — see the
+   HEEHRA eligibility gate. On an AC-only tier, or a furnace-removal electrification job, omit this
+   line and state in one sentence why HEEHRA does not apply.]
 - [State program — e.g., Mass Save / NYSERDA / Xcel Energy]: $[XXX]
 - Manufacturer rebate — [brand] spring/summer promo: $[XXX]  (through [date])
 - Federal 25D (geothermal only, 30% of project cost): $[XXX]  ([applies / does not apply])
@@ -367,7 +391,11 @@ When `incentive_auto_stacking = pull from navigator`, the skill must:
 
 Given input: *"Mrs. Chen, 2,200 sqft home in Phoenix (ZIP 85016), replacing a 16-year-old Trane 3-ton system that's leaking refrigerant. Carrier-only shop. Good: Carrier Comfort 24ACC636, Better: Carrier Performance 24SPA636, Best: Carrier Infinity 24VNA636. Install prices: $8,200, $10,200, $14,100 respectively (reflecting 2026 tariff-adjusted bands). Install timing: under contract for May 2026. Household income: ~$110K (family of 3, ~100% AMI for Maricopa County). Output: homeowner proposal."*
 
-The proposal would present all three tiers with Carrier-specific features, show the SEER2 efficiency progression (15 → 17 → up to 24), calculate approximate annual savings at each tier from Phoenix climate-zone CDD/HDD and the utility rate stored in `config.utility_rates.85016`, and build the Available Incentives block from the post-12/31/2025 rule set: HEEHRA estimated at 50%-up-to-$8,000 (80-150% AMI tier), APS utility rebate ~$800, Carrier spring promo ~$500 — explicitly noting federal 25C is not available. Financing row uses the configured partner (e.g., Synchrony 120-month / 9.99%), landing Good at ~$106/month, Better at ~$131/month, Best at ~$181/month. AI-validation block honestly scores the Better tier's $10,200 price as "mid-range for 17 SEER2 Carrier in Phoenix in spring 2026, within ~10% of competitive quotes; includes permit, haul-away, and new line set which not all quotes include." The proposal closes with an invitation to paste the document into ChatGPT for a second opinion, and a direct phone number for the advisor.
+The proposal would present all three tiers with Carrier-specific features, show the SEER2 efficiency progression (15 → 17 → up to 24), calculate approximate annual savings at each tier from Phoenix climate-zone CDD/HDD and the utility rate stored in `config.utility_rates.85016`, and build the Available Incentives block from the post-12/31/2025 rule set.
+
+**Worked incentive block — note what is deliberately *absent*.** All three quoted units (24ACC636 / 24SPA636 / 24VNA636) are **straight air conditioners**, not heat pumps. Running the HEEHRA eligibility gate: test 1 fails on every tier. **The proposal therefore carries no HEEHRA line at all** — not a reduced one, not a hedged one. It carries APS utility rebate ~$800 and Carrier spring promo ~$500, and it explicitly notes that federal 25C is not available. It then spends one sentence telling Mrs. Chen *why* there is no $8,000 on her proposal, because at ~100% AMI in Maricopa County she is squarely in the income band the HEEHRA headlines are written for and she will ask: **"HEEHRA is an electrification rebate — it pays for heat pumps, not for air conditioners. If you'd like, I can price a heat-pump or dual-fuel option instead, which would open that door; on a Phoenix cooling-dominated load it's worth a look, and I'll show you both."** That sentence converts a missing rebate from a silent omission into a second, larger conversation — which is what a veteran salesperson does with it. (This is also the honest answer: quoting the $8,000 here would be denied at redemption.)
+
+Financing row uses the configured partner (e.g., Synchrony 120-month / 9.99% APR), computed on the pre-incentive contract amount (federal credits are claimed later at tax time and do not reduce the financed principal; a point-of-sale rebate like HEEHRA would, and should be subtracted before amortizing) — landing Good ($8,200) at ~$108/month, Better ($10,200) at ~$135/month, Best ($14,100) at ~$186/month (120-month amortization at 9.99% APR = a factor of ~$13.21 per $1,000 financed). AI-validation block honestly scores the Better tier's $10,200 price as "mid-range for 17 SEER2 Carrier in Phoenix in spring 2026, within ~10% of competitive quotes; includes permit, haul-away, and new line set which not all quotes include." The proposal closes with an invitation to paste the document into ChatGPT for a second opinion, and a direct phone number for the advisor.
 
 ### Commercial-portfolio worked example
 
@@ -375,9 +403,14 @@ Given input: *"Sunbelt Property Management LLC, 6 garden-style apartment buildin
 
 The proposal would produce:
 - Per-property tier assignment table for all 6 properties with rationale (worst-condition + tenant-impact = Y1, lower priority = Y2/Y3)
-- Portfolio roll-up with Better at 4 properties / 12 RTUs / ~$890K investment / ~$72K incentives, Best at 2 properties / 6 RTUs / ~$640K investment / ~$58K incentives, totals ~$1.53M / ~$130K / ~$1.40M net / ~$73K/yr energy savings cross-linked to the energy-savings-report commercial-portfolio output for SBM-2026-0412
-- CapEx-by-quarter table sequencing 8 RTUs in Y1 / 6 in Y2 / 4 in Y3 within the $600K/yr ceiling (Y1Q1 + Y1Q3 each at ~$300K)
-- Entity-level federal stack line-items pulled verbatim from the navigator output: 179D at $2.50–$3.50/sqft sliding scale × 312K sqft × 5× PW/A multiplier = est. ~$780K–$1.09M (CPA-confirm flagged); Section 48 ITC base 6% / enhanced 30% with energy-community adder if any property qualifies (per-property eligibility deferred to navigator); §6417 not applicable (S-corp); 179D allocation rules not applicable (not government / non-profit)
-- CapEx-vs-OpEx summary showing cash position turns positive between Y6 and Y7
-- "What your CFO will see" block calibrated to the navigator's 179D ASHRAE 90.1-2019 baseline reference and the "as of 2026-04-26" caveat on Section 48 adders
+- Portfolio roll-up with Better at 4 properties / 12 RTUs / **~$390K** investment, Best at 2 properties / 6 RTUs / **~$255K** (VFD + BMS integration), totals **~$645K project / ~$170K cash-equivalent incentives / ~$475K net / ~$71K/yr energy savings** — every figure identical to the energy-savings-report commercial-portfolio output for SBM-2026-0412, because the two documents go to the same property manager and any drift between them destroys both. (Per-RTU installed cost lands at ~$32K–$43K including curb adapter, crane, controls and commissioning, which is where a 3–7.5-ton commercial changeout actually prices.)
+- CapEx-by-quarter table sequencing 8 RTUs in Y1 / 6 in Y2 / 4 in Y3 within the $600K/yr ceiling
+- Entity-level federal stack line-items pulled verbatim from the navigator output, with the three commercial rules this block exists to enforce:
+  - **179D — no double multiplier.** $2.50–$3.50/sqft is taken from the **PW/A-enhanced** band, which is *already* the ~5×-multiplied rate; applying a further 5× to it (as an earlier version of this example did) overstates the deduction by roughly five-fold. **And 179D is capped at the cost of the qualifying property** — on a $645K project the deduction caps at $645K, not $2.50 × 312K sqft = $780K.
+  - **179D is a deduction, not cash.** Report it at its cash-equivalent value (deduction × the entity's ~21% marginal rate ≈ **$135K**), never as a face-value subtraction from CapEx. This is why total incentives are ~$170K and not ~$1M — the earlier version of this example asserted a $130K incentive total *and* a $780K–$1.09M 179D line in the same paragraph, which cannot both be true.
+  - **Section 48 ITC = $0 here, and the proposal says so.** These are packaged **air-source** rooftop units; §48 energy property means geothermal/ground-source, CHP and similar. A 6%/30% ITC line on an air-source RTU portfolio is a hard error a CPA will strike on sight.
+  - §6417 elective pay not applicable (S-corp); 179D allocation rules not applicable (not government / non-profit).
+- ⚠️ **179D begin-construction flag on the 3-year rollout:** OBBBA terminates 179D for property whose construction begins after the 2026 cutoff, so the **Y2/Y3 tranches may not qualify even though Y1 does.** The proposal flags this rather than modeling the deduction flat across all three years — it is the largest line in the stack and the one most likely to disappear.
+- CapEx-vs-OpEx summary showing the cumulative cash position turning positive in **Y7** (~$475K net ÷ ~$71K/yr ≈ 6.7 years post-incentive; ~9.1 years pre-incentive), with both figures shown
+- "What your CFO will see" block calibrated to the navigator's 179D ASHRAE 90.1-2019 baseline reference, the 179D cap and begin-construction caveat, and the "as of [navigator output date]" caveat on state/utility figures
 - Clarifications block carrying every navigator `_mapping_gaps` entry forward (energy-community designation per property, lease pass-through structure, prior bid amounts from CRM SBM-2026-0412, tenant-coordination windows for occupied buildings)

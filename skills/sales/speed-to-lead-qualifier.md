@@ -4,7 +4,7 @@ category: sales
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~12 min/lead"
-version: 2.0
+version: 2.1
 last_eval_score: null
 ---
 
@@ -133,6 +133,7 @@ Never re-ask the AI's questions. The AI agent is only worth running if it shorte
 **Rules across all output:**
 
 - Never promise a price over SMS or email without a diagnostic visit
+- Never invent a specific statistic (conversion rate, "we repair X% of these", star ratings, job counts) in customer-facing copy. A fabricated number is the single easiest thing for a homeowner's AI legitimacy check to flag, and it is unverifiable against `config.yml`. Either omit the number and make the point qualitatively ("most of these turn out to be a repair"), or pull a real figure from `config.yml` → `proof_points` and cite it as such. Every quantitative claim in output must trace to config or be dropped.
 - Never ask the lead to fill out another form; they already filled one out
 - Always provide one and only one clear call to action per message
 - Always sign with a specific human first name from `config.yml`; never "Team" or "Support"
@@ -190,9 +191,7 @@ Subject: Quick note on AC diagnostics — and one common worry
 
 Hi Jamie,
 
-One thing I hear a lot: people worry we're going to show up and try to sell them a new system. That's not how we work. On a diagnostic call, our tech's job is to tell you exactly what's wrong and give you options — repair vs. replace — in writing, so you can decide on your own time.
-
-Last month we repaired roughly 70% of the "blowing warm" calls without a full system replacement. Want to grab a slot this week? [booking link]
+One thing I hear a lot: people worry we're going to show up and try to sell them a new system. That's not how we work. On a diagnostic call, our tech's job is to tell you exactly what's wrong and give you options — repair vs. replace — in writing, so you can decide on your own time. Most "blowing warm" calls turn out to be a repair, not a replacement. Want to grab a slot this week? [booking link]
 
 Thanks,
 [CSR first name]

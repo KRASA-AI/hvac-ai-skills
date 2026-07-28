@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~15 min/report"
-version: 3.1
+version: 3.2
 last_eval_score: null
 ---
 
@@ -231,13 +231,14 @@ FINDINGS
 WORK PERFORMED
 --------------
 - Replaced run capacitor (40 µF replacement installed)
-- Verified refrigerant charge on R-410A system
+- Checked refrigerant pressures on R-410A system — readings indicate the system is undercharged (see Measurements + Recommendations); charge not corrected this visit pending leak search
 
 MEASUREMENTS & READINGS
 ------------------------
 - Run capacitor (old): 32 µF (rated 40 µF)
-- Suction pressure: 72 PSI (R-410A)
-- Head pressure: 230 PSI (R-410A)
+- Suction pressure: 72 PSI (R-410A) — **low**; ~120 PSI is typical at hot outdoor for R-410A
+- Head pressure: 230 PSI (R-410A) — **low**; ~340 PSI is typical at ~90°F outdoor
+- Low-side + high-side both running low is the classic undercharge / possible-leak signature — not "within spec"
 
 PARTS USED (truck stock)
 -------------------------
@@ -246,6 +247,7 @@ PARTS USED (truck stock)
 
 RECOMMENDATIONS
 ---------------
+- **System is undercharged** (72 PSI suction / 230 PSI head on R-410A both read low for hot outdoor). Schedule an electronic leak search and correct the charge — do NOT simply top off refrigerant without locating the leak (EPA + it masks the underlying failure).
 - Replace contactor at next scheduled visit — pitted contacts risk welding closed
 - Customer advised to replace air filter monthly during cooling season
 - Upsell flag: eligible for Silver maintenance plan given equipment age and condition
@@ -275,7 +277,7 @@ LABOR TIME
     "refrigerant": "R-410A"
   },
   "findings": "Outdoor fan motor noise; run cap weak at 32 µF (rated 40); contactor pitted; filter 3+ months overdue.",
-  "workPerformed": "Replaced run capacitor; verified charge on R-410A.",
+  "workPerformed": "Replaced run capacitor. Checked R-410A pressures: 72/230 read low for hot outdoor — system undercharged; charge not corrected pending leak search.",
   "readings": [
     {"label": "run_capacitor_measured_uf", "value": 32, "unit": "uF"},
     {"label": "run_capacitor_rated_uf", "value": 40, "unit": "uF"},
@@ -292,6 +294,7 @@ LABOR TIME
     }
   ],
   "recommendations": [
+    "Electronic leak search + charge correction — 72/230 on R-410A indicates undercharge; do not top off without finding the leak.",
     "Replace contactor at next scheduled visit.",
     "Homeowner to change filter monthly during cooling season."
   ],
@@ -299,7 +302,7 @@ LABOR TIME
   "safetyNotes": [],
   "laborMinutes": 70,
   "followUpNeeded": true,
-  "followUpReason": "Contactor replacement recommended next visit.",
+  "followUpReason": "Undercharge (72/230 on R-410A) — leak search + charge correction; contactor replacement also recommended next visit.",
   "_mapping_gaps": ["workOrderId", "serial", "technicianId"]
 }
 ```
@@ -307,7 +310,7 @@ LABOR TIME
 **Dispatcher one-liner (ServiceTitan-formatted):**
 
 ```
-JobType=repair | LocationID=null | Equipment=Carrier 24ACC636 (~8yr R-410A) | Diagnosis=Weak run cap 32µF/40µF replaced; contactor pitted | NextStep=Schedule contactor replacement next visit | EstHours=0.5 | Tags=upsell-silver-plan,filter-overdue
+JobType=repair | LocationID=null | Equipment=Carrier 24ACC636 (~8yr R-410A) | Diagnosis=Weak run cap 32µF/40µF replaced; 72/230 pressures read low = undercharge; contactor pitted | NextStep=Schedule leak search + charge correction and contactor replacement | EstHours=0.5 | Tags=undercharge-leaksearch,upsell-silver-plan,filter-overdue
 ```
 
 ### Substitute-Part Example (PartsConnect verification placeholder)

@@ -4,7 +4,7 @@ category: operations
 tools: [claude, chatgpt]
 difficulty: beginner
 time_saved: "~10 min/call"
-version: 2.1
+version: 2.3
 last_eval_score: null
 ---
 
@@ -141,16 +141,18 @@ Guide the technician through a logical diagnostic tree, one step at a time. This
 - One question per turn, never stack multiple requests
 - If a measurement is abnormal, explain what it indicates before asking the next question
 - Reference manufacturer specs when interpreting readings, with the correct refrigerant pressure regime:
-  - R-410A: low-side 115–130 PSI / high-side 250–325 PSI (typical 90°F outdoor)
-  - R-454B: low-side 105–120 PSI / high-side 240–315 PSI (typical 90°F outdoor) — the A2L runs ~7–10% lower on both sides than R-410A
-  - R-32: similar low-side to R-454B but ~5% higher head pressure
+  - R-410A: low-side 115–130 PSI / high-side **300–400 PSI** (typical 90°F outdoor; head climbs with ambient and with a dirty condenser — a 90°F-day head in the 330–350 range is unremarkable)
+  - R-454B: low-side 110–125 PSI / high-side **290–390 PSI** (typical 90°F outdoor) — R-454B tracks R-410A **closely**, running only about **3–5% lower**, not dramatically lower
+  - R-32: low-side similar to R-454B; head pressure runs slightly higher than R-454B
+  - ⚠️ **Do not treat the R-454B/R-410A gap as large.** An earlier version of this skill said the A2L runs "~7–10% lower on both sides," which overstates the difference and invites a tech to normalize a genuinely low reading. The practical rule: R-454B numbers look *almost the same* as R-410A numbers, so a reading that is clearly low for R-410A is clearly low for R-454B too. Always confirm against the OEM chart for the specific unit rather than a universal table. These figures must stay consistent with `operations/field-report-dictation.md`, which a tech uses on the same call.
 - If the tech mentions a symptom that suggests a safety hazard (gas smell, sparking, burn marks, A2L cylinder leak), immediately advise safe shutdown before continuing diagnosis
 
 **A2L diagnostic branch (auto-engaged when equipment refrigerant is R-454B or R-32):**
 
 The A2L diagnostic tree differs from R-410A on five procedural points. When equipment refrigerant is R-454B or R-32, the interactive mode MUST branch as follows:
 
-1. **Pre-diagnosis safety check (always first when A2L):** Before any pressure or refrigerant-circuit work, confirm: (a) work area ventilation (open windows / fan on if indoor; outdoor unit only needs the standard 6-ft mixing distance); (b) leak detector is A2L-class (most R-410A-era detectors are too coarse — a 2-ppm-class A2L detector is required); (c) recovery cylinder is A2L-rated (DOT 4BA / 4BW orange-label cylinders for R-454B; A2L-stamped cylinders for R-32 — do not use R-410A pink cylinders, EPA rejects co-mingled recovery); (d) no open ignition sources within 10 ft (no torch, no electrical-arc work, no smoking — A2L LFL is 6.2% v/v for R-454B). If any check fails, advise tech to address before continuing diagnosis.
+1. **Pre-diagnosis safety check (always first when A2L):** Before any pressure or refrigerant-circuit work, confirm: (a) work area ventilation (open windows / fan on if indoor; outdoor unit only needs the standard 6-ft mixing distance); (b) leak detector is A2L-class (most R-410A-era detectors are too coarse — a 2-ppm-class A2L detector is required); (c) recovery cylinder is A2L-rated (DOT 4BA / 4BW orange-label cylinders for R-454B; A2L-stamped cylinders for R-32 — do not use R-410A pink cylinders, EPA rejects co-mingled recovery); (d) no open ignition sources within 10 ft (no torch, no electrical-arc work, no smoking). If any check fails, advise tech to address before continuing diagnosis.
+   - ⚠️ **On the LFL number: do not quote 6.2% for R-454B — that is R-1234yf's LFL** (R-1234yf is a ~31% *component* of the blend, not the blend). Published R-454B LFL values genuinely disagree across sources, roughly **7.7%–11.8% by volume**. See `knowledge-base/refrigerants/a2l-handling.md`, which is the single source of truth for LFL figures in this repo. For *safety* procedure, design to the most conservative published figure rather than the most favorable one — the standoff and ventilation rules above are unchanged either way, which is exactly why the precise number should not be asserted here.
 2. **Pressure-reading interpretation:** When tech reports suction/head readings, apply the R-454B norms above (~7–10% lower than R-410A). A reading that looks "low" by R-410A muscle memory may be in-range for R-454B — do NOT advise adding refrigerant based on R-410A targets.
 3. **Charging procedure (if undercharge is confirmed):** R-454B is a near-azeotrope but must still be charged as a liquid from the cylinder (vapor charge changes the blend). Confirm tech is using a manifold rated for A2L (most modern hoses are; older R-410A-only hoses may not meet the SAE J2843 A2L spec). If tech needs to add refrigerant, the procedure is: weighed-in liquid charge from the cylinder via the liquid line port, not vapor charge — call out this difference explicitly when guiding through the step.
 4. **Leak-search procedure (if refrigerant loss is suspected):** A2L leak search uses the A2L-class detector AND a soap-bubble cross-check at suspected joints (the lower flammability margin means small leaks must be located precisely, not just zone-confirmed). Electronic-only leak search is acceptable for R-410A; insufficient for A2L claim documentation per Carrier and Trane warranty desks as of 2026.
@@ -244,7 +246,7 @@ Maintenance-plan tier: Silver (per config.yml customer record)
 
 PROBABLE CAUSES (ranked by likelihood)
 ---------------------------------------
-1. Low refrigerant charge (slow leak) — Check: Measure suction & head pressure; compare to superheat/subcooling targets (R-410A: low 118–130 PSI, high 250–325 PSI at 90°F)
+1. Low refrigerant charge (slow leak) — Check: Measure suction & head pressure; compare to superheat/subcooling targets (R-410A: low 115–130 PSI, high 250–325 PSI at 90°F)
 2. Failed run capacitor — Check: Test capacitor µF rating; replace if below 90% of rated 45/5 µF
 3. Compressor not starting — Check: Verify voltage at compressor terminals; check amperage vs. RLA on nameplate
 4. Dirty condenser coil — Check: Visual inspection; measure 18–22°F split across coil
@@ -264,7 +266,10 @@ SAFETY NOTES
 - 6-year-old Goodman: verify ground-fault on the 240V whip; corrosion is age-typical at this point
 
 ESTIMATED REPAIR TIME: 0.5–2 hours depending on root cause
-ESTIMATED LABOR COST: $135–$540 at config.labor_rate $135/hr (within-hours; +50% after-hours multiplier if applicable)
+ESTIMATED LABOR COST: $68–$270 at config.labor_rate $135/hr (0.5 hr × $135 = $67.50, rounded to $68;
+  2.0 hr × $135 = $270) — within-hours; apply the +50% after-hours multiplier if applicable.
+  [The labor range must be the time range × the configured rate. Recompute it; never carry a range
+   that doesn't multiply out, because the customer will do this arithmetic.]
 
 DISPATCH FIELD GAPS (for dispatcher)
 ------------------------------------
@@ -276,7 +281,7 @@ DISPATCH FIELD GAPS (for dispatcher)
   "dispatch_system": "ServiceTitan",
   "customer_id": "[from CRM]",
   "site_id": "[from CRM]",
-  "equipment_id": "GSX140361 (decoded: 3-ton, 14 SEER, 2020 manufacture from serial)",
+  "equipment_id": "GSX140361 (model-decoded: 3-ton / 36k BTU, 14 SEER; manufacture year is NOT derivable from a model number — confirm via the serial's date code on arrival. Age here (~6 yrs) is from the customer/CRM record, not decoded)",
   "job_type_id": "Diagnostic-Residential",
   "business_unit_id": null,
   "priority": "STANDARD",

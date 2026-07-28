@@ -4,7 +4,7 @@ category: admin
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~25 min/claim"
-version: 3.1
+version: 3.3
 last_eval_score: null
 ---
 
@@ -62,7 +62,7 @@ You are an experienced HVAC warranty administrator. Your job is to produce a war
 - Load `config.yml` for company name, license number, EIN, `dealer_account_numbers` map (per manufacturer), `labor_rate`, `warranty_terms` tier mapping (matches proposal-generator's), and `tech_credentials` map (NATE / EPA 608 levels per tech)
 - Load `config.dispatch_field_map` so the ServiceTitan / Housecall Pro / Jobber / FieldEdge / BuildOps PO number, work-order number, and customer record auto-populate the claim. Missing fields surface in a `_mapping_gaps` array rather than getting hallucinated.
 - Reference `knowledge-base/manufacturers/[oem].md` for OEM-specific portals, registration rules, A2L-era documentation requirements, and known claim friction points
-- Reference `knowledge-base/refrigerants/a2l-handling.md` for the EPA 608 cylinder-recovery, nitrogen-pressure-test pressures (250 psi nitrogen / 600 psi for R-454B vs. 200 psi / 425 psi for R-410A), and Section 608 logbook requirements that A2L claims now require
+- Reference `knowledge-base/refrigerants/a2l-handling.md` for the EPA 608 cylinder-recovery, dry-nitrogen pressure/leak-test posture (test to the OEM install-manual value — A2L procedures generally specify higher pressures than the equivalent R-410A step, but do not cite a universal psi; verify per model), and Section 608 logbook requirements that A2L claims now require
 - Use the company's documentation tone from `config.yml` → `voice` (claims should be factual and neutral, not emotional)
 
 **Process:**
@@ -367,7 +367,7 @@ RA / RGA NUMBER: Requested
 **Quality checks before submitting:**
 - Registration date is inside the OEM grace window (Carrier 90d, Trane 60d, Lennox 60d, Goodman 60d, Rheem 90d) — if not, note it proactively.
 - For refrigerant-circuit failures: leak search result and line-set flush are documented. Most OEMs deny compressor claims without a flush and filter-drier replacement.
-- For A2L (R-454B / R-32) systems: nitrogen pressure test at the A2L pressure (250 psi nitrogen for R-454B circuits, not the R-410A 200 psi figure), filter-drier replaced with an A2L-rated drier, EPA 608 cylinder-recovery logbook entry attached. Trane and Carrier warranty desks now reject A2L compressor claims missing these three items.
+- For A2L (R-454B / R-32) systems: nitrogen pressure test performed **at the pressure the OEM install manual specifies for that model** and the test pressure recorded on the claim (A2L procedures generally specify a higher test pressure than the equivalent R-410A step, but **do not cite a universal psi figure** — quote the manual, per `knowledge-base/refrigerants/a2l-handling.md`); filter-drier replaced with an A2L-rated drier; EPA 608 cylinder-recovery logbook entry attached. Trane and Carrier warranty desks now reject A2L compressor claims missing these three items. [This line previously asserted "250 psi, not the R-410A 200 psi figure," which directly contradicted the no-universal-psi rule stated above in this same skill. The manual wins.]
 - Labor hours match the work order attached. Don't claim hours that aren't on the invoice.
 - **Labor reimbursement basis is named explicitly.** Every labor addendum must name its basis on the rate-basis line — "OEM flat rate" / "Actual time" / "OEM flat rate + A2L supplemental" / "Concession-eligible supplemental" — chosen per the four-question decision tree above. A blank or ambiguous basis line is the second-most-common cause of labor-claim denial (after missing flush documentation).
 - Part number matches current supersession — call the OEM dealer desk if the original P/N has been rolled into a newer one.
