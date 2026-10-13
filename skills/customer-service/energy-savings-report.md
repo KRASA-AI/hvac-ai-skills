@@ -4,7 +4,7 @@ category: customer-service
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~20 min/report"
-version: 4.4
+version: 4.5
 last_eval_score: null
 ---
 
@@ -100,7 +100,7 @@ Only `commercial-portfolio` uses the per-property roster (#9), the 179D/Section 
      - **Electric-to-electric** (heat pump or high-efficiency electric replacing existing electric resistance / an old heat pump) → **HEEHRA may apply.** Not a fuel switch.
      - In all "may apply" cases the figure still carries the AMI test and the "as of [date] — your state is revising its program" caveat. Route the dollar figure to `rebate-and-tax-credit-navigator.md`; this skill states eligibility posture, not the final number.
    - *Geothermal installs*: federal 25D is **terminated for expenditures after 12/31/2025** (OBBBA, July 2025). It applies only to systems paid and placed in service by 12/31/2025 (30% of project cost, no cap). For 2026+ geothermal installs, do not include 25D — pivot to state/utility incentives and, for commercial, Section 48 ITC via the navigator skill.
-   - Commercial: defer to `rebate-and-tax-credit-navigator.md` for 179D deduction and Section 48 ITC handling.
+   - Commercial: defer to `rebate-and-tax-credit-navigator.md` for 179D deduction and Section 48 ITC handling. **179D gate:** OBBBA ended 179D for property whose construction begins after **6/30/2026** — for any project not documented as started by then, the report shows `179D: $0 (ended 6/30/2026)` on its own line and computes payback without it.
 
 5. **Calculate payback period.** Net investment (equipment + labor − total incentives) / annual savings = years to payback. Show both the simple payback and the 10-year and 15-year net savings.
 
@@ -217,8 +217,9 @@ PORTFOLIO ROLL-UP
 -----------------
 Total project cost (all 3 years): $[X,XXX,XXX]
 Cash incentives (utility + manufacturer rebates):                     −$[XX,XXX]
-179D deduction: $[X.XX]/sqft (PW/A-enhanced band) × [sqft] = $[XXX,XXX] deduction,
-  CAPPED at project cost, × [entity marginal rate ~21%]           ≈ −$[XXX,XXX] cash-equivalent
+179D gate: construction began on/before 6/30/2026? [yes — documented / no → $0]
+179D deduction (only if gate = yes, per tranche): $[X.XX]/sqft (PW/A-enhanced band) × [sqft] = $[XXX,XXX] deduction,
+  CAPPED at qualifying project cost, × [entity marginal rate ~21%]  ≈ −$[XXX,XXX] cash-equivalent
 Section 48 ITC:  $0 — [state why: air-source RTUs are not §48 energy property]
                        [only populate this line for geothermal / ground-source / CHP scope]
 Total cash-equivalent incentives:                                    −$[XXX,XXX]   (see Rebate & Tax Credit Navigator commercial-portfolio output)
@@ -247,7 +248,7 @@ WHAT YOUR CFO / ACCOUNTANT WILL SEE
 We encourage you to share this report with your finance team and run the numbers. Here's what an honest review will see and say:
 1. Portfolio OpEx-per-sqft baseline ($[X.XX]/sqft/yr): [one sentence — e.g., "In line with BOMA 2025 benchmark for [building class] in [climate zone]."]
 2. Per-property savings methodology: [one sentence — "Uses (1 − old/new) efficiency ratio plus IEER-vs-SEER2 conversion for RTU; consistent with ASHRAE 90.1-2019 baseline assumptions used by the 179D modeler."]
-3. Incentive posture: [one sentence — "179D taken at the PW/A-**enhanced** $2.50–$5.00/sqft band (that band is already the ~5×-multiplied figure — no further multiplier is applied on top of it), capped at project cost and reported at its ~21% cash-equivalent value because it is a deduction and not a credit; Section 48 ITC is $0 on air-source RTU scope and is only populated for geothermal / CHP property; all handed to the navigator for accountant-facing detail and CPA confirmation."]
+3. Incentive posture: [one sentence — "179D included only because construction began on or before the 6/30/2026 OBBBA cutoff (CPA-confirmed) — otherwise $0 and stated; where included, taken at the PW/A-**enhanced** $2.50–$5.00/sqft band (that band is already the ~5×-multiplied figure — no further multiplier is applied on top of it), capped at project cost and reported at its ~21% cash-equivalent value because it is a deduction and not a credit; Section 48 ITC is $0 on air-source RTU scope and is only populated for geothermal / CHP property; all handed to the navigator for accountant-facing detail and CPA confirmation."]
 4. Payback horizon: [one sentence — "[X.X]-year simple payback at portfolio level on a 15+ year useful-life standardization is in the defensible range for a [filing entity] under 2026 equipment pricing."]
 
 If your CFO or accountant pushes back on any of the four, call me at [phone] and I'll bring the per-property model and the navigator output to the next finance review.
@@ -322,7 +323,7 @@ The report would produce:
   - **179D is a deduction, not a credit.** The PW/A-**enhanced** rate is the $2.50–$5.00/sqft band (that band is *already* the multiplied figure — do **not** apply a further 5× to it; base is the ~$0.50–$1.00/sqft band). And **179D is capped at the cost of the qualifying property**, so on a $645K project the deduction caps at $645K, not at $2.50 × 312K sqft = $780K. Cash value ≈ $645K × the entity's ~21% marginal rate ≈ **$135K**.
   - **Section 48 ITC does not apply here at all.** These are packaged air-source rooftop units; §48 energy property means geothermal/ground-source, CHP and similar. A 6%/30% ITC line on an air-source RTU portfolio is a hard error a CPA will strike. Removed from this example on purpose.
   - Cash incentives that *do* apply: APS commercial RTU rebate ≈ $27K (18 units) + Carrier commercial promo ≈ $7K. **Total cash-equivalent stack ≈ $170K; net portfolio investment ≈ $475K.**
-- ⚠️ **179D timing flag on a 3-year rollout:** OBBBA terminates 179D for property whose construction begins after the 2026 cutoff. A Y1 start may qualify while the **Y2 and Y3 tranches may not** — the report must flag this rather than modeling the deduction flat across all three years, because it is the single largest line in the stack and the one most likely to evaporate.
+- ⚠️ **179D begin-construction gate on a 3-year rollout:** OBBBA ended 179D for property whose construction begins after **6/30/2026**. This example's inputs date from April 2026 (CRM SBM-2026-0412), when a Y1 start before the cutoff was still possible — so the ~$135K above is the **best case**, valid only if the CPA confirms the whole program began construction by 6/30/2026. The report must also show the **conservative case**: Y2/Y3 tranches excluded, and the cap re-applied to the Y1 tranche alone (8 RTUs × ~$32K–$43K ≈ $256K–$344K) → 179D cash-equivalent at most ≈ $54K–$72K, total stack ≈ $88K–$106K, post-incentive payback ≈ 7.6–7.9 years. **Run today for a project not yet started, the 179D line is $0** (total stack ≈ $34K cash; payback ≈ 8.6 years) and the report says so plainly.
 - CapEx-by-quarter table sequencing the 8 / 6 / 4 RTU replacements across 12 quarters with cumulative CapEx and cumulative annual savings columns, respecting the stated CapEx ceiling
 - CapEx-vs-OpEx summary showing the cumulative cash position turning positive in **Y7** on the post-incentive basis (~$475K net ÷ ~$71K/yr ≈ 6.7 years) — and stating the pre-incentive figure (~9.1 years) alongside it, so the manager sees what the incentives are actually buying
 - "What your CFO will see" block calibrated to the BOMA benchmark, the ASHRAE 90.1-2019 baseline for the 179D modeler hand-off, and the explicit CPA-confirm caveat on the 179D cap, rate band, and begin-construction cutoff

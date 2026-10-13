@@ -93,9 +93,10 @@ confirm current program terms."
 - **179D — Energy Efficient Commercial Buildings Deduction.** Sliding-scale $/sqft deduction;
   base rate vs. an enhanced rate that requires **prevailing-wage + apprenticeship (PW/A)**, which
   applies a roughly **5×** multiplier to the base. Modeled against the **ASHRAE 90.1** baseline in
-  effect (90.1-2019 for current projects). Note: OBBBA set a **termination of 179D for property whose
-  construction begins after a 2026 cutoff** — confirm the current begin-construction date rule before
-  promising it on a future project.
+  effect (90.1-2019 for current projects). Note: OBBBA **terminated 179D for property whose
+  construction begins after June 30, 2026** — that date has passed, so treat 179D as $0 for any project
+  not documented (CPA-confirmed) as having begun construction by then. 2026-indexed bands: roughly
+  $0.59–$1.19/sqft base, $2.97–$5.94/sqft PW/A-enhanced (secondary-source figures; CPA confirms).
 
   > ⚠️ **Which band is which — the repo's most-repeated commercial error.** The **base** deduction is
   > the *low* band (order of **$0.50–$1.00/sqft**, sliding with modeled savings from 25% up). The

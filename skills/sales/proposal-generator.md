@@ -4,7 +4,7 @@ category: sales
 tools: [claude, chatgpt]
 difficulty: intermediate
 time_saved: "~25 min/proposal"
-version: 4.3
+version: 4.4
 last_eval_score: null
 ---
 
@@ -322,8 +322,9 @@ CAPEX BY QUARTER (proposed rollout)
 
 ENTITY-LEVEL FEDERAL STACK (handed to navigator for CPA-facing detail)
 ----------------------------------------------------------------------
-- 179D ($[X.XX]–$[X.XX]/sqft sliding scale × [X,XXX,XXX] sqft × 5× PW/A multiplier if confirmed): est. $[XXX,XXX]
-- Section 48 ITC base 6% / enhanced 30% with energy-community + domestic-content adders: est. $[XX,XXX] — base-vs-enhanced-vs-adder breakdown lives in the navigator output
+- 179D begin-construction gate: construction began on/before 6/30/2026 and documented? [yes / no] — **if no, this line reads "179D: $0 — ended by OBBBA for projects started after 6/30/2026" and the next line is skipped**
+- 179D (gate = yes only): $[X.XX]/sqft from ONE band — base ~$0.50–$1.00 OR PW/A-enhanced ~$2.50–$5.00 (the enhanced band already includes the ~5× — never multiply again) × [X,XXX,XXX] sqft, capped at qualifying project cost = $[XXX,XXX] deduction ≈ $[XX,XXX] cash-equivalent at ~21%
+- Section 48 ITC: **$0 unless the scope includes geothermal/ground-source or CHP** (air-source RTUs/VRF are not §48 property); only then base 6% / enhanced 30% + adders, breakdown in the navigator output
 - IRA §6417 elective-pay (if filing entity is non-profit / municipal): applicable / not applicable
 - 179D allocation rules for designer-claim (if filing entity is government / non-profit): captured in navigator output
 
@@ -339,7 +340,7 @@ CAPEX-VS-OPEX SUMMARY
 WHAT YOUR CFO / ACCOUNTANT WILL SEE
 -----------------------------------
 1. Tier assignment logic: [one sentence — e.g., "Better is recommended for 4 of 6 properties because the equipment-age + tenant-impact profile makes the ~12% incremental CapEx pay back inside the holding-period assumption."]
-2. Federal stack defensibility: [one sentence — e.g., "179D figure uses ASHRAE 90.1-2019 baseline at the $2.50–$5.00/sqft sliding scale with PW/A 5× multiplier; the navigator output carries the modeler hand-off and the CPA-confirm worksheet."]
+2. Federal stack defensibility: [one sentence — e.g., "179D is shown only because construction began before the 6/30/2026 OBBBA cutoff (CPA-confirmed); it uses the ASHRAE 90.1-2019 baseline at the PW/A-enhanced $2.50–$5.00/sqft band — which already includes the ~5× — capped at project cost and carried at cash-equivalent value; the navigator output carries the modeler hand-off and the CPA-confirm worksheet."]
 3. Pricing benchmarks: [one sentence — e.g., "Per-RTU pricing is at the 2026 tariff-adjusted regional median per `knowledge-base/market-conditions/2026-tariff-price-environment.md`; competitive bids should land within ±10% on the equipment line and ±15% on the install line."]
 4. CapEx rollout: [one sentence — e.g., "Quarterly sequencing fits inside the stated $[XXX,XXX]/yr ceiling and concentrates Y1 spend on the two worst-condition properties; if the ceiling is breached the rollout can shift one Q1 property to Q3."]
 
@@ -410,7 +411,7 @@ The proposal would produce:
   - **179D is a deduction, not cash.** Report it at its cash-equivalent value (deduction × the entity's ~21% marginal rate ≈ **$135K**), never as a face-value subtraction from CapEx. This is why total incentives are ~$170K and not ~$1M — the earlier version of this example asserted a $130K incentive total *and* a $780K–$1.09M 179D line in the same paragraph, which cannot both be true.
   - **Section 48 ITC = $0 here, and the proposal says so.** These are packaged **air-source** rooftop units; §48 energy property means geothermal/ground-source, CHP and similar. A 6%/30% ITC line on an air-source RTU portfolio is a hard error a CPA will strike on sight.
   - §6417 elective pay not applicable (S-corp); 179D allocation rules not applicable (not government / non-profit).
-- ⚠️ **179D begin-construction flag on the 3-year rollout:** OBBBA terminates 179D for property whose construction begins after the 2026 cutoff, so the **Y2/Y3 tranches may not qualify even though Y1 does.** The proposal flags this rather than modeling the deduction flat across all three years — it is the largest line in the stack and the one most likely to disappear.
+- ⚠️ **179D begin-construction gate on the 3-year rollout:** OBBBA ended 179D for property whose construction begins after **6/30/2026**. These inputs date from April 2026, so the ~$135K is the **best case** (CPA confirms the whole program began construction by the cutoff). The proposal also shows the **conservative case** — Y1 tranche only, cap re-applied to Y1 cost (8 RTUs ≈ $256K–$344K) → ≈ $54K–$72K cash-equivalent, total stack ≈ $88K–$106K — with figures identical to the energy-savings-report for SBM-2026-0412. **Run today for a project not yet started, 179D is $0** (stack ≈ $34K cash) and the proposal says so on its own line.
 - CapEx-vs-OpEx summary showing the cumulative cash position turning positive in **Y7** (~$475K net ÷ ~$71K/yr ≈ 6.7 years post-incentive; ~9.1 years pre-incentive), with both figures shown
 - "What your CFO will see" block calibrated to the navigator's 179D ASHRAE 90.1-2019 baseline reference, the 179D cap and begin-construction caveat, and the "as of [navigator output date]" caveat on state/utility figures
 - Clarifications block carrying every navigator `_mapping_gaps` entry forward (energy-community designation per property, lease pass-through structure, prior bid amounts from CRM SBM-2026-0412, tenant-coordination windows for occupied buildings)
