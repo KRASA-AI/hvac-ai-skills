@@ -12,7 +12,7 @@ Quick-reference facts for any HVAC AI skill that touches on refrigerant transiti
   - ✅ **Effective-date resolved.** The rule took effect 60 days after its 2026-05-26 Federal Register publication, landing the weekend of **July 25, 2026**; trade press (NAHB, ACHR NEWS) cites the practical effective date as **July 27, 2026** (the following Monday). Either way, the removal is now in effect — skills no longer need to hedge with "late July 2026"; say "the January 1, 2026 R-410A install deadline was removed effective late July 2026" as a settled fact, not a pending one.
   - ⚠️ **State-level backstop.** At least one state has not adopted the federal relief: **New York's DEC Part 494 regulation keeps its own January 1, 2026 R-410A installation deadline in force** as an independent state backstop, regardless of the federal removal. Skills serving NY contractors should flag that the federal relief does not automatically override a stricter state rule and should not assume the federal removal applies statewide — confirm against DEC Part 494 rather than asserting relief for NY jobs.
 
-## Litigation over the reconsideration rule (two separate challenges — live, unresolved)
+## Litigation over the reconsideration rule (five petitions on three fronts — live, unresolved)
 
 Two sets of plaintiffs are now challenging the same May 2026 reconsideration rule from opposite directions. Neither has produced a ruling or injunction; the rule remains in effect while both proceed.
 
@@ -23,7 +23,8 @@ Two sets of plaintiffs are now challenging the same May 2026 reconsideration rul
   - **EPA's own analysis projects a 12–24% increase in U.S. refrigerant prices by 2029** (cited by PHCC/HARDI). HARDI frames that as roughly **4–8% annual refrigerant inflation** over the next three years, with further step-downs in the phasedown schedule in **2029, 2034, and 2036**.
   - **HARDI estimates ~$13 billion in added cost to the refrigeration subsector alone**, part of an EPA-estimated **$900M+ in cost savings** the agency itself attributes to the rule (of which $800M+ is attributed to supermarket refrigeration alone) — trade-association and EPA figures are directly in tension here; attribute each source rather than presenting one as settled.
 - **Downstream regulatory risk flagged by the trade groups:** tighter supply raises pressure for a rushed transition to **A3 (flammable hydrocarbon, e.g. propane) refrigerants** and for a state-by-state patchwork. New York, California, and Washington have already empowered regulators to restrict A2L equipment; per ACCA, New York prohibitions take effect **2027** (heat-pump water heaters), **2030** (chillers and VRF), and **2034** (most residential and light-commercial systems). ACCA is separately asking Congress for federal preemption under the AIM Act.
-- **Status:** both petitions unresolved as of 2026-07-28; no injunction has been granted. Skills must not state or imply an outcome for either suit. Frame as "two industry/state legal challenges are pending on different grounds; the rule remains in effect unless and until a court says otherwise."
+- **Third front — refrigeration-equipment petition (filed 2026-07-24).** ALTA Refrigeration, Inc. and CUSER filed their own D.C. Circuit petition for review (No. 26-1202). It is a commercial-refrigeration-side challenge; it does not change anything for residential/light-commercial installs. EPA's AIM Act litigation tracker (updated 2026-08-13) lists five active petitions against the rule — HARDI et al. (No. 26-1168), AHRI + Alliance (No. 26-1174), NRDC (No. 26-1188), the Massachusetts-led state coalition, and ALTA/CUSER (No. 26-1202) — with no consolidation order or ruling shown. Note that EPA's tracker logs the trade-group petitions by date *received* (2026-06-24 and 2026-06-25), a day earlier than the filing dates trade press reported; either date is acceptable, the case numbers are the stable identifiers.
+- **Status:** all petitions unresolved as of 2026-10-13 (no ruling, stay, or injunction found in trade press or on EPA's tracker); the rule remains in effect. Skills must not state or imply an outcome for either suit. Frame as "two industry/state legal challenges are pending on different grounds; the rule remains in effect unless and until a court says otherwise."
 
 ## Contractor-facing implications of the refrigerant-price trajectory
 
@@ -90,10 +91,11 @@ Both are classified ASHRAE A2L — lower toxicity, mildly flammable.
 - NAHB, "EPA Finalizes Refrigerant Rule Update to Allow Older HVAC Unit Installation," 2026-05
 - ACCA / HARDI / PHCC petition for judicial review, D.C. Circuit, filed 2026-06-25; AHRI + Alliance for Responsible Atmospheric Policy parallel petition, 2026-06-26
 - ACHR NEWS, "HVACR Trade Groups Challenge EPA Refrigerant Rule in Federal Court," 2026-06-25
+- EPA "Petitions for Reconsideration and Judicial Review under the AIM Act" tracker (updated 2026-08-13) — case numbers 26-1168, 26-1174, 26-1188, 26-1202; ALTA Refrigeration / CUSER petition for review, D.C. Circuit, 2026-07-24; ACHR NEWS 166521 (2026-08-06, FROSTlines round-up of support/opposition)
 - NRDC petition for review, D.C. Circuit, filed 2026-07-20; 19-state AG coalition (led by NY AG Letitia James) petition for review, D.C. Circuit, filed 2026-07-21
 - ACHR NEWS, "EPA Faces New Lawsuits Over HFC Refrigerant Rule Rollback," 2026-07-23
 - UL 60335-2-40 and ASHRAE 15 safety standards for A2L systems
 - ACCA A2L Refrigerant Safety Training program
 - Manufacturer transition guides (Carrier, Trane, Lennox, Goodman, Rheem, Daikin, Mitsubishi)
 
-_Last reviewed: 2026-07-28_
+_Last reviewed: 2026-10-13_
